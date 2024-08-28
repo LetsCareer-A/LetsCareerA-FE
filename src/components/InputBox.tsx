@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 const InputBox: React.FC = () => {
   const [value, setValue] = useState('');
