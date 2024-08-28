@@ -6,10 +6,10 @@ const Toast = () => {
   return (
     <Box
       sx={{
-        position: 'fixed', // 화면에 고정
-        top: 102,       // 화면 하단에서 20px 떨어진 위치
-        left: '50%',      // 화면 중앙에 위치
-        transform: 'translateX(-50%)', // 중앙 정렬을 위한 이동
+        position: 'fixed', 
+        top: 102,      
+        left: '50%',
+        transform: 'translateX(-50%)', 
         width: 848,
         height: 80,
         padding: '16px 20px',
@@ -18,14 +18,14 @@ const Toast = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        zIndex: 1300, // 기본 MUI zIndex보다 높게 설정하여 오버레이가 항상 위에 보이도록 함
+        zIndex: 1300, 
       }}
     >
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: 1.5, // gap-4
+          gap: 1.5, 
         }}
       >
         <CheckCircleIcon
