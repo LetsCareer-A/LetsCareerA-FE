@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Typography } from '@mui/material';
 
-const Textfield: React.FC = () => {
+const InputBox: React.FC = () => {
   const [value, setValue] = useState('');
   const [isFocused, setIsFocused] = useState(false); // 입력 상태 관리
   const [isHovered, setIsHovered] = useState(false); // 호버 상태 관리
@@ -84,42 +84,8 @@ const Textfield: React.FC = () => {
           backgroundColor: 'transparent',
         }}
       />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          gap: 1,
-          position: 'absolute',
-          bottom: 8,
-          right: 12,
-        }}
-      >
-        {/* 글자수 세는 코드들 */}
-        <Typography
-          sx={{
-            color: hasError? '#F64E39' : isFocused ? '#9499F9' : '#acafb6',
-            fontSize: '0.75rem',
-            fontWeight: 'medium',
-            fontFamily: 'Pretendard',
-            textAlign: 'right',
-          }}
-        >
-          {value.length}
-        </Typography>
-        <Typography
-          sx={{
-            color: '#acafb6',
-            fontSize: '0.75rem', 
-            fontWeight: 'normal',
-            fontFamily: 'Pretendard',
-          }}
-        >
-          /500
-        </Typography>
-      </Box>
     </Box>
   );
 };
 
-export default Textfield;
+export default InputBox;

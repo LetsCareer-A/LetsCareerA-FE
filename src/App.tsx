@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import Textfield from './components/TextField';
+import InputBox from './components/InputBox';
 
 const queryClient = new QueryClient();
 
@@ -11,7 +12,7 @@ function App() {
   return (
     <div>
     <Navbar/>
-    <Textfield/>
+    <InputBox/>
     <Footer/>
     </div>
 
