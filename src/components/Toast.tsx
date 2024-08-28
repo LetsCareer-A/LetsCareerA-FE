@@ -1,7 +1,5 @@
-import React from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { MoreHoriz } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const Toast = () => {
@@ -42,7 +40,6 @@ const Toast = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: 0.5, // gap-0.5
           }}
         >
           <Typography
@@ -52,7 +49,7 @@ const Toast = () => {
               color: 'white',
               fontWeight: 'bold',
               fontFamily: 'Pretendard',
-              lineHeight: '1.75', // leading-7
+              lineHeight: '1.75',
             }}
           >
             ‘네이버클라우드 UX리서처’ 중간 전형에 대한 회고를 완료했어요!
@@ -62,7 +59,7 @@ const Toast = () => {
             sx={{
               color: 'white',
               fontFamily: 'Pretendard',
-              lineHeight: '1.5', // leading-snug
+              lineHeight: '1.5',
             }}
           >
             조금 더 성장에 한 걸음 가까워졌어요 :
@@ -75,6 +72,8 @@ const Toast = () => {
           height: 24,
           backgroundColor: 'transparent',
         }}
+        onClick={() => console.log('Close button clicked')} // 닫기 버튼 클릭 핸들러
+
       >
         <CloseIcon sx={{ color: 'white' }} />
       </IconButton>

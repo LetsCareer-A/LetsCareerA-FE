@@ -12,7 +12,7 @@ function App() {
   return (
     <div>
     <Navbar/>
-    <Box
+    {/* <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -20,9 +20,9 @@ function App() {
         height: '100vh', // 화면 전체 높이
         backgroundColor: '#f0f0f0', // 배경색
       }}
-    >
+    > */}
       <Toast />
-    </Box>
+    {/* </Box> */}
     <Footer/>
     </div>
 
