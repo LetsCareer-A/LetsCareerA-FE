@@ -5,16 +5,16 @@ import { BsList } from "react-icons/bs";
 const Navbar: React.FC = () => {
   return (
     <div className="flex items-center justify-between w-full h-16 px-10 bg-white border-b border-gray-200">
-      {/* Left Side: Logo and Menu */}
+      {/* 왼쪽 사이드 - 로고&메뉴 */}
       <div className="flex items-center gap-[32px] ml-[120px]">
         <img src="public/Logo.svg" className="w-[79px] h-auto" alt="Logo" />
           <div className="text-lg font-medium text-gray-500">렛츠커리어 스토리</div>
           <div className="text-lg font-medium text-gray-500">프로그램</div>
           <div className="text-lg font-medium text-gray-500">블로그</div>
-          <div className="text-lg font-bold text-black">대시보드</div>
+          <div className="text-lg font-bold text-black">대시보드</div> {/* 해당 페이지일 땐 black표시 */}
       </div>
 
-      {/* Right Side: User Info */}
+      {/* 오른쪽 사이드 - 사용자정보&메뉴 */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <div className="text-lg font-medium text-black">김렛츠 님</div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaInstagram } from "react-icons/fa";
 import { FaMicroblog } from "react-icons/fa";
 
@@ -99,10 +98,6 @@ const Footer = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="w-5 h-5 left-0 top-0 absolute bg-[#989ba2]" />
-                  </div>
-                  <div className="w-9 h-9 left-[-8px] top-[-8px] absolute">
-                    <div className="w-9 h-9 left-0 top-0 absolute opacity-0 bg-[#989ba2] rounded-full" />
                   </div>
                 </div>
                 <div className="h-5 flex-col justify-center items-center gap-2.5 inline-flex">
@@ -117,10 +112,6 @@ const Footer = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="w-5 h-5 left-0 top-0 absolute bg-[#989ba2]" />
-                  </div>
-                  <div className="w-9 h-9 left-[-8px] top-[-8px] absolute">
-                    <div className="w-9 h-9 left-0 top-0 absolute opacity-0 bg-[#989ba2] rounded-full" />
                   </div>
                 </div>
               </div>
