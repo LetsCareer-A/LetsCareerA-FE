@@ -48,3 +48,12 @@ export default tseslint.config({
   },
 })
 ```
+
+# Lets Career A팀 Frontend
+## 설치
+```
+yarn add react
+```
+```
+npm install react-icons --save
+```
