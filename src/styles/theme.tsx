@@ -76,19 +76,23 @@ const colors ={
         light: colors.primary.light,
         dark: colors.primary.dark,
         contrastText: '#FFFFFF',
+        100: colors.primary[100],
       },
       secondary: {
         main: colors.secondary.normal,
         light: colors.secondary.light,
         dark: colors.secondary.dark,
         contrastText: colors.primary.normal,
+        100: colors.secondary[100],
       },
       action: {
-        disabled: colors.neutral[90], // disabled 상태 색상
+        disabled: colors.neutral[90],
+        selected: colors.primary[10],
       },
       text: {
-        disabled: colors.neutral[50], // disabled 상태 텍스트 색상
+        disabled: colors.neutral[50], 
       },
+
     },
 
   });
