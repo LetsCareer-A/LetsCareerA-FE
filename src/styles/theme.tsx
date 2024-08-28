@@ -81,7 +81,13 @@ const colors ={
         main: colors.secondary.normal,
         light: colors.secondary.light,
         dark: colors.secondary.dark,
-        contrastText: '#FFFFFF',
+        contrastText: colors.primary.normal,
+      },
+      action: {
+        disabled: colors.neutral[90], // disabled 상태 색상
+      },
+      text: {
+        disabled: colors.neutral[50], // disabled 상태 텍스트 색상
       },
     },
 
