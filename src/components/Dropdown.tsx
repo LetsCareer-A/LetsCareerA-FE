@@ -10,8 +10,8 @@ const StyledButton = styled(Button)(({ theme }) => ({
     gap: '8px',
     alignSelf: 'stretch',
     borderRadius: '8px',
-    border: `1px solid ${colors.primary[60]}`, // Use the correct color from your palette
-    background: colors.primary[10], // Use the correct color from your palette
+    border: `1px solid ${colors.primary[60]}`, 
+    background: colors.primary[10], 
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
 }));
 
