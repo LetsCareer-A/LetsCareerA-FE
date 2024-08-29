@@ -18,6 +18,11 @@
     margin: 0 16px;
   }
 
+  .fc .fc-button-primary {
+    background-color: #F9F9F8;
+    border: none;
+    color: #3E4148;
+}
 
 
   
