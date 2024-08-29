@@ -10,7 +10,6 @@ const Textfield: React.FC = () => {
 
     {/* 오류 상태 경우 */}
   const checkError = () => {
-    // 글자수 초과
     if (value.length > 500) { 
       setHasError(true);
     } else {
@@ -29,9 +28,9 @@ const Textfield: React.FC = () => {
       setIsBlurred(false);
     } else {
       setIsFocused(false);
-      setIsBlurred(true); 
+      setIsBlurred(true); // 입력 완료 후 포커스가 사라지면 블러 상태 유지
     }
-    checkError();
+    checkError(); // 블러 시 오류 체크
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +38,7 @@ const Textfield: React.FC = () => {
     checkError();
   };
 
+  {/* */}
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
