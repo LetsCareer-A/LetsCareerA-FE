@@ -2,7 +2,7 @@ import { useState, MouseEvent } from 'react';
 import { Button, Menu, MenuItem, styled } from '@mui/material';
 import colors from '../styles/colors';
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(() => ({
     display: 'flex',
     height: '44px',
     padding: '11px 8px 11px 12px',
@@ -15,7 +15,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
 }));
 
-const StyledMenu = styled(Menu)(({ theme }) => ({
+const StyledMenu = styled(Menu)(() => ({
   '& .MuiPaper-root': {
     borderRadius: '8px',
     padding: '8px',
