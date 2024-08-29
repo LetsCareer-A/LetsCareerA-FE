@@ -7,14 +7,20 @@ import Textfield from './components/TextField';
 import InputBox from './components/InputBox';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
+import Dashbord from './pages/index'
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Navbar/>
-      <Footer/>
+       <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Dashbord />} />
+      </Routes>
+        <Footer/>
+    </Router>
     </ThemeProvider>
   );
 }
