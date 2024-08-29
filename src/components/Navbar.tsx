@@ -23,6 +23,7 @@ const Navbar: React.FC = () => {
         </div>
         <CgProfile className='w-[28px] h-[28px]'/>
         <BsList className='w-[32px] h-[32px]'/>
+
         </div>
       </div>
   );

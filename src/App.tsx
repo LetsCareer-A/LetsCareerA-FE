@@ -5,17 +5,17 @@ import Footer from './components/Footer';
 import Toast from './components/Toast';
 import Textfield from './components/TextField';
 import InputBox from './components/InputBox';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './styles/theme';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div>
-    <Navbar/>
-    <InputBox/>
-    <Footer/>
-    </div>
-
+    <ThemeProvider theme={theme}>
+      <Navbar/>
+      <Footer/>
+    </ThemeProvider>
   );
 }
 
