@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Typography } from '@mui/material';
 import TodayIcon from '@mui/icons-material/Today';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
