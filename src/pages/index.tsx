@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { PrimaryButton, SecondaryButton } from "../components/CustomButton"
-import Dropdown from "../components/Dropdown";
-import Modal from '../components/Modal';
-import { Button } from '@mui/material';
-import Chip from "../components/Chips";
+// import { PrimaryButton, SecondaryButton } from "../components/CustomButton"
+// import Dropdown from "../components/Dropdown";
+// import Modal from '../components/Modal';
+// import { Button } from '@mui/material';
+// import Chip from "../components/Chips";
+// import Calendar from "./components/Calendar";
+// import TodoList from "./components/Todo";
+// import DetailList from "./components/DetailList";
 
 
-const handleItemClick = (item: string) => {
-    alert(`Clicked on ${item}`);
-  };
+// const handleItemClick = (item: string) => {
+//     alert(`Clicked on ${item}`);
+//   };
 
 
 
@@ -16,24 +19,27 @@ const handleItemClick = (item: string) => {
 
 const index = () => {
 
-  const [isModalOpen, setModalOpen] = useState(false);
+  // const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setModalOpen(true);
-  };
+  // const handleOpenModal = () => {
+  //   setModalOpen(true);
+  // };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  // const handleCloseModal = () => {
+  //   setModalOpen(false);
+  // };
 
-  const handleConfirm = () => {
-    console.log('확인 버튼 클릭');
-    setModalOpen(false);
-  };
+  // const handleConfirm = () => {
+  //   console.log('확인 버튼 클릭');
+  //   setModalOpen(false);
+  // };
 
 
   return (
     <div>
+    {/* <Calendar />
+    <TodoList />
+    <DetailList /> */}
         {/* <PrimaryButton>텍스트</PrimaryButton>
         <SecondaryButton>텍스트</SecondaryButton>
         <Dropdown 
