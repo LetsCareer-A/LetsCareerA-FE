@@ -270,14 +270,6 @@ const typography = {
     letterSpacing: '-0.21px',
     fontStyle: 'normal',
   },
-  xSmall2Bold: {
-    fontFamily: 'Pretendard',
-    fontSize: '14px',
-    fontWeight: 700,
-    lineHeight: '20px',
-    letterSpacing: '-0.21px',
-    fontStyle: 'normal',
-  },
   xSmall2Semiold: {
     fontFamily: 'Pretendard',
     fontSize: '14px',
