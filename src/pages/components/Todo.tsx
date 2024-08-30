@@ -91,8 +91,8 @@ const TodoList: React.FC = () => {
             justifyContent="space-between"
             sx={{
               borderBottom: '1px solid #EFEFEF',
-              color: todo.completed ? 'gray' : 'black',
-              background: colors.neutral[95],
+              borderRadius: '8px',
+              background: todo.completed ? colors.primary[10] : colors.neutral[95], // Change background color based on completion
             }}
           >
             <Box display="flex" alignItems="center">
@@ -111,7 +111,7 @@ const TodoList: React.FC = () => {
               src={Delete}
               alt="Delete"
               onClick={() => deleteTodo(todo.id)}
-              style={{ cursor: 'pointer' }} 
+              style={{ cursor: 'pointer',marginRight:'12px' }} 
             />
           </Box>
         ))}

@@ -7,7 +7,7 @@ import Textfield from './components/TextField';
 import InputBox from './components/InputBox';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
-import Dashbord from './pages/index'
+import Dashbord from './pages/index';
 
 const queryClient = new QueryClient();
 
