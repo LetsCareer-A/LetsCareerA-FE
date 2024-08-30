@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@mui/material/styles';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
-import { ThemeProvider } from '@mui/material/styles';
+import AlwaysReady from './components/AlwaysReady';
 import Dashboard from './pages/Dashboard';
 import theme from './styles/theme';
 
@@ -20,9 +21,10 @@ function App() {
         <Router>
           <Navbar />
             <Sidebar />
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-              </Routes>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+            </Routes>
+            <AlwaysReady/>
           <Footer />
         </Router>
       </ThemeProvider>
