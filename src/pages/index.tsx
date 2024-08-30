@@ -4,8 +4,9 @@ import { useState } from "react";
 // import Modal from '../components/Modal';
 // import { Button } from '@mui/material';
 // import Chip from "../components/Chips";
-import Calendar from "./components/Calendar";
-import TodoList from "./components/Todo";
+// import Calendar from "./components/Calendar";
+// import TodoList from "./components/Todo";
+// import DetailList from "./components/DetailList";
 
 
 // const handleItemClick = (item: string) => {
@@ -36,8 +37,9 @@ const index = () => {
 
   return (
     <div>
-    <Calendar />
+    {/* <Calendar />
     <TodoList />
+    <DetailList /> */}
         {/* <PrimaryButton>텍스트</PrimaryButton>
         <SecondaryButton>텍스트</SecondaryButton>
         <Dropdown 
