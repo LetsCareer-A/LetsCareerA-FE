@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Pagination, Paper } from '@mui/material';
+import { Box, Typography, Pagination } from '@mui/material';
 
 interface DetailItem {
   id: number;
@@ -46,19 +46,18 @@ const DetailList: React.FC = () => {
         padding: 2,
       }}
     >
-      <Box display="flex" alignItems="center" mb={2}>
+      <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
         <Typography variant="h6">세부 일정</Typography>
-        <Box ml={2}>
-          <Typography variant="body2" component="span" sx={{ fontWeight: 'bold' }}>
+        <Box display='flex'>
+          <Typography mr='8px'>
             {date}
           </Typography>
-          <Typography variant="body2" component="span" sx={{ color: 'gray' }}>
+          <Typography sx={{ color: 'gray' }}>
             {dayOfWeek}
           </Typography>
         </Box>
       </Box>
-      
-      <Paper elevation={3} sx={{ padding: 2 }}>
+    
         {currentData.map(item => (
           <Box
             key={item.id}
@@ -73,7 +72,6 @@ const DetailList: React.FC = () => {
             <Typography>{item.description}</Typography>
           </Box>
         ))}
-      </Paper>
       <Box display="flex" justifyContent="center" mt={2}>
         <Pagination
           count={Math.ceil(data.length / ITEMS_PER_PAGE)}

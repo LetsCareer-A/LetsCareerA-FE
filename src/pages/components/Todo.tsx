@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Button, Checkbox, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, Checkbox, Typography } from '@mui/material';
 import { NormalButton } from '../../components/CustomButton';
 import Delete from '../../assets/delete.svg';
 import colors from '../../styles/colors';
 
 const TodoList: React.FC = () => {
-  const theme = useTheme(); 
   const initialTodos = [
     { id: 1, text: '체크리스트 항목 1', completed: false },
     { id: 2, text: '체크리스트 항목 2', completed: false },
