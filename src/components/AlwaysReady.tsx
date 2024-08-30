@@ -25,8 +25,8 @@ const StyledReadyBoard = {
     backgroundColor: 'white',
 }
 
-const ReadyBoardItem = ({company, department, status}) => (
-        <Box sx={ {...StyledReadyBoard, flexDirection: 'column'}}>
+const ReadyBoardItem = ({company, department, status}) => (  //화살표 함수 사용
+        <Box sx={ {...StyledReadyBoard, flexDirection: 'column'}}> {/* 객체 전개 문법 - StyledReadyBoard의 모든 속성을 복사해 붙여넣고, 새로운 속성 추가 ! */}
             <Box sx={{display: 'flex', gap:'8px', flexDirection: 'row', marginTop: '5px'}}>
                 <Typography sx={ReadyTextStyles}>{company}</Typography>
                 <Typography sx={ReadyTextStyles}>|</Typography>
@@ -40,7 +40,7 @@ const ReadyBoardItem = ({company, department, status}) => (
 )
 
 const AlwaysReady = () => {
-    const readyBoardData=[
+    const readyBoardData=[ //data 모아놓기 -> map으로 나열
         {company: '삼성전자', department: '마케팅', status:'준비진행중'},
     ];
 
