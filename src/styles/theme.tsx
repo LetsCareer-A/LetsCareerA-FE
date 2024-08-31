@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import colors from './colors';
+import typography from './typograhy';
 
   const theme = createTheme({
     palette: {
@@ -25,6 +26,40 @@ import colors from './colors';
         disabled: colors.neutral[50], 
       },
 
+    },
+      typography: {
+        fontFamily: 'Pretendard',
+        h1: {
+          ...typography.xxlarge1,
+        },
+        h2: {
+          ...typography.xxlarge2,
+        },
+        h3: {
+          ...typography.xxlarge1,
+        },
+        h4: {
+          ...typography.xlargeBold,
+        },
+        h5: {
+          ...typography.xlargeSemibold,
+        },
+        h6: {
+          ...typography.xlargeMed,
+        },
+        subtitle1:{
+          ...typography.largeSemibold,
+        },
+
+        subtitle2:{
+          ...typography.largeSemibold,
+        },
+        body1: {
+          ...typography.mediumMed,
+        },
+        body2: {
+          ...typography.mediumLight,
+        },
     },
 
   });

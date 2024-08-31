@@ -1,0 +1,29 @@
+/* Calendar.css */
+
+.fc-toolbar.fc-header-toolbar {
+    display: flex;
+    justify-content: flex-start;
+    gap: 16px;
+    margin-top: 16px;;
+  }
+  
+  .fc-toolbar .fc-toolbar-chunk {
+    display: flex;
+  }
+
+  .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+    margin: 0;
+}   
+#fc-dom-86 {
+    margin: 0 16px;
+  }
+
+  .fc .fc-button-primary {
+    background-color: #F9F9F8;
+    border: none;
+    color: #3E4148;
+}
+
+
+  
+  

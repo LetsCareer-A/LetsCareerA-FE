@@ -11,6 +11,7 @@ import theme from './styles/theme';
 
 // import Retrospective from './pages/Retrospective'; // 회고 보드 페이지
 // import CareerBoard from './pages/CareerBoard'; // 커리어 보드 페이지
+import Dashbord from './pages/index';
 
 const queryClient = new QueryClient();
 
