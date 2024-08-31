@@ -22,46 +22,51 @@ const Footer = () => {
                   </div>
                   <div className="inline-flex items-start self-stretch justify-start gap-2">
                     <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">대표자: 송다예</div>
-                    <div className="relative w-px h-4">
-                      <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-                        <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
+                      <div className="relative w-px h-4">
+                        <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
+                          <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
+                        </div>
                       </div>
-                    </div>
                     <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">사업자등록번호: 871-11-02629</div>
                   </div>
                   <div className="inline-flex items-start self-stretch justify-start gap-2">
                     <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">통신판매업신고번호 제 2024-서울마포-2221호</div>
-                    <div className="relative w-px h-4">
-                      <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-                        <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="inline-flex items-start self-stretch justify-start gap-2">
-                    <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">주소: 서울특별시 마포구 독막로 9길 18, 서홍빌딩 3층 A9호</div>
-                    <div className="relative w-px h-4">
-                      <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-                        <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-                      </div>
-                    </div>
-                    <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">이메일: official@letscareer.co.kr</div>
-                    <div className="relative w-px h-4">
-                      <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-                        <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-start h-4 gap-2">
-                      <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">고객센터: 0507-0178-8541</div>
                       <div className="relative w-px h-4">
                         <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
                           <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
                         </div>
                       </div>
                     </div>
-                    <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">Copyright© 2024 아이앤지. All rights reserved</div>
+                  
+                    <div className="inline-flex flex-col items-start self-stretch justify-start gap-2">
+                    <div className="flex items-center justify-start h-4 gap-2">
+                      <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">주소: 서울특별시 마포구 독막로 9길 18, 서홍빌딩 3층 A9호</div>
+                      <div className="relative w-px h-4">
+                        <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
+                          <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
+                        </div>
+                      </div>
+                      </div>
+                      <div className="flex items-center justify-start h-4 gap-2">
+                      <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">이메일: official@letscareer.co.kr</div>
+                      <div className="relative w-px h-4">
+                        <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
+                          <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
+                        </div>
+                      </div>
+                      </div>
+                      <div className="flex items-center justify-start h-4 gap-2">
+                        <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">고객센터: 0507-0178-8541</div>
+                        <div className="relative w-px h-4">
+                          <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
+                            <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">Copyright© 2024 아이앤지. All rights reserved</div>
+                    </div>
                   </div>
                 </div>
-              </div>
               <div className="flex items-start justify-end gap-24 grow shrink basis-0 h-44">
                 <div className="inline-flex flex-col items-end justify-start gap-3">
                   <div className="flex flex-col items-start justify-start h-20 gap-3">
@@ -124,77 +129,10 @@ const Footer = () => {
             </div>
           </div>
           <div className="flex flex-col items-start self-stretch justify-start h-10 gap-5">
-            {/* <div className="self-stretch h-px bg-[#e7e7e7]" /> */}
             <div className="self-stretch" />
           </div>
         </div>
-        {/* <div className="w-96 h-96 left-0 top-0 absolute border-t border-[#e7e7e7]" /> */}
       </div>
-        // <div className="w-full h-44 bg-[#efefef] flex items-center justify-between px-10">            
-        //     <div className="flex flex-col items-center gap-[8px]">
-        //         <img className="w-48 h-auto" src="images/Logo.png" alt="Logo" />
-        //         <div className="inline-flex flex-col items-start justify-start gap-2 h-44">
-        //             <div className="inline-flex items-start justify-start gap-2">
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">아이앤지 사업자 정보</div>
-        //             </div>
-        //             <div className="inline-flex items-start self-stretch justify-start gap-2">
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">대표자: 송다예</div>
-        //                 <div className="relative w-px h-4">
-        //                 <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-        //                     <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-        //                 </div>
-        //                 </div>
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">사업자등록번호: 871-11-02629</div>
-        //             </div>
-        //             <div className="inline-flex items-start self-stretch justify-start gap-2">
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">통신판매업신고번호 제 2024-서울마포-2221호</div>
-        //                 <div className="relative w-px h-4">
-        //                 <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-        //                     <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-        //                 </div>
-        //                 </div>
-        //             </div>
-        //             <div className="inline-flex items-start self-stretch justify-start gap-2">
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">주소: 서울특별시 마포구 독막로 9길 18, 서홍빌딩 3층 A9호</div>
-        //                 <div className="relative w-px h-4">
-        //                 <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-        //                     <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-        //                 </div>
-        //                 </div>
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">이메일: official@letscareer.co.kr</div>
-        //                 <div className="relative w-px h-4">
-        //                 <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-        //                     <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-        //                 </div>
-        //                 </div>
-        //                 <div className="flex items-center justify-start h-4 gap-2">
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">고객센터: 0507-0178-8541</div>
-        //                 <div className="relative w-px h-4">
-        //                     <div className="w-px h-2.5 left-0 top-[3.60px] absolute flex-col justify-center items-center inline-flex">
-        //                     <div className="w-px grow shrink basis-0 bg-[#d7d7d7]" />
-        //                     </div>
-        //                 </div>
-        //                 </div>
-        //                 <div className="text-[#989ba2] text-xs font-medium font-['Pretendard'] leading-none">Copyright© 2024 아이앤지. All rights reserved</div>
-        //             </div>
-        //         </div>
-        //         <div className="flex gap-4">
-        //             <FaInstagram />
-        //             <FaMicroblog />
-        //             </div>
-                    
-        //         <div className="flex flex-col items-center gap-[8px]">
-        //         <div className="flex gap-6">
-        //                 <p className="text-[#27272d]/60 text-sm font-medium">서비스 이용약관</p>
-        //                 <p className="text-[#27272d]/60 text-sm font-medium">개인정보처리방침</p>
-        //             </div>
-
-        //     </div>
-
-        //     <div className="w-full h-px bg-[#e7e7e7] mt-10" />
-        // </div>
-        // </div>
-
     );
 };
 
