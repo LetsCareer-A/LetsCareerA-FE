@@ -32,14 +32,14 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="calendar-container">
+    <div className="calendar-container" style={{background:'white'}}>
       <Box display='flex' gap='10px'
-      // sx={{
-      //   position: 'absolute', 
-      //   top: '100px',     
-      //   right: '21px',    
+      sx={{
+        // position: 'absolute', 
+        // top: '100px',     
+        // right: '21px',    
 
-      // }}
+      }}
       > 
         <Box 
         display='flex'

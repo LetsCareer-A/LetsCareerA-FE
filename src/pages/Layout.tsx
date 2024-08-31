@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Navbar />
         <Box display='flex'>
         <Sidebar />
-        <Box component="main" flexGrow={1}>
+        <Box component="main" flexGrow={1} sx={{background: '#F9F9F8'}}>
           {children}
         </Box>          
         </Box>
