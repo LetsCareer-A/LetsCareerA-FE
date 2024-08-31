@@ -25,7 +25,7 @@ const StyledReadyBoard = {
     backgroundColor: 'white',
 }
 
-const ReadyBoardItem = ({company, department, status}) => ( 
+const ReadyBoardItem = ({company, department, status}) => ( //API 연결할 때 이 변수 쓰면 됨
         <Box sx={ {...StyledReadyBoard, flexDirection: 'column'}}>
             <Box sx={{display: 'flex', gap:'8px', flexDirection: 'row', marginTop: '5px'}}>
                 <Typography sx={ReadyTextStyles}>{company}</Typography>
