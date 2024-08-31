@@ -2,16 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Sidebar from './components/Sidebar';
-import AlwaysReady from './components/AlwaysReady';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/index';
 import theme from './styles/theme';
-
-// import Retrospective from './pages/Retrospective'; // 회고 보드 페이지
-// import CareerBoard from './pages/CareerBoard'; // 커리어 보드 페이지
-import Dashbord from './pages/index';
+import Layout from './pages/Layout'; 
 
 const queryClient = new QueryClient();
 
@@ -20,13 +13,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <Router>
-          <Navbar />
-            <Sidebar />
+          <Layout>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/retrospective" element={<Dashboard />} />
+              <Route path="/career-board" element={<Dashboard />} />
             </Routes>
-            <AlwaysReady/>
-          <Footer />
+          </Layout>
         </Router>
       </ThemeProvider>
     </QueryClientProvider>
