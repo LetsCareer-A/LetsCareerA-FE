@@ -41,8 +41,8 @@ const Sidebar = () => {
       <Box sx={{ width: 181, display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative', left: '80px', top: '40px' }}>
         {[
           { icon: <TodayIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '지원 대시보드', path: '/dashboard' },
-          { icon: <Inventory2OutlinedIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '회고 보드', path: '/retrospective' },
-          { icon: <FolderCopyOutlinedIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '커리어 보드', path: '/career-board' }
+          { icon: <Inventory2OutlinedIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '회고 보드', path: '/reviews' },
+          { icon: <FolderCopyOutlinedIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '커리어 보드', path: '/careers' }
         ].map((item, index) => (
           <Link key={index} to={item.path} style={{ textDecoration: 'none' }}>
             <Box sx={menuItemStyle}>
