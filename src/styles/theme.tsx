@@ -52,13 +52,13 @@ import typography from './typograhy';
         },
 
         subtitle2:{
-          ...typography.largeSemibold,
+          ...typography.largeMed,
         },
         body1: {
-          ...typography.mediumMed,
+          ...typography.largeLight,
         },
         body2: {
-          ...typography.mediumLight,
+          ...typography.mediumBold,
         },
     },
 

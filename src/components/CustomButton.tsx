@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
     borderRadius: '12px',
-    height: '56px',
     padding: '8px 16px',
     display: 'inline-flex',
     justifyContent: 'center',

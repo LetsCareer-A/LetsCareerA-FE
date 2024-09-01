@@ -4,8 +4,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { DateClickArg, EventClickArg } from '@fullcalendar/core';
 import { Box, Typography, useTheme } from '@mui/material';
-import '../../styles/calendar.css';
-import colors from '../../styles/colors';
+import '../../../styles/calendar.css';
+import colors from '../../../styles/colors';
 
 interface Event {
   title: string;
@@ -32,7 +32,7 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="calendar-container" style={{background:'white'}}>
+    <div className="calendar-container" style={{background:'white', width: '100%', padding: '0 24px 16px 24px'}}>
       <Box display='flex' gap='10px'
       sx={{
         // position: 'absolute', 
