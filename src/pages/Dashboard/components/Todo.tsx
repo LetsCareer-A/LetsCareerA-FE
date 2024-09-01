@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Checkbox, Typography } from '@mui/material';
-import { NormalButton } from '../../components/CustomButton';
-import Delete from '../../assets/delete.svg';
-import colors from '../../styles/colors';
+import { NormalButton } from '../../../components/CustomButton';
+import Delete from '../../../assets/delete.svg';
+import colors from '../../../styles/colors';
+import typography from '../../../styles/typography';
 
 const TodoList: React.FC = () => {
   const initialTodos = [
@@ -59,14 +60,15 @@ const TodoList: React.FC = () => {
       }}
     >
       <Box display="flex" alignItems="center" justifyContent='space-between'>
-        <Typography variant="h5">Todo</Typography> 
+        <Typography style={typography.small2Bold}>Todo</Typography> 
         <NormalButton
           onClick={addTodo}
+          style={typography.xxSmallSemibold}
         >
           Todo 추가하기 +
         </NormalButton>
       </Box>
-      <Typography variant="body1" mb={2}>
+      <Typography style={typography.xxSmallReg} mb={2} color='#7A7D84'>
         지원 과정에서 필요한 Todo를 직접 입력하고 체크해요!
       </Typography> 
       <Box
@@ -77,7 +79,7 @@ const TodoList: React.FC = () => {
           m: 0,
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px', // Add gap here
+          gap: '10px',
         }}
       >
         {todos.map(todo => (
@@ -101,6 +103,8 @@ const TodoList: React.FC = () => {
               <Typography
                 variant="body1"
                 sx={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+                style={typography.xSmallMed}
+                color='#2A2D34'
               >
                 {todo.text}
               </Typography>

@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import colors from './colors';
-import typography from './typograhy';
+import typography from './typography';
 
   const theme = createTheme({
     palette: {
@@ -52,13 +52,13 @@ import typography from './typograhy';
         },
 
         subtitle2:{
-          ...typography.largeSemibold,
+          ...typography.largeMed,
         },
         body1: {
-          ...typography.mediumMed,
+          ...typography.largeLight,
         },
         body2: {
-          ...typography.mediumLight,
+          ...typography.mediumBold,
         },
     },
 

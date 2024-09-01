@@ -4,8 +4,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { DateClickArg, EventClickArg } from '@fullcalendar/core';
 import { Box, Typography, useTheme } from '@mui/material';
-import '../../styles/calendar.css';
-import colors from '../../styles/colors';
+import '../../../styles/calendar.css';
+import colors from '../../../styles/colors';
+import typography from '../../../styles/typography';
 
 interface Event {
   title: string;
@@ -32,29 +33,30 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="calendar-container" style={{background:'white'}}>
+    <div className="calendar-container" style={{background:'white', width: '669px', padding: '0 24px 16px 24px', boxSizing:'border-box'}}>
       <Box display='flex' gap='10px'
       sx={{
-        // position: 'absolute', 
-        // top: '100px',     
-        // right: '21px',    
+        position: 'relative', 
+        top: '42px',       
+         justifyContent:'flex-end'
 
       }}
       > 
         <Box 
         display='flex'
         height='20px'
-        padding='2px 5px 1px 4px'
+        padding='2px 5px 1px 4px' 
         gap='25px'
         borderRadius='4px'
         sx={{background: 'rgba(81, 119, 255, 0.10)',
-          color: colors.system.PositiveBlue
+          color: colors.system.PositiveBlue,
+          position: 'relative', 
         }}
       >
-        <Typography>
+        <Typography style={typography.xxSmall2}>
         서류 마감
         </Typography>
-        <Typography>
+        <Typography style={typography.xxSmallBold}>
         32건
         </Typography>
       </Box>
@@ -68,10 +70,10 @@ const Calendar: React.FC = () => {
           color: colors.neutral[20]
         }}
       >
-        <Typography>
+        <Typography style={typography.xxSmall2}>
         중간 단계
         </Typography>
-        <Typography>
+        <Typography style={typography.xxSmallBold}>
         2건
         </Typography>
       </Box>
@@ -86,10 +88,10 @@ const Calendar: React.FC = () => {
           color: theme.palette.secondary.main
         }}
       >
-        <Typography>
+        <Typography style={typography.xxSmall2}>
         면접
         </Typography>
-        <Typography>
+        <Typography style={typography.xxSmallBold}>
         4건
         </Typography>
       </Box>

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
+import typography from '../../../styles/typography';
+import Chip from '../../../components/Chips';
+import colors from '../../../styles/colors';
 
 interface DetailItem {
   id: number;
@@ -41,18 +44,19 @@ const DetailList: React.FC = () => {
   return (
     <Box
       sx={{
-        width: 369,
-        margin: 'auto',
+        width: 370,
         padding: 2,
+        background: 'white',
+
       }}
     >
       <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
-        <Typography variant="h6">세부 일정</Typography>
+        <Typography style={typography.smallBold}>세부 일정</Typography>
         <Box display='flex'>
-          <Typography mr='8px'>
+          <Typography mr='8px' style={typography.smallBold}>
             {date}
           </Typography>
-          <Typography sx={{ color: 'gray' }}>
+          <Typography sx={{ color: 'gray', display: 'flex', alignItems:'center' }} style={typography.xSmallMed}>
             {dayOfWeek}
           </Typography>
         </Box>
@@ -64,19 +68,25 @@ const DetailList: React.FC = () => {
             sx={{
               border: '1px solid #ddd',
               borderRadius: 1,
-              mb: 2, 
+              mb: '8px', 
               p: 2,
             }}
           >
-            <Typography variant="h6">{item.title}</Typography>
-            <Typography>{item.description}</Typography>
-          </Box>
+            <Typography mb='8px' style={typography.xSmall2Bold}>{item.title} | </Typography>
+            <Chip text="서류 마감까지 D-1" backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
+            </Box>
         ))}
-      <Box display="flex" justifyContent="center" mt={2}>
+      <Box display="flex" justifyContent="center" mt={2}> 
         <Pagination
           count={Math.ceil(data.length / ITEMS_PER_PAGE)}
           page={page}
           onChange={handleChangePage}
+          sx={{
+            '& .MuiPaginationItem-root': {
+              fontSize: '14px', 
+            },
+          }}
+          color="primary"
         />
       </Box>
     </Box>
