@@ -19,8 +19,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/review" element={<ReviewsPage />} />
-              <Route path="/career" element={<CareersPage />} />
+              <Route path="/reviews" element={<ReviewsPage />} />
+              <Route path="/careers" element={<CareersPage />} />
             </Routes>
           </Layout>
         </Router>
