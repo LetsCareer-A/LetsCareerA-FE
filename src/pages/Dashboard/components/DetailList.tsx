@@ -41,9 +41,10 @@ const DetailList: React.FC = () => {
   return (
     <Box
       sx={{
-        width: 369,
+        width: 370,
         padding: 2,
-        background: 'white'
+        background: 'white',
+
       }}
     >
       <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
