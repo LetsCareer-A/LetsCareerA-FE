@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import TodayIcon from '@mui/icons-material/Today';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import FolderCopyOutlinedIcon from '@mui/icons-material/FolderCopyOutlined';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import QuickReview from '../pages/Dashboard/components/QuickReview';
 
 const menuItemStyle = {
@@ -36,8 +36,10 @@ const textStyle = {
 };
 
 const Sidebar = () => {
+  const location = useLocation();
+
   return (
-    <Box sx={{ width: 277, height: '100vh', backgroundColor: 'white',padding:'40px 0 0 80px'}}>
+    <Box sx={{ width: 277, height: '100vh', backgroundColor: 'white', padding: '40px 0 0 80px' }}>
       {/* 상단 메뉴 목록 */}
       <Box sx={{ width: 181, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {[
@@ -54,7 +56,7 @@ const Sidebar = () => {
         ))}
       </Box>
       <Box sx={{ marginTop: '40px' }}>
-        <QuickReview />
+        {location.pathname === '/dashboard' && <QuickReview />}
       </Box>
     </Box>
   );
