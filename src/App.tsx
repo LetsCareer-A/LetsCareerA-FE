@@ -5,8 +5,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import Dashboard from './pages/index';
 import theme from './styles/theme';
 import Layout from './pages/Layout'; 
-import Retrospective from './pages/Retrospective/Retrospective';
-import Careerboard from './pages/Careerboard/Careerboard';
+import ReviewsPage from './pages/Reviews/ReviewsPage';
+import CareersPage from './pages/Careers/CareersPage';
 
 const queryClient = new QueryClient();
 
@@ -19,8 +19,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/retrospective" element={<Retrospective />} />
-              <Route path="/career-board" element={<Careerboard />} />
+              <Route path="/review" element={<ReviewsPage />} />
+              <Route path="/career" element={<CareersPage />} />
             </Routes>
           </Layout>
         </Router>
