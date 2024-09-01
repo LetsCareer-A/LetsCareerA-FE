@@ -3,6 +3,7 @@ import TodayIcon from '@mui/icons-material/Today';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import FolderCopyOutlinedIcon from '@mui/icons-material/FolderCopyOutlined';
 import { Link } from 'react-router-dom';
+import QuickReview from '../pages/Dashboard/components/QuickReview';
 
 const menuItemStyle = {
   display: 'flex',
@@ -36,9 +37,9 @@ const textStyle = {
 
 const Sidebar = () => {
   return (
-    <Box sx={{ width: 277, height: '100vh', backgroundColor: 'white' }}>
+    <Box sx={{ width: 277, height: '100vh', backgroundColor: 'white',padding:'40px 0 0 80px'}}>
       {/* 상단 메뉴 목록 */}
-      <Box sx={{ width: 181, display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative', left: '80px', top: '40px' }}>
+      <Box sx={{ width: 181, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {[
           { icon: <TodayIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '지원 대시보드', path: '/dashboard' },
           { icon: <Inventory2OutlinedIcon sx={{ width: 20, height: 20, color: 'black', transition: 'color 0.3s' }} className="menuIcon" />, text: '회고 보드', path: '/reviews' },
@@ -51,6 +52,9 @@ const Sidebar = () => {
             </Box>
           </Link>
         ))}
+      </Box>
+      <Box sx={{ marginTop: '40px' }}>
+        <QuickReview />
       </Box>
     </Box>
   );
