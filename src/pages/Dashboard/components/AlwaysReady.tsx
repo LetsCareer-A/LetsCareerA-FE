@@ -53,7 +53,7 @@ const AlwaysReady = () => {
                         상시 준비 보드
                     </Typography>
                     <Typography mt='4px' mb='16px' style={typography.xxSmallReg} color='#7A7D84'>
-                        마감 기한이 없는 채용 공고나 채용 공고가 뜨지 않은 준비 건이에요. 
+                        마감 기한 없는 채용이나 채용 공고가 뜨지 않은 준비 건이에요.
                     </Typography>
                 </Box>
                 <Box sx={{display: 'flex', width: 338, flexDirection: 'column', gap: '8px'}}>
