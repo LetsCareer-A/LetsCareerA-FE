@@ -148,21 +148,21 @@ const typography = {
   },
 
   //small
-  samllBold: {
+  smallBold: {
     fontFamily: 'Pretendard',
     fontSize: '20px',
     fontWeight: 700,
     lineHeight: '28px',
     fontStyle: 'normal',
   },
-  samllSemibold: {
+  smallSemibold: {
     fontFamily: 'Pretendard',
     fontSize: '20px',
     fontWeight: 600,
     lineHeight: '28px',
     fontStyle: 'normal',
   },
-  samllMed: {
+  smallMed: {
     fontFamily: 'Pretendard',
     fontSize: '20px',
     fontWeight: 500,
@@ -170,7 +170,7 @@ const typography = {
     letterSpacing: '-0.4px',
     fontStyle: 'normal',
   },
-  samllReg: {
+  smallReg: {
     fontFamily: 'Pretendard',
     fontSize: '20px',
     fontWeight: 400,
@@ -178,7 +178,7 @@ const typography = {
     letterSpacing: '-0.4px',
     fontStyle: 'normal',
   },
-  samllLight: {
+  smallLight: {
     fontFamily: 'Pretendard',
     fontSize: '20px',
     fontWeight: 300,
@@ -188,14 +188,14 @@ const typography = {
   },
 
 
-  samll2Bold: {
+  small2Bold: {
     fontFamily: 'Pretendard',
     fontSize: '18px',
     fontWeight: 700,
     lineHeight: '26px',
     fontStyle: 'normal',
   },
-  samll2Semibold: {
+  small2Semibold: {
     fontFamily: 'Pretendard',
     fontSize: '18px',
     fontWeight: 600,
@@ -203,7 +203,7 @@ const typography = {
     fontStyle: 'normal',
     letterSpacing: '-0.022px',
   },
-  samll2Med: {
+  small2Med: {
     fontFamily: 'Pretendard',
     fontSize: '18px',
     fontWeight: 500,
@@ -211,7 +211,7 @@ const typography = {
     letterSpacing: '-0.022pxpx',
     fontStyle: 'normal',
   },
-  samll2Reg: {
+  small2Reg: {
     fontFamily: 'Pretendard',
     fontSize: '18px',
     fontWeight: 400,
@@ -219,7 +219,7 @@ const typography = {
     letterSpacing: '-0.022px',
     fontStyle: 'normal',
   },
-  samll2Light: {
+  small2Light: {
     fontFamily: 'Pretendard',
     fontSize: '18px',
     fontWeight: 300,
