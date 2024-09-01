@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Pagination, Typography } from '@mui/material';
-import colors from '../styles/colors';
+import colors from '../.././../styles/colors';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 
 const ReadyTextStyles = {

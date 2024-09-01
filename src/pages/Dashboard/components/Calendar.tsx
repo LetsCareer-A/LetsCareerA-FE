@@ -6,7 +6,7 @@ import { DateClickArg, EventClickArg } from '@fullcalendar/core';
 import { Box, Typography, useTheme } from '@mui/material';
 import '../../../styles/calendar.css';
 import colors from '../../../styles/colors';
-import typography from '../../../styles/typograhy';
+import typography from '../../../styles/typography';
 
 interface Event {
   title: string;
