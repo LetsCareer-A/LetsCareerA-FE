@@ -1,9 +1,11 @@
 import { Container, Box, Typography } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import CalendarAdd from '../../assets/calendarAdd.svg';
-import typography from '../../styles/typograhy'
+import typography from '../../styles/typography'
 import Calendar from './components/Calendar';
 import DetailList from './components/DetailList';
+import TodoList from './components/Todo';
+import AlwaysReady from './components/AlwaysReady';
 
 const DashboardPage = () => {
     return (
@@ -19,9 +21,13 @@ const DashboardPage = () => {
                 <img src={CalendarAdd} alt='캘린더 아이콘'/>
             </PrimaryButton>
             </Box>
-            <Box display='flex' gap='4px' justifyContent='space-between' mt='20px' borderRadius='12px' sx={{overflow: 'hidden'}}>
+            <Box display='flex' gap='4px' justifyContent='space-between' mt='20px' mb='16px' borderRadius='12px' sx={{overflow: 'hidden'}}>
                 <Calendar />
                 <DetailList />
+            </Box>
+            <Box display='flex' gap='4px' justifyContent='space-between' borderRadius='12px' sx={{overflow: 'hidden'}}>
+                <TodoList />
+                <AlwaysReady />
             </Box>
             
         </Box>

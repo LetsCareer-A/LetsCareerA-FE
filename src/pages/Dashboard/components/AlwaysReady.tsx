@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Pagination, Typography } from '@mui/material';
 import colors from '../.././../styles/colors';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import typography from '../../../styles/typography';
 
 const ReadyTextStyles = {
     colors : `${colors.neutral[10]}`,
@@ -45,17 +46,17 @@ const AlwaysReady = () => {
     ];
 
     return (
-        <Box sx={{width: 370, height: 594, flexShrink: 0, borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, background: `${colors.neutral[100]}`, boxShadow:'0px 0px 25px 0px rgba(0, 0, 0, 0.02)'}}>
-            <Box sx={{gap: 16, marginLeft: '16px', marginTop: '16px', flexDirection:'row' }}>
-                <Box sx={{gap:'4px'}}>
-                    <Typography sx={{color: `${colors.neutral[10]}`, fontSize: '18px', letterSpacing: '-0.022px', fontFamily: 'Pretendard', fontStyle: 'normal'}}>
+        <Box sx={{width: '370px', height: '594px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, background:'white', boxShadow:'0px 0px 25px 0px rgba(0, 0, 0, 0.02)', padding: '16px'}}>
+            <Box sx={{ flexDirection:'row' }}>
+                <Box>
+                    <Typography style={typography.small2Bold}>
                         상시 준비 보드
                     </Typography>
-                    <Typography sx={{color: `${colors.neutral[40]}`, fontSize: '12px', letterSpacing: '-0.3px', fontFamily: 'Pretendard', fontStyle: 'normal'}}>
+                    <Typography mt='4px' mb='16px' style={typography.xxSmallReg} color='#7A7D84'>
                         마감 기한이 없는 채용 공고나 채용 공고가 뜨지 않은 준비 건이에요. 
                     </Typography>
                 </Box>
-                <Box sx={{display: 'flex', width: 338, height: 452, flexDirection: 'column', gap: '8px'}}>
+                <Box sx={{display: 'flex', width: 338, flexDirection: 'column', gap: '8px'}}>
                     {readyBoardData.map((item, index) => (
                         <ReadyBoardItem
                             key={index}
@@ -65,7 +66,17 @@ const AlwaysReady = () => {
                         />
                     ))}
                 </Box>
-                    <Pagination count={5} color="primary" />
+                <Box display="flex" justifyContent="center" mt={2}>
+                <Pagination
+                    count={5}
+                    color="primary"
+                    sx={{
+                    '& .MuiPaginationItem-root': {
+                        fontSize: '14px',
+                    },
+                    }}
+                />
+                </Box>
             </Box>
         </Box>
     );
