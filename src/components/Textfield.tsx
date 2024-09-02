@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import { Box, TextField, Typography } from '@mui/material';
 
 interface TextfieldProps {
-  showCharCount?: boolean; // 글자수 표시 여부
-  placeholder?: string;    // placeholder 텍스트
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  showCharCount?: boolean;
+  placeholder?: string;
 }
-
-const Textfield: React.FC<TextfieldProps> = ({ showCharCount = true, placeholder = '텍스트텍스트' }) => { // 기본값 설정
-  const [value, setValue] = useState('');
+const Textfield: React.FC<TextfieldProps> = ({
+  value,
+  onChange,
+  showCharCount = true,
+  placeholder = '텍스트를 입력하세요.'
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   const checkError = () => {
-    if (value.length > 500) { 
+    if (value.length > 500) {
       setHasError(true);
     } else {
       setHasError(false);
@@ -38,7 +43,7 @@ const Textfield: React.FC<TextfieldProps> = ({ showCharCount = true, placeholder
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    onChange(event);
     checkError();
   };
 
@@ -85,7 +90,7 @@ const Textfield: React.FC<TextfieldProps> = ({ showCharCount = true, placeholder
           backgroundColor: 'transparent',
         }}
       />
-      {showCharCount && (  // showCharCount가 true일 때만 표시
+      {showCharCount && (
         <Box
           sx={{
             display: 'flex',

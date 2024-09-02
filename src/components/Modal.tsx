@@ -2,17 +2,18 @@ import React from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, IconButton, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import typography from '../styles/typography';
+import colors from '../styles/colors';
 
 const StyledDialog = styled(Dialog)<{ width?: string }>(({ width }) => ({
   '& .MuiPaper-root': {
-    width: width || '706px', 
+    width: width || '706px',
     flexShrink: 0,
     borderRadius: '16px',
     background: '#FFF',
     padding: '20px',
     margin: 0,
-    maxWidth: '100%',   
-    minWidth: 'auto',  
+    maxWidth: '100%',
+    minWidth: 'auto',
   },
 }));
 
@@ -25,8 +26,14 @@ const StyledConfirmButton = styled(Button)(({ theme }) => ({
   alignItems: 'center',
   gap: '8px',
   flexShrink: 0,
-  backgroundColor: theme.palette.primary.main, 
+  backgroundColor: theme.palette.primary.main,
   color: '#fff',
+  // Default state
+  '&:disabled': {
+    backgroundColor: colors.neutral[90], 
+    color: colors.neutral[50], 
+    cursor: 'not-allowed',
+  },
 }));
 
 interface ModalProps {
@@ -36,7 +43,8 @@ interface ModalProps {
   children: React.ReactNode;
   confirmText?: string;
   onConfirm?: () => void;
-  width?: string; 
+  width?: string;
+  isButtonDisabled: boolean;  // Prop added for button disabled state
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -46,7 +54,8 @@ const Modal: React.FC<ModalProps> = ({
   children,
   confirmText = '확인',
   onConfirm,
-  width,  
+  width,
+  isButtonDisabled,  // Prop added for button disabled state
 }) => {
   return (
     <StyledDialog open={open} onClose={onClose} width={width}>
@@ -63,6 +72,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={() => {
           if (onConfirm) onConfirm();
         }}
+        disabled={isButtonDisabled}  // Apply disabled state
       >
         {confirmText}
       </StyledConfirmButton>
