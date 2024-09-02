@@ -1,16 +1,18 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, Button, styled, IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, IconButton, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import typography from '../styles/typography';
 
-const StyledDialog = styled(Dialog)(() => ({
+const StyledDialog = styled(Dialog)<{ width?: string }>(({ width }) => ({
   '& .MuiPaper-root': {
-    width: '706px',
-    height: '413px',
+    width: width || '706px', 
     flexShrink: 0,
     borderRadius: '16px',
     background: '#FFF',
-    padding: '20px'
+    padding: '20px',
+    margin: 0,
+    maxWidth: '100%',   
+    minWidth: 'auto',  
   },
 }));
 
@@ -34,6 +36,7 @@ interface ModalProps {
   children: React.ReactNode;
   confirmText?: string;
   onConfirm?: () => void;
+  width?: string; 
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -43,9 +46,10 @@ const Modal: React.FC<ModalProps> = ({
   children,
   confirmText = '확인',
   onConfirm,
+  width,  
 }) => {
   return (
-    <StyledDialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <StyledDialog open={open} onClose={onClose} width={width}>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }} style={typography.medium2Bold}>
         {title}
         <IconButton aria-label="close" onClick={onClose} sx={{ color: (theme) => theme.palette.grey[500] }}>
@@ -55,13 +59,13 @@ const Modal: React.FC<ModalProps> = ({
       <DialogContent sx={{ p: 0 }}>
         {children}
       </DialogContent>
-        <StyledConfirmButton 
-          onClick={() => {
-            if (onConfirm) onConfirm();
-          }}
-        >
-          {confirmText}
-        </StyledConfirmButton>
+      <StyledConfirmButton 
+        onClick={() => {
+          if (onConfirm) onConfirm();
+        }}
+      >
+        {confirmText}
+      </StyledConfirmButton>
     </StyledDialog>
   );
 };

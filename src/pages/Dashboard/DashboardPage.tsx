@@ -52,6 +52,7 @@ const DashboardPage = () => {
                 onClose={handleClose}
                 title="새로운 지원 일정 등록"
                 confirmText="다음"
+                width='412px'
              >
                 <Box mt='32px' mb='24px'>
                     <Label label="기업 이름" required={true} />
