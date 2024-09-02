@@ -1,5 +1,7 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, styled } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, styled, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import typography from '../styles/typography';
 
 const StyledDialog = styled(Dialog)(() => ({
   '& .MuiPaper-root': {
@@ -43,7 +45,12 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   return (
     <StyledDialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} style={typography.medium2Bold}>
+        {title}
+        <IconButton aria-label="close" onClick={onClose} sx={{ color: (theme) => theme.palette.grey[500] }}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent className="p-4">
         {children}
       </DialogContent>
