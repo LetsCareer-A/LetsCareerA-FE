@@ -28,7 +28,7 @@ const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor }) => {
     <StyledChip backgroundColor={backgroundColor}>
       <Typography 
       sx={{ 
-        color: textColor || colors.system.PositiveBlue, 
+        color: textColor || 'white' ,
         ...typography.xxSmall2
       }}
 >

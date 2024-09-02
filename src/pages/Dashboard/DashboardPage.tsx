@@ -13,6 +13,7 @@ import colors from '../../styles/colors';
 import Label from '../../components/Label';
 import Dropdown from '../../components/Dropdown';
 import useModalStore, { useModalStoreState } from '../../store/useModalStore';
+import Chip from '../../components/Chips';
 
 const DashboardPage = () => {
     const [open, setOpen] = React.useState(false);
@@ -35,6 +36,13 @@ const DashboardPage = () => {
 
     useEffect(() => {
     }, [companyName, jobTitle]);
+
+    const items = [
+        { text: '서류 준비 중', color: '#4D55F5' , onClick: () => console.log('서류 준비 중') },
+        { text: '면접 준비 중', color: '#1BC47D' , onClick: () => console.log('면접 준비 중') },
+        { text: '중간 전형(직접 입력)', color: '#3E4148' ,onClick: () => console.log('중간 전형(직접 입력)') },
+      ];
+    
 
     return (
         <Box>
@@ -87,12 +95,14 @@ const DashboardPage = () => {
                     <Label label="현재 준비 상태" required={true} />
                     <Dropdown
                         buttonText="준비 단계를 선택해주세요."
-                        items={[
-                            { text: 'Item 1', onClick: () => alert('Item 1') },
-                            { text: 'Item 2', onClick: () => alert('Item 2') },
-                            { text: 'Item 3', onClick: () => alert('Item 3') },
-                        ]}
-                    />
+                        items={items}
+                        renderItem={(item) => (
+                            <Chip
+                            text={item.text}
+                            backgroundColor={item.color}
+                            />
+                        )}
+                        />
                 </Box>
                 <Box mb='24px' p='10px 12px' borderRadius='8px' sx={{ background: colors.neutral[95] }}>
                     <FormControlLabel
