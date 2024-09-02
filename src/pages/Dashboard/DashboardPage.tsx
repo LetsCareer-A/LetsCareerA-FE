@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import CalendarAdd from '../../assets/calendarAdd.svg';
 import typography from '../../styles/typography'
@@ -8,13 +8,22 @@ import TodoList from './components/Todo';
 import AlwaysReady from './components/AlwaysReady';
 import Modal from '../../components/Modal';
 import { useState } from 'react';
+import Textfield from '../../components/Textfield';
+import colors from '../../styles/colors';
+import Label from '../../components/Label';
+import Dropdown from '../../components/Dropdown';
 
 const DashboardPage = () => {
 
     const [open, setOpen] = useState(false);
-
+    const [checked, setChecked] = useState(false);
+  
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+  
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setChecked(event.target.checked);
+    };
 
     return (
         <Box>
@@ -42,7 +51,43 @@ const DashboardPage = () => {
                 open={open}
                 onClose={handleClose}
                 title="새로운 지원 일정 등록"
-             />
+                confirmText="다음"
+             >
+                <Box mt='32px' mb='24px'>
+                    <Label label="기업 이름" required={true} />
+                <Textfield showCharCount={false} placeholder="지원하시는 기업의 이름을 입력해주세요. (ex: 렛츠커리어)" />
+                </Box>
+                <Box mb='24px'>
+                    <Label label="직무 이름" required={true} />
+                    <Textfield showCharCount={false} placeholder="지원하시는 직무의 이름을 입력해주세요. (ex: 컨텐츠 디자이너)" />
+                </Box>
+                <Box mb='32px'>
+                   <Label label="현재 준비 상태" required={true} />
+                <Dropdown 
+                    buttonText="준비 단계를 선택해주세요."
+                    items={[
+                    { text: 'Item 1', onClick: () => alert('Item 1') },
+                    { text: 'Item 2', onClick: () => alert('Item 2') },
+                    { text: 'Item 3', onClick: () => alert('Item 3') },
+                    ]}
+                /> 
+                </Box>
+                <Box mb='24px' p='10px 12px' borderRadius='8px' sx={{background: colors.neutral[95]}}>
+                <FormControlLabel
+                    control={
+                    <Checkbox
+                        checked={checked}
+                        onChange={handleCheckboxChange}
+                        color="primary"
+                    />
+                    }
+                    label={<Typography style={typography.xSmall2Med}>마감일이 없거나 공고가 뜨지 않았어요. (상시준비)</Typography>}
+                />
+                </Box>
+                
+                
+                
+             </Modal>
             
         </Box>
     );
