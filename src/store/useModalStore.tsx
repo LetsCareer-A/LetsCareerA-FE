@@ -6,6 +6,7 @@ interface ModalState {
   setCompanyName: (name: string) => void;
   setJobTitle: (title: string) => void;
   isButtonDisabled: boolean;
+  resetState: () => void; 
 }
 
 const useModalStore = create<ModalState>((set) => ({
@@ -14,6 +15,7 @@ const useModalStore = create<ModalState>((set) => ({
   setCompanyName: (name: string) => set({ companyName: name }),
   setJobTitle: (title: string) => set({ jobTitle: title }),
   isButtonDisabled: false,
+  resetState: () => set({ companyName: '', jobTitle: '' }),
 }));
 
 

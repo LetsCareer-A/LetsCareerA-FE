@@ -19,11 +19,14 @@ const DashboardPage = () => {
     const [checked, setChecked] = React.useState(false);
 
 
-    const { companyName, jobTitle, setCompanyName, setJobTitle } = useModalStore();
+    const { companyName, jobTitle, setCompanyName, setJobTitle, resetState  } = useModalStore();
     const { isButtonDisabled } = useModalStoreState(); 
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        resetState(); 
+        setOpen(false);
+    };
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
