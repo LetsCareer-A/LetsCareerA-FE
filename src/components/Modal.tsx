@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, styled, IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, styled, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import typography from '../styles/typography';
 
@@ -10,6 +10,7 @@ const StyledDialog = styled(Dialog)(() => ({
     flexShrink: 0,
     borderRadius: '16px',
     background: '#FFF',
+    padding: '20px'
   },
 }));
 
@@ -45,16 +46,15 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   return (
     <StyledDialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} style={typography.medium2Bold}>
+      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }} style={typography.medium2Bold}>
         {title}
         <IconButton aria-label="close" onClick={onClose} sx={{ color: (theme) => theme.palette.grey[500] }}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent className="p-4">
+      <DialogContent sx={{ p: 0 }}>
         {children}
       </DialogContent>
-      <DialogActions className="flex justify-end gap-4 p-4">
         <StyledConfirmButton 
           onClick={() => {
             if (onConfirm) onConfirm();
@@ -62,7 +62,6 @@ const Modal: React.FC<ModalProps> = ({
         >
           {confirmText}
         </StyledConfirmButton>
-      </DialogActions>
     </StyledDialog>
   );
 };
