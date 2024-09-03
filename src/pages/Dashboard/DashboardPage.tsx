@@ -19,8 +19,7 @@ const DashboardPage = () => {
     const [open, setOpen] = React.useState(false);
     const [checked, setChecked] = React.useState(false);
 
-
-    const { companyName, jobTitle, setCompanyName, setJobTitle, resetState  } = useModalStore();
+    const { companyName, jobTitle, setCompanyName, setJobTitle, resetState, setDropdownItem } = useModalStore();
     const { isButtonDisabled } = useModalStoreState(); 
 
     const handleOpen = () => setOpen(true);
@@ -33,16 +32,13 @@ const DashboardPage = () => {
         setChecked(event.target.checked);
     };
 
-
-    useEffect(() => {
-    }, [companyName, jobTitle]);
+    useEffect(() => {}, [companyName, jobTitle]);
 
     const items = [
-        { text: '서류 준비 중', color: '#4D55F5' , onClick: () => console.log('서류 준비 중') },
-        { text: '면접 준비 중', color: '#1BC47D' , onClick: () => console.log('면접 준비 중') },
-        { text: '중간 전형(직접 입력)', color: '#3E4148' ,onClick: () => console.log('중간 전형(직접 입력)') },
-      ];
-    
+        { text: '서류 준비 중', color: '#4D55F5', onClick: () => setDropdownItem('서류 준비 중') },
+        { text: '면접 준비 중', color: '#1BC47D', onClick: () => setDropdownItem('면접 준비 중') },
+        { text: '중간 전형(직접 입력)', color: '#3E4148', onClick: () => setDropdownItem('중간 전형(직접 입력)') },
+    ];
 
     return (
         <Box>
@@ -102,7 +98,7 @@ const DashboardPage = () => {
                             backgroundColor={item.color}
                             />
                         )}
-                        />
+                    />
                 </Box>
                 <Box mb='24px' p='10px 12px' borderRadius='8px' sx={{ background: colors.neutral[95] }}>
                     <FormControlLabel
