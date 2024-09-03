@@ -4,7 +4,7 @@ import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import ReactPaginate from 'react-paginate';
 import { useTheme } from '@mui/material';
-import '../../../styles/pagination.css'; // CSS 파일 임포트
+import '../../../styles/pagination.css';
 
 // 예시 아이템 데이터
 const items = Array.from({ length: 10 }, (_, index) => `아이템 ${index + 1}`);
@@ -51,7 +51,7 @@ const QuickReview: React.FC = () => {
                 면접 또는 중간 전형 당일부터 3일 후까지 보여드려요.
             </Typography>
             {/* 아이템 목록 */}
-            <Box>
+            <Box display='flex' flexDirection='column' gap= '8px'>
                 {currentItems.map((item, index) => (
                     <Box
                     key={index} 
@@ -59,19 +59,24 @@ const QuickReview: React.FC = () => {
                     sx={{
                         background: 'white',
                         display: 'flex',
-                        flexDirection: 'column', 
-                        gap: '8px', 
+                        flexDirection: 'column',  
                         borderRadius: '12px',
-                        mb: '8px'
+                        p: '8px'
                     }}
                 >
                     <Typography 
                         key={index} 
                         style={typography.xSmallMed} 
                         color='#2A2D34'
-                        sx={{ marginBottom: '4px' }}
                     >
                         {item}
+                    </Typography>
+                    <Typography 
+                        key={index} 
+                        style={typography.xSmall2Reg} 
+                        color='#7A7D84' 
+                    >
+                        인터렉션 디자이너
                     </Typography>
                     </Box>
                 ))}

@@ -1,18 +1,19 @@
-import { useState, MouseEvent } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { Button, Menu, MenuItem, styled } from '@mui/material';
+import Chip from './Chips'; 
 import colors from '../styles/colors';
 
 const StyledButton = styled(Button)(() => ({
-    display: 'flex',
-    height: '44px',
-    padding: '11px 8px 11px 12px',
-    alignItems: 'center',
-    gap: '8px',
-    alignSelf: 'stretch',
-    borderRadius: '8px',
-    border: `1px solid ${colors.primary[60]}`, 
-    background: colors.primary[10], 
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
+  display: 'flex',
+  height: '44px',
+  padding: '11px 8px 11px 12px',
+  alignItems: 'center',
+  gap: '8px',
+  alignSelf: 'stretch',
+  borderRadius: '8px',
+  border: `1px solid ${colors.primary[60]}`, 
+  background: colors.primary[10], 
+  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
 }));
 
 const StyledMenu = styled(Menu)(() => ({
@@ -22,9 +23,9 @@ const StyledMenu = styled(Menu)(() => ({
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
   },
   '& .MuiList-root': {
-        padding: 0, 
-        margin: 0, 
-    },
+    padding: 0, 
+    margin: 0, 
+  },
 }));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
@@ -37,11 +38,13 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 
 interface DropdownProps {
   buttonText: string;
-  items: Array<{ text: string; onClick: () => void }>;
+  items: Array<{ text: string; onClick: () => void; color?: string }>; // color 속성 추가
+  renderItem?: (item: { text: string; onClick: () => void; color?: string }) => React.ReactNode; // Optional render prop
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items }) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedItem, setSelectedItem] = useState<{ text: string; onClick: () => void; color?: string } | null>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -52,10 +55,24 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items }) => {
     setAnchorEl(null);
   };
 
+  const handleItemClick = (item: { text: string; onClick: () => void; color?: string }) => {
+    setSelectedItem(item); 
+    item.onClick();
+    handleClose();
+  };
+
   return (
     <div>
       <StyledButton onClick={handleClick}>
-        {buttonText}
+        {selectedItem ? (
+          <Chip 
+            text={selectedItem.text}
+            backgroundColor={selectedItem.color}
+            textColor="#FFF" 
+          />
+        ) : (
+          buttonText
+        )}
       </StyledButton>
       <StyledMenu
         anchorEl={anchorEl}
@@ -65,9 +82,9 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items }) => {
         {items.map((item, index) => (
           <StyledMenuItem
             key={index}
-            onClick={() => { item.onClick(); handleClose(); }}
+            onClick={() => handleItemClick(item)} // 아이템 클릭 시 처리
           >
-            {item.text}
+            {renderItem ? renderItem(item) : item.text}
           </StyledMenuItem>
         ))}
       </StyledMenu>

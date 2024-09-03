@@ -1,13 +1,19 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, styled } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, IconButton, styled } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import typography from '../styles/typography';
+import colors from '../styles/colors';
 
-const StyledDialog = styled(Dialog)(() => ({
+const StyledDialog = styled(Dialog)<{ width?: string }>(({ width }) => ({
   '& .MuiPaper-root': {
-    width: '706px',
-    height: '413px',
+    width: width || '706px',
     flexShrink: 0,
     borderRadius: '16px',
     background: '#FFF',
+    padding: '20px',
+    margin: 0,
+    maxWidth: '100%',
+    minWidth: 'auto',
   },
 }));
 
@@ -20,8 +26,14 @@ const StyledConfirmButton = styled(Button)(({ theme }) => ({
   alignItems: 'center',
   gap: '8px',
   flexShrink: 0,
-  backgroundColor: theme.palette.primary.main, 
+  backgroundColor: theme.palette.primary.main,
   color: '#fff',
+  // Default state
+  '&:disabled': {
+    backgroundColor: colors.neutral[90], 
+    color: colors.neutral[50], 
+    cursor: 'not-allowed',
+  },
 }));
 
 interface ModalProps {
@@ -31,6 +43,8 @@ interface ModalProps {
   children: React.ReactNode;
   confirmText?: string;
   onConfirm?: () => void;
+  width?: string;
+  isButtonDisabled: boolean;  // Prop added for button disabled state
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -40,22 +54,28 @@ const Modal: React.FC<ModalProps> = ({
   children,
   confirmText = '확인',
   onConfirm,
+  width,
+  isButtonDisabled,  // Prop added for button disabled state
 }) => {
   return (
-    <StyledDialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent className="p-4">
+    <StyledDialog open={open} onClose={onClose} width={width}>
+      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }} style={typography.medium2Bold}>
+        {title}
+        <IconButton aria-label="close" onClick={onClose} sx={{ color: (theme) => theme.palette.grey[500] }}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent sx={{ p: 0 }}>
         {children}
       </DialogContent>
-      <DialogActions className="flex justify-end gap-4 p-4">
-        <StyledConfirmButton 
-          onClick={() => {
-            if (onConfirm) onConfirm();
-          }}
-        >
-          {confirmText}
-        </StyledConfirmButton>
-      </DialogActions>
+      <StyledConfirmButton 
+        onClick={() => {
+          if (onConfirm) onConfirm();
+        }}
+        disabled={isButtonDisabled}  // Apply disabled state
+      >
+        {confirmText}
+      </StyledConfirmButton>
     </StyledDialog>
   );
 };
