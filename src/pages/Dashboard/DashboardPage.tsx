@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import CalendarAdd from '../../assets/calendarAdd.svg';
@@ -16,20 +16,30 @@ import useModalStore, { useModalStoreState } from '../../store/useModalStore';
 import Chip from '../../components/Chips';
 
 const DashboardPage = () => {
-    const [open, setOpen] = React.useState(false);
-    const [checked, setChecked] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [buttonText, setButtonText] = useState('다음');
 
-    const { companyName, jobTitle, setCompanyName, setJobTitle, resetState, setDropdownItem } = useModalStore();
+    const { companyName, jobTitle, setCompanyName, setJobTitle, resetState, setDropdownItem, isCheckboxChecked, setCheckboxChecked } = useModalStore();
     const { isButtonDisabled } = useModalStoreState(); 
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         resetState(); 
         setOpen(false);
+        setButtonText('다음'); 
     };
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked(event.target.checked);
+        setCheckboxChecked(event.target.checked);
+        setButtonText(event.target.checked ? '등록 완료' : '다음');  
+    };
+
+    const handleConfirm = () => {
+        if (buttonText === '등록 완료') {
+            handleClose(); 
+        } else {
+            // "다음" 버튼일 때 로직
+        }
     };
 
     useEffect(() => {}, [companyName, jobTitle]);
@@ -62,12 +72,10 @@ const DashboardPage = () => {
                 open={open}
                 onClose={handleClose}
                 title="새로운 지원 일정 등록"
-                confirmText="다음"
+                confirmText={buttonText}  
                 width='412px'
                 isButtonDisabled={isButtonDisabled} 
-                onConfirm={() => {
-                    //버튼 클릭 시 로직 추가
-                }}
+                onConfirm={handleConfirm}  
             >
                 <Box mt='32px' mb='24px'>
                     <Label label="기업 이름" required={true} />
@@ -94,8 +102,8 @@ const DashboardPage = () => {
                         items={items}
                         renderItem={(item) => (
                             <Chip
-                            text={item.text}
-                            backgroundColor={item.color}
+                                text={item.text}
+                                backgroundColor={item.color}
                             />
                         )}
                     />
@@ -104,7 +112,7 @@ const DashboardPage = () => {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={checked}
+                                checked={isCheckboxChecked}  
                                 onChange={handleCheckboxChange}
                                 color="primary"
                             />
