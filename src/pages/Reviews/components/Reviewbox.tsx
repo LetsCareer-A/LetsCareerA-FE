@@ -4,9 +4,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 const Reviewbox = () => {
-    return (
-   
-    );
+
 };
 
 export default Reviewbox;

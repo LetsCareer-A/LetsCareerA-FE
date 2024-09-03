@@ -74,7 +74,7 @@ const typography = {
     fontWeight: 700,
     lineHeight: '32px',
     letterSpacing: '-0.576px',
-    fontStyle: 'normal',
+    fontStyle: 'bold',
   },
 
   mediumSemibold: {
@@ -83,7 +83,7 @@ const typography = {
     fontWeight: 600,
     lineHeight: '32px',
     letterSpacing: '-0.576px',
-    fontStyle: 'normal',
+    fontStyle: 'bold',
   },
 
   mediumMed: {
