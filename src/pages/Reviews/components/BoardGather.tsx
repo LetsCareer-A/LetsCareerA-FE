@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
-import colors from '../../../styles/colors'
-import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx';
+import colors from '../../../styles/colors';
+import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx'; // Chip 컴포넌트를 import합니다.
 
 const BoardGather = ({ company, department, reviews }) => {
   return (
@@ -10,7 +10,8 @@ const BoardGather = ({ company, department, reviews }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '300px',
+        width: '337px',          // 넓이 설정
+        height: '670px',         // 높이 설정
         padding: '16px',
         border: '1px solid #EFEFEF',
         borderRadius: '12px',
@@ -26,28 +27,23 @@ const BoardGather = ({ company, department, reviews }) => {
 
       {/* 회고 상태 리스트 */}
       <Stack spacing={2}>
-        {reviews.map((index, review) => (
+        {reviews.map((review, index) => (
           <Box 
             key={index} 
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '12px',
-              backgroundColor: colors.neutral[0],
-              borderRadius: '8px',
-              border: '1px solid #EFEFEF',
-              gap: '8px'
+              border: `1px solid ${colors.neutral[85]}`,        // 테두리 색상 설정
+              borderRadius: '8px',                              // 둥근 테두리 설정
+              background: `${colors.neutral[95]}`,              // 배경 색상 설정
+              padding: '12px 12px',                             // 패딩 설정
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Chip text={review.title} backgroundColor={review.color} />
-              <Box sx={{ flexGrow: 1 }} /> {/* Spacing */}
-              <Typography sx={{ color: colors.neutral[50], typography: typography.xxSmall2 }}>
-                &#x27A4;
-              </Typography>
-            </Box>
-            <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[50] }}>
-              {review.description}
+            <Chip 
+              text={review.type}
+              backgroundColor={colors.neutral[20]} 
+              textColor="#FFFFFF"                                  // Chip의 텍스트 색상 설정
+            />
+            <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[50], marginTop: '12px'}}>
+              {review.freeReview}
             </Typography>
           </Box>
         ))}

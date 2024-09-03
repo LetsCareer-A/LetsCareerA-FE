@@ -2,50 +2,17 @@ import React from 'react';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import { Box, Typography, Stack, Pagination } from '@mui/material';
-import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx'; // Chip 컴포넌트를 import합니다.
+import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx';
+import BoardGather from './components/BoardGather';
 
-const BoardGather = () => {
-  return (
-    <Box 
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '337px',
-        height: '670px',
-        padding: '16px',
-        border: '1px solid #EFEFEF',
-        borderRadius: '12px',
-        background: colors.neutral[100]
-      }}
-    >
-      {/* 회사 이름 및 부서 */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
-        <Typography sx={{ typography: typography.small2Bold }}>네이버클라우드</Typography>
-        <Typography sx={{ typography: typography.small2Bold }}> | </Typography> 
-        <Typography sx={{ typography: typography.small2Bold }}>UX리서치</Typography>
-      </Box>
-
-      {/* 회고 상태 리스트 */}
-      <Stack spacing={2}>
-        <Box>
-          <Chip text="중간 전형 회고" backgroundColor={colors.neutral[80]} textColor="#FFF" />
-          <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[50] }}>
-            2024년 08월 21일에 진행된 중간 전형입니다.
-          </Typography>
-        </Box>
-        <Box>
-          <Chip text="면접 회고" backgroundColor={colors.system.PositiveBlue} textColor="#FFF" />
-          <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[50] }}>
-            2024년 08월 21일에 진행된 면접입니다.
-          </Typography>
-        </Box>
-        {/* 추가 회고 리스트를 여기에 추가하세요 */}
-      </Stack>
-    </Box>
-  );
-}
 
 const ReviewPage = () => {
+  const company = [
+    { company: '네이버', department: 'UI 엔지니어', reviews: [{ type: '중간 전형 회고', freeReview: '이 회사의 UI 엔지니어는 매우 만족스럽습니다.' }] },
+    { company: '삼성', department: '프론트엔드', reviews: [{ type: '면접', freeReview: '프론트엔드 개발 환경이 불편했습니다.' }] },
+    { company: '엘지', department: '백엔드', reviews: [{ type: '아주 나쁨', freeReview: '백엔드 업무가 매우 힘들었습니다.' }] }
+  ];
+
   return (
     <Box sx={{ width: '100%', padding: '16px' }}>
       {/* 페이지 상단의 제목 및 설명 */}
@@ -68,11 +35,15 @@ const ReviewPage = () => {
         </Box>
 
         {/* 회고록 박스 나열 */}
-        <Stack direction="row" flexWrap="wrap">
-          <Box>
-            <BoardGather />
-            {/* 필요시 다른 BoardGather 컴포넌트도 추가하세요 */}
-          </Box>
+        <Stack direction="row" spacing={2}>
+          {company.map((item, index) => (
+            <BoardGather
+              key={index}
+              company={item.company}
+              department={item.department}
+              reviews={item.reviews}
+            />
+          ))}
         </Stack>
       </Stack>
 
