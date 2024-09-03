@@ -9,26 +9,26 @@ import BoardGather from './components/BoardGather';
 const ReviewPage = () => {
   const company = [
     { company: '네이버', department: 'UI 엔지니어', reviews: [{ type: '중간 전형 회고', freeReview: '이 회사의 UI 엔지니어는 매우 만족스럽습니다.' }] },
-    { company: '삼성', department: '프론트엔드', reviews: [{ type: '면접', freeReview: '프론트엔드 개발 환경이 불편했습니다.' }] },
-    { company: '엘지', department: '백엔드', reviews: [{ type: '아주 나쁨', freeReview: '백엔드 업무가 매우 힘들었습니다.' }] }
+    { company: '삼성', department: '프론트엔드', reviews: [{ type: '면접 회고', freeReview: '프론트엔드 개발 환경이 불편했습니다.' }] },
+    { company: '엘지', department: '백엔드', reviews: [{ type: '중간 전형 회고', freeReview: '백엔드 업무가 매우 힘들었습니다.' }] }
   ];
 
   return (
-    <Box sx={{ width: '100%', padding: '16px' }}>
+    <Box sx={{ width: '100%', padding: '40px' }}>
       {/* 페이지 상단의 제목 및 설명 */}
       <Stack spacing={4}>
         <Box 
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            width: '384px',
+            width: '100%',
             height: '32px',
-            marginTop: '110px',
-            marginLeft: '317px',
+            marginTop: '40px',
+            marginLeft: '40px',
             gap: '16px'
           }}
         >
-          <Typography sx={{ typography: typography.mediumBold }}>회고마스터</Typography>
+          <Typography sx={{ typography: typography.mediumBold, marginLeft: '12px' }}>회고마스터</Typography>
           <Typography sx={{ typography: typography.small2Reg, color: colors.neutral[40] }}>
             기업별로 진행한 회고를 볼 수 있어요
           </Typography>

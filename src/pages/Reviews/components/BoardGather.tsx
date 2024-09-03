@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
-import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx'; // Chip 컴포넌트를 import합니다.
+import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx'; 
 
 const BoardGather = ({ company, department, reviews }) => {
   return (
@@ -10,8 +10,8 @@ const BoardGather = ({ company, department, reviews }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '337px',          // 넓이 설정
-        height: '670px',         // 높이 설정
+        width: '337px',          
+        height: '670px',         
         padding: '16px',
         border: '1px solid #EFEFEF',
         borderRadius: '12px',
@@ -31,18 +31,18 @@ const BoardGather = ({ company, department, reviews }) => {
           <Box 
             key={index} 
             sx={{
-              border: `1px solid ${colors.neutral[85]}`,        // 테두리 색상 설정
-              borderRadius: '8px',                              // 둥근 테두리 설정
-              background: `${colors.neutral[95]}`,              // 배경 색상 설정
-              padding: '12px 12px',                             // 패딩 설정
+              border: `1px solid ${review.type === '면접 회고' ? colors.secondary[20] : colors.neutral[85]}`,
+              borderRadius: '8px',                             
+              backgroundColor: review.type === '면접 회고' ? 'rgba(27, 196, 125, 0.05)' : colors.neutral[95],  // 조건부 배경색 설정              
+              padding: '12px 12px',                            
             }}
           >
             <Chip 
               text={review.type}
-              backgroundColor={colors.neutral[20]} 
-              textColor="#FFFFFF"                                  // Chip의 텍스트 색상 설정
+              backgroundColor={review.type === '면접 회고' ? '#1bC47d' : colors.neutral[20]} // 조건부 배경색 설정
+              textColor="#FFFFFF"                               
             />
-            <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[50], marginTop: '12px'}}>
+            <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[35], marginTop: '12px'}}>
               {review.freeReview}
             </Typography>
           </Box>
