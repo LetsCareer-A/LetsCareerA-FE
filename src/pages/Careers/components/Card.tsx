@@ -1,18 +1,40 @@
-import {  Typography,  CardContent, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import colors from '../../../styles/colors';
+import Chip from '../../../components/Chips';
+import typography from '../../../styles/typography';
 
+interface CardProps {
+  chipText: string;
+  chipBackgroundColor: string;
+  chipTextColor: string;
+  title: string;
+  summary: string;
+}
 
-const Card = ({ title }: { title: string }) => (
-  <Box sx={{ maxWidth: 300, background: colors.neutral[95], borderRadius: '8px' }}>
-    <CardContent>
-      <Typography variant="h6" color={colors.neutral[10]}>
+const Card: React.FC<CardProps> = ({ chipText, chipBackgroundColor, chipTextColor, title, summary }) => (
+  <Box sx={{ width: '337px', background: 'white', borderRadius: '12px', padding: '12px' }}>
+      <Chip 
+        text={chipText} 
+        backgroundColor={chipBackgroundColor} 
+        textColor={chipTextColor}
+      />
+      <Typography style={typography.small2Bold} color={colors.neutral[10]} mt="8px">
         {title}
       </Typography>
-    </CardContent>
+      <Typography 
+        style={typography.xSmall2Reg}
+        color={colors.neutral[60]} 
+        sx={{
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          WebkitLineClamp: 1
+        }}
+      >
+        {summary}
+      </Typography>
   </Box>
 );
-
-// 샘플 카드 데이터
-const cardData = Array.from({ length: 30 }, (_, index) => `Card ${index + 1}`);
 
 export default Card;

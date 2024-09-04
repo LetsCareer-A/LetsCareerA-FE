@@ -39,7 +39,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <Box sx={{ width: 277, height: '100vh', backgroundColor: 'white', padding: '40px 0 0 80px' }}>
+    <Box sx={{ width: 277, backgroundColor: 'white', padding: '40px 0 0 80px' }}>
       {/* 상단 메뉴 목록 */}
       <Box sx={{ width: 181, display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {[

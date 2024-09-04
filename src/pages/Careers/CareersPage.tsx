@@ -1,32 +1,37 @@
 import React, { useState } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
-import Card from './components/Card';  // 카드 컴포넌트 import
+import Card from './components/Card';  
 import typography from '../../styles/typography';
 import Plus from '../../assets/plus.svg';
 import colors from '../../styles/colors';
 
-const cardData = Array.from({ length: 30 }, (_, index) => `Card ${index + 1}`);
+const cardData = Array.from({ length: 30 }, (_, index) => ({
+  chipText: `Chip ${index + 1}`,
+  chipBackgroundColor: index % 2 === 0 ? '#4D55F5' : '#1BC47D', 
+  chipTextColor: '#FFFFFF', 
+  title: `Card ${index + 1}`,
+  summary: `This is the summary for Card ${index + 1}.`
+}));
 
-const CardsPerPage = 15; // 페이지당 카드 수
+const CardsPerPage = 15; 
 const TotalPages = Math.ceil(cardData.length / CardsPerPage);
 
 const CareersPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 페이지 변경 핸들러
+
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
-  // 현재 페이지에 표시할 카드 데이터 계산
   const startIndex = (currentPage - 1) * CardsPerPage;
   const endIndex = startIndex + CardsPerPage;
   const currentCards = cardData.slice(startIndex, endIndex);
 
   return (
     <Box>
-      <Box display='flex' justifyContent='space-between' gap='217px'>
+      <Box display='flex' justifyContent='space-between'>
         <Box display='flex' gap='16px' alignItems='center'>
           <Typography variant="body2">지원 일정관리</Typography>
           <Typography style={typography.small2Reg} color={colors.neutral[40]}>
@@ -46,8 +51,15 @@ const CareersPage = () => {
         gap='16px'
         mt='32px'
       >
-        {currentCards.map((title, index) => (
-          <Card key={index} title={title} />
+        {currentCards.map((card, index) => (
+          <Card 
+            key={index} 
+            chipText={card.chipText}
+            chipBackgroundColor={card.chipBackgroundColor}
+            chipTextColor={card.chipTextColor}
+            title={card.title}
+            summary={card.summary}
+          />
         ))}
       </Box>
 
