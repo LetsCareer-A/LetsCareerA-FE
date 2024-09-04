@@ -1,35 +1,46 @@
 import create from 'zustand';
 
-interface CareerModalStore {
+interface CareerModalState {
   isModalOpen: boolean;
-  setIsModalOpen: (open: boolean) => void;
   title: string;
-  setTitle: (title: string) => void;
   situation: string;
-  setSituation: (situation: string) => void;
   task: string;
-  setTask: (task: string) => void;
   action: string;
-  setAction: (action: string) => void;
   result: string;
+  selectedExperience: string | null;
+  setIsModalOpen: (isOpen: boolean) => void;
+  setTitle: (title: string) => void;
+  setSituation: (situation: string) => void;
+  setTask: (task: string) => void;
+  setAction: (action: string) => void;
   setResult: (result: string) => void;
-  selectedExperience: string | null; 
-  setSelectedExperience: (experience: string | null) => void; 
+  setSelectedExperience: (experience: string | null) => void;
+  resetState: () => void; 
 }
 
-export const useStore = create<CareerModalStore>((set) => ({
+export const useStore = create<CareerModalState>((set) => ({
   isModalOpen: false,
-  setIsModalOpen: (open) => set({ isModalOpen: open }),
   title: '',
-  setTitle: (title) => set({ title }),
   situation: '',
-  setSituation: (situation) => set({ situation }),
   task: '',
-  setTask: (task) => set({ task }),
   action: '',
-  setAction: (action) => set({ action }),
   result: '',
+  selectedExperience: null,
+  setIsModalOpen: (isOpen) => set({ isModalOpen: isOpen }),
+  setTitle: (title) => set({ title }),
+  setSituation: (situation) => set({ situation }),
+  setTask: (task) => set({ task }),
+  setAction: (action) => set({ action }),
   setResult: (result) => set({ result }),
-  selectedExperience: null, 
   setSelectedExperience: (experience) => set({ selectedExperience: experience }),
+  
+  resetState: () =>
+    set({
+      title: '',
+      situation: '',
+      task: '',
+      action: '',
+      result: '',
+      selectedExperience: null,
+    }),
 }));

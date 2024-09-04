@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import Card from './components/Card';  
@@ -38,10 +38,12 @@ const CareersPage = () => {
     result, 
     setResult,
     selectedExperience,
-    setSelectedExperience
+    setSelectedExperience,
+    resetState  
   } = useStore(); 
 
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -53,6 +55,31 @@ const CareersPage = () => {
 
   const handleExperienceChange = (label: string) => {
     setSelectedExperience(selectedExperience === label ? null : label);
+  };
+
+  const validateForm = () => {
+    const isTitleValid = title.trim().length > 0 && title.trim().length <= 20;
+    const isSituationValid = situation.trim().length > 0 && situation.trim().length <= 100;
+    const isTaskValid = task.trim().length > 0 && task.trim().length <= 100;
+    const isActionValid = action.trim().length > 0 && action.trim().length <= 100;
+    const isResultValid = result.trim().length > 0 && result.trim().length <= 100;
+    const isExperienceSelected = selectedExperience !== null;
+
+    return isTitleValid && isSituationValid && isTaskValid && isActionValid && isResultValid && isExperienceSelected;
+  };
+
+  useEffect(() => {
+    setIsButtonDisabled(!validateForm());
+  }, [title, situation, task, action, result, selectedExperience]);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    resetState();  
+  };
+
+  const handleConfirm = () => {
+    console.log('Confirm clicked');
+    handleCloseModal();
   };
 
   return (
@@ -67,7 +94,7 @@ const CareersPage = () => {
         
         <PrimaryButton 
           style={{ marginTop: '-6px', height: '44px' }} 
-          onClick={() => setIsModalOpen(true)} // Open modal on button click
+          onClick={() => setIsModalOpen(true)} 
         >
           <Typography style={typography.xSmallSemiold}>내 경험 추가하기</Typography>
           <img src={Plus} alt='플러스 아이콘' />
@@ -104,14 +131,11 @@ const CareersPage = () => {
 
       <Modal
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)} 
+        onClose={handleCloseModal}  
         title="내 경험 추가"
         confirmText="경험 추가 완료하기"
-        onConfirm={() => {
-          console.log('Confirm clicked');
-          setIsModalOpen(false); 
-        }}
-        isButtonDisabled={false} 
+        onConfirm={handleConfirm}  
+        isButtonDisabled={isButtonDisabled} 
       >
         <Box mt="32px" mb="24px">
           <Label label="제목" required={true} />
