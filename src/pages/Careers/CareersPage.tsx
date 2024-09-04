@@ -36,7 +36,9 @@ const CareersPage = () => {
     action, 
     setAction,
     result, 
-    setResult 
+    setResult,
+    selectedExperience,
+    setSelectedExperience
   } = useStore(); 
 
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -48,6 +50,10 @@ const CareersPage = () => {
   const startIndex = (currentPage - 1) * CardsPerPage;
   const endIndex = startIndex + CardsPerPage;
   const currentCards = cardData.slice(startIndex, endIndex);
+
+  const handleExperienceChange = (label: string) => {
+    setSelectedExperience(selectedExperience === label ? null : label);
+  };
 
   return (
     <Box>
@@ -127,16 +133,39 @@ const CareersPage = () => {
               width: '100%', 
             }}
           >
-            <Experience label="대외활동" checked={false} />
-            <Experience label="공모전" checked={false} />
-            <Experience label="실무" checked={false} />
-            <Experience label="프로젝트" checked={false} />
-            <Experience label="자격증" checked={false} />
-            <Experience label="기타" checked={false} />
+            <Experience 
+              label="대외활동" 
+              checked={selectedExperience === "대외활동"} 
+              onChange={() => handleExperienceChange("대외활동")} 
+            />
+            <Experience 
+              label="공모전" 
+              checked={selectedExperience === "공모전"} 
+              onChange={() => handleExperienceChange("공모전")} 
+            />
+            <Experience 
+              label="실무" 
+              checked={selectedExperience === "실무"} 
+              onChange={() => handleExperienceChange("실무")} 
+            />
+            <Experience 
+              label="프로젝트" 
+              checked={selectedExperience === "프로젝트"} 
+              onChange={() => handleExperienceChange("프로젝트")} 
+            />
+            <Experience 
+              label="자격증" 
+              checked={selectedExperience === "자격증"} 
+              onChange={() => handleExperienceChange("자격증")} 
+            />
+            <Experience 
+              label="기타" 
+              checked={selectedExperience === "기타"} 
+              onChange={() => handleExperienceChange("기타")} 
+            />
           </Box>
-          
         </Box>
-         <Box mb="24px">
+        <Box mb="24px">
           <Label label="Situation (상황)" required={true} />
           <Textfield
             showCharCount={true}

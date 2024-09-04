@@ -13,6 +13,8 @@ interface CareerModalStore {
   setAction: (action: string) => void;
   result: string;
   setResult: (result: string) => void;
+  selectedExperience: string | null; 
+  setSelectedExperience: (experience: string | null) => void; 
 }
 
 export const useStore = create<CareerModalStore>((set) => ({
@@ -28,4 +30,6 @@ export const useStore = create<CareerModalStore>((set) => ({
   setAction: (action) => set({ action }),
   result: '',
   setResult: (result) => set({ result }),
+  selectedExperience: null, 
+  setSelectedExperience: (experience) => set({ selectedExperience: experience }),
 }));
