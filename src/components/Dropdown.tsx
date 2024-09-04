@@ -1,7 +1,8 @@
 import React, { useState, MouseEvent } from 'react';
-import { Button, Menu, MenuItem, styled } from '@mui/material';
+import { Box, Button, Menu, MenuItem, styled } from '@mui/material';
 import Chip from './Chips'; 
 import colors from '../styles/colors';
+import Arrow from '../assets/arrow.svg';
 
 const StyledButton = styled(Button)(() => ({
   display: 'flex',
@@ -11,8 +12,9 @@ const StyledButton = styled(Button)(() => ({
   gap: '8px',
   alignSelf: 'stretch',
   borderRadius: '8px',
-  border: `1px solid ${colors.primary[60]}`, 
-  background: colors.primary[10], 
+  border: `1px solid ${colors.neutral[80]}`, 
+  background: colors.neutral[95], 
+  color: colors.neutral[40], 
   boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
 }));
 
@@ -71,7 +73,16 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
             textColor="#FFF" 
           />
         ) : (
-          buttonText
+          <Box display="flex" alignItems="center" gap='8px'>
+          {buttonText}
+          <img 
+            src={Arrow} 
+            alt="icon" 
+            style={{ 
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
+            }} 
+          />
+        </Box>
         )}
       </StyledButton>
       <StyledMenu
