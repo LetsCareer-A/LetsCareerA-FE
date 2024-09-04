@@ -4,6 +4,12 @@ import Chip from './Chips';
 import colors from '../styles/colors';
 import Arrow from '../assets/arrow.svg';
 
+interface DropdownItem {
+  text: string;
+  color?: string;
+  image?: string;
+}
+
 const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   display: 'flex',
   padding: '11px 8px 11px 12px',
@@ -38,13 +44,13 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 
 interface DropdownProps {
   buttonText: string;
-  items: Array<{ text: string; onClick: () => void; color?: string }>; 
-  renderItem?: (item: { text: string; onClick: () => void; color?: string }) => React.ReactNode; 
+  items: DropdownItem[]; 
+  renderItem?: (item: DropdownItem) => React.ReactNode; 
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedItem, setSelectedItem] = useState<{ text: string; onClick: () => void; color?: string } | null>(null);
+  const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -55,20 +61,19 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
     setAnchorEl(null);
   };
 
-  const handleItemClick = (item: { text: string; onClick: () => void; color?: string }) => {
+  const handleItemClick = (item: DropdownItem) => {
     setSelectedItem(item); 
-    item.onClick();
-    handleClose();
+    handleClose(); 
   };
 
   return (
     <div>
-      <StyledButton onClick={handleClick} open={open}> {/* open 상태 전달 */}
+      <StyledButton onClick={handleClick} open={open}>
         {selectedItem ? (
           <Chip 
             text={selectedItem.text}
             backgroundColor={selectedItem.color}
-            textColor="#FFF" 
+            image={selectedItem.image}
           />
         ) : (
           <Box display="flex" alignItems="center" gap='8px'>
@@ -93,7 +98,12 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
             key={index}
             onClick={() => handleItemClick(item)} 
           >
-            {renderItem ? renderItem(item) : item.text}
+            {renderItem ? renderItem(item) : (
+              <Box display="flex" alignItems="center">
+                {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
+                {item.text}
+              </Box>
+            )}
           </StyledMenuItem>
         ))}
       </StyledMenu>

@@ -29,7 +29,6 @@ const StyledConfirmButton = styled(Button)(({ theme }) => ({
   flexShrink: 0,
   backgroundColor: theme.palette.primary.main,
   color: '#fff',
-  // Default state
   '&:disabled': {
     backgroundColor: colors.neutral[90], 
     color: colors.neutral[50], 
@@ -45,7 +44,7 @@ interface ModalProps {
   confirmText?: string;
   onConfirm?: () => void;
   width?: string;
-  isButtonDisabled: boolean;  // Prop added for button disabled state
+  isButtonDisabled: boolean; 
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -56,7 +55,7 @@ const Modal: React.FC<ModalProps> = ({
   confirmText = '확인',
   onConfirm,
   width,
-  isButtonDisabled,  // Prop added for button disabled state
+  isButtonDisabled, 
 }) => {
   return (
     <StyledDialog open={open} onClose={onClose} width={width}>
@@ -73,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={() => {
           if (onConfirm) onConfirm();
         }}
-        disabled={isButtonDisabled}  // Apply disabled state
+        disabled={isButtonDisabled}  
       >
         {confirmText}
       </StyledConfirmButton>

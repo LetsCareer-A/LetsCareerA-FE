@@ -18,6 +18,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarInput from '../../components/CalendarInput';
 import Toast from '../../components/Toast';
+import File from '../../assets/file.svg';
+import Communication from '../../assets/communication.svg';
+import Edit from '../../assets/edit.svg';
 
 const DashboardPage = () => {
   const [open, setOpen] = useState(false);
@@ -33,7 +36,6 @@ const DashboardPage = () => {
     setCompanyName,
     setJobTitle,
     resetState,
-    setDropdownItem,
     isCheckboxChecked,
     setCheckboxChecked,
     dropdownItem,
@@ -65,6 +67,7 @@ const DashboardPage = () => {
     setCheckboxChecked(event.target.checked);
   };
 
+
   const handleConfirm = () => {
     if (modalStep === 1) {
       if (buttonText === '다음') {
@@ -89,9 +92,21 @@ const DashboardPage = () => {
   };
 
   const items = [
-    { text: '서류 준비 중', color: '#4D55F5', onClick: () => setDropdownItem('서류 준비 중') },
-    { text: '면접 준비 중', color: '#1BC47D', onClick: () => setDropdownItem('면접 준비 중') },
-    { text: '중간 전형(직접 입력)', color: '#3E4148', onClick: () => setDropdownItem('중간 전형(직접 입력)') },
+    { 
+      text: '서류 준비 중', 
+      color: '#4D55F5', 
+      image: File
+    },
+    { 
+      text: '면접 준비 중', 
+      color: '#1BC47D', 
+      image: Communication
+    },
+    { 
+      text: '중간 전형(직접 입력)', 
+      color: '#3E4148', 
+      image: Edit
+    },
   ];
 
   const isStep1ButtonDisabled =
@@ -159,7 +174,7 @@ const DashboardPage = () => {
                 <Dropdown
                   buttonText="준비 단계를 선택해주세요."
                   items={items}
-                  renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} />}
+                  renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} image={item.image}/>}
                 />
                 {dropdownItem === '중간 전형(직접 입력)' && (
                   <Box flexGrow={1}>
