@@ -23,7 +23,6 @@ const Experience: React.FC<ExperienceProps> = ({ label, checked = false, onChang
     <Box
       sx={{
         display: 'flex',
-        width: '110px',
         padding: '11px 8px 11px 12px',
         alignItems: 'center',
         gap: '8px',
