@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import Card from './components/Card';  
@@ -11,6 +11,7 @@ import Label from '../../components/Label';
 import Textfield from '../../components/Textfield';
 import { useStore } from '../../store/careerModalStore';
 import Experience from './components/Experience';
+import Toast from '../../components/Toast';
 
 const cardData = Array.from({ length: 30 }, (_, index) => ({
   chipText: `Chip ${index + 1}`,
@@ -44,6 +45,10 @@ const CareersPage = () => {
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
+  const [showToast, setShowToast] = useState(false); 
+  const [toastMessage, setToastMessage] = useState(''); 
+  const [toastDescription, setToastDescription] = useState(''); 
+  
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -73,9 +78,17 @@ const CareersPage = () => {
   }, [title, situation, task, action, result, selectedExperience]);
 
   const handleCloseModal = () => {
+    setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
+    setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
+    setShowToast(true);
     setIsModalOpen(false);
     resetState();  
   };
+
+  const handleCloseToast = () => {
+    setShowToast(false);
+  };
+  
 
   const handleConfirm = () => {
     console.log('Confirm clicked');
@@ -238,6 +251,16 @@ const CareersPage = () => {
           />
         </Box>
       </Modal>
+
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          description={toastDescription}
+          onClose={handleCloseToast}
+        />
+      )}
+
+
     </Box>
   );
 };
