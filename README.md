@@ -57,3 +57,6 @@ yarn add react
 ```
 npm install react-icons --save
 ```
+```
+react-datepicker
+```
