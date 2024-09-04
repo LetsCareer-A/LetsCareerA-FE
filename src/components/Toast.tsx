@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,6 +11,14 @@ interface ToastProps {
 }
 
 const Toast = ({ message, description, onClose }: ToastProps) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000); 
+
+    return () => clearTimeout(timer); 
+  }, [onClose]);
+
   return (
     <Box
       sx={{
