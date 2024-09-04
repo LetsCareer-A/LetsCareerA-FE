@@ -6,7 +6,6 @@ import Arrow from '../assets/arrow.svg';
 
 const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   display: 'flex',
-  height: '44px',
   padding: '11px 8px 11px 12px',
   alignItems: 'center',
   gap: '8px',

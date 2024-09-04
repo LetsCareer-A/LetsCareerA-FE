@@ -19,8 +19,20 @@ const DashboardPage = () => {
     const [open, setOpen] = useState(false);
     const [buttonText, setButtonText] = useState('다음');
 
-    const { companyName, jobTitle, setCompanyName, setJobTitle, resetState, setDropdownItem, isCheckboxChecked, setCheckboxChecked } = useModalStore();
-    const { isButtonDisabled } = useModalStoreState(); 
+    const {
+        companyName,
+        jobTitle,
+        setCompanyName,
+        setJobTitle,
+        resetState,
+        setDropdownItem,
+        isCheckboxChecked,
+        setCheckboxChecked,
+        dropdownItem,
+        stageDetailInput,
+        setStageDetailInput
+    } = useModalStore();
+    const { isButtonDisabled } = useModalStoreState();
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -31,11 +43,11 @@ const DashboardPage = () => {
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCheckboxChecked(event.target.checked);
-        setButtonText(event.target.checked ? '등록 완료' : '다음');  
+        setButtonText(event.target.checked ? '등록 완료하기' : '다음');  
     };
 
     const handleConfirm = () => {
-        if (buttonText === '등록 완료') {
+        if (buttonText === '등록 완료하기') {
             handleClose(); 
         } else {
             // "다음" 버튼일 때 로직
@@ -95,19 +107,33 @@ const DashboardPage = () => {
                         placeholder="지원하시는 직무의 이름을 입력해주세요. (ex: 컨텐츠 디자이너)"
                     />
                 </Box>
-                <Box mb='32px'>
-                    <Label label="현재 준비 상태" required={true} />
-                    <Dropdown
-                        buttonText="준비 단계를 선택해주세요."
-                        items={items}
-                        renderItem={(item) => (
-                            <Chip
-                                text={item.text}
-                                backgroundColor={item.color}
+               
+                    <Box mb='32px'>
+                        <Label label="현재 준비 상태" required={true} /> 
+                        <Box display='flex' gap='8px'>
+                            <Dropdown
+                                buttonText="준비 단계를 선택해주세요."
+                                items={items}
+                                renderItem={(item) => (
+                                    <Chip
+                                        text={item.text}
+                                        backgroundColor={item.color}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                </Box>
+                    
+                            {dropdownItem === '중간 전형(직접 입력)' && (
+                    <Box flexGrow={1}> 
+                        <Textfield
+                            showCharCount={false}
+                            value={stageDetailInput}
+                            onChange={(e) => setStageDetailInput(e.target.value)}
+                            placeholder="전형 단계를 입력해주세요."
+                        />
+                    </Box>
+                )}
+                                </Box>
+                    </Box>
                 <Box mb='24px' p='10px 12px' borderRadius='8px' sx={{ background: colors.neutral[95] }}>
                     <FormControlLabel
                         control={

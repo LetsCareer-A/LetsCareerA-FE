@@ -6,6 +6,7 @@ interface TextfieldProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   showCharCount?: boolean;
   placeholder?: string;
+  fullWidth?: boolean;
 }
 const Textfield: React.FC<TextfieldProps> = ({
   value,
@@ -59,8 +60,7 @@ const Textfield: React.FC<TextfieldProps> = ({
     <Box
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      sx={{
-        height: 62,
+      sx={{ 
         backgroundColor: hasError ? 'rgba(246, 78, 57, 0.10)' : (isFocused || isHovered || isBlurred ? '#EDEEFE' : '#f8f8f8'),
         borderRadius: '8px',
         border: `1px solid ${hasError ? '#F64E39' : (isFocused ? '#9499F9' : isHovered ? '#CACCFC' : '#e7e7e7')}`,
