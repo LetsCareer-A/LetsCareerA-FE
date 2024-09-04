@@ -4,7 +4,7 @@ import Chip from './Chips';
 import colors from '../styles/colors';
 import Arrow from '../assets/arrow.svg';
 
-const StyledButton = styled(Button)(() => ({
+const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   display: 'flex',
   height: '44px',
   padding: '11px 8px 11px 12px',
@@ -12,10 +12,9 @@ const StyledButton = styled(Button)(() => ({
   gap: '8px',
   alignSelf: 'stretch',
   borderRadius: '8px',
-  border: `1px solid ${colors.neutral[80]}`, 
-  background: colors.neutral[95], 
-  color: colors.neutral[40], 
-  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
+  border: open ? `1px solid ${colors.primary[60]}` : `1px solid ${colors.neutral[80]}`, 
+  background: open ? colors.primary[10] : colors.neutral[95], 
+  color: open ? colors.neutral[10] : colors.neutral[40],
 }));
 
 const StyledMenu = styled(Menu)(() => ({
@@ -34,14 +33,14 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   '&:hover': {
     backgroundColor: theme.palette.action.selected,
     borderRadius: '6px',
-    color: theme.palette.primary.light
+    color: theme.palette.primary.light,
   },
 }));
 
 interface DropdownProps {
   buttonText: string;
-  items: Array<{ text: string; onClick: () => void; color?: string }>; // color 속성 추가
-  renderItem?: (item: { text: string; onClick: () => void; color?: string }) => React.ReactNode; // Optional render prop
+  items: Array<{ text: string; onClick: () => void; color?: string }>; 
+  renderItem?: (item: { text: string; onClick: () => void; color?: string }) => React.ReactNode; 
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) => {
@@ -65,7 +64,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
 
   return (
     <div>
-      <StyledButton onClick={handleClick}>
+      <StyledButton onClick={handleClick} open={open}> {/* open 상태 전달 */}
         {selectedItem ? (
           <Chip 
             text={selectedItem.text}
@@ -74,15 +73,15 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
           />
         ) : (
           <Box display="flex" alignItems="center" gap='8px'>
-          {buttonText}
-          <img 
-            src={Arrow} 
-            alt="icon" 
-            style={{ 
-              transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
-            }} 
-          />
-        </Box>
+            {buttonText}
+            <img 
+              src={Arrow} 
+              alt="icon" 
+              style={{ 
+                transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
+              }} 
+            />
+          </Box>
         )}
       </StyledButton>
       <StyledMenu
@@ -93,7 +92,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
         {items.map((item, index) => (
           <StyledMenuItem
             key={index}
-            onClick={() => handleItemClick(item)} // 아이템 클릭 시 처리
+            onClick={() => handleItemClick(item)} 
           >
             {renderItem ? renderItem(item) : item.text}
           </StyledMenuItem>
