@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import CalendarAdd from '../../assets/calendarAdd.svg';
@@ -12,7 +12,7 @@ import Textfield from '../../components/Textfield';
 import colors from '../../styles/colors';
 import Label from '../../components/Label';
 import Dropdown from '../../components/Dropdown';
-import useModalStore, { useModalStoreState } from '../../store/useModalStore';
+import useModalStore from '../../store/useModalStore';
 import Chip from '../../components/Chips';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -22,7 +22,6 @@ const DashboardPage = () => {
     const [open, setOpen] = useState(false);
     const [buttonText, setButtonText] = useState('다음');
     const [modalStep, setModalStep] = useState<number>(1);
-    const [date, setDate] = useState<Date | null>(null);
 
     const {
         companyName,
@@ -35,11 +34,20 @@ const DashboardPage = () => {
         setCheckboxChecked,
         dropdownItem,
         stageDetailInput,
-        setStageDetailInput
+        setStageDetailInput,
+        link,
+        setLink,
+        date,
+        setDate
     } = useModalStore();
-    const { isButtonDisabled } = useModalStoreState();
 
     const datePickerRef = useRef<DatePicker>(null);
+
+    useEffect(() => {
+        if (modalStep === 1) {
+            setButtonText(isCheckboxChecked ? '등록 완료하기' : '다음');
+        }
+    }, [isCheckboxChecked, modalStep]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -47,30 +55,34 @@ const DashboardPage = () => {
         setOpen(false);
         setButtonText('다음'); 
         setModalStep(1);
-        setDate(null); 
     };
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCheckboxChecked(event.target.checked);
-        setButtonText(event.target.checked ? '등록 완료하기' : '다음');  
     };
 
     const handleConfirm = () => {
-        if (buttonText === '등록 완료하기') {
-            handleClose(); 
-        } else if (modalStep === 1) {
-            setModalStep(2); 
-            setButtonText('완료하기');
-        } else {
-            // "완료하기" 버튼일 때 로직
+        if (modalStep === 1) {
+            if (buttonText === '다음') {
+                setModalStep(2);
+                setButtonText('등록 완료하기');
+            } else if (buttonText === '등록 완료하기') {
+                handleClose();
+            }
+        } else if (modalStep === 2) {
+            handleClose();
         }
     };
+    
 
     const items = [
         { text: '서류 준비 중', color: '#4D55F5', onClick: () => setDropdownItem('서류 준비 중') },
         { text: '면접 준비 중', color: '#1BC47D', onClick: () => setDropdownItem('면접 준비 중') },
         { text: '중간 전형(직접 입력)', color: '#3E4148', onClick: () => setDropdownItem('중간 전형(직접 입력)') },
     ];
+
+    const isStep1ButtonDisabled = !companyName || !jobTitle || !dropdownItem || (dropdownItem === '중간 전형(직접 입력)' && !stageDetailInput);
+    const isStep2ButtonDisabled = !date || (dropdownItem === '중간 전형(직접 입력)' && !link);
 
     return (
         <Box>
@@ -94,9 +106,9 @@ const DashboardPage = () => {
                 open={open}
                 onClose={handleClose}
                 title="새로운 지원 일정 등록"
-                confirmText={buttonText}  
+                confirmText={buttonText}
                 width='412px'
-                isButtonDisabled={isButtonDisabled} 
+                isButtonDisabled={modalStep === 1 ? isStep1ButtonDisabled : isStep2ButtonDisabled}
                 onConfirm={handleConfirm}  
             >
                 {modalStep === 1 && (
@@ -159,10 +171,11 @@ const DashboardPage = () => {
                     </>
                 )}
                 {modalStep === 2 && (
+                    <>
                     <Box mt='32px' mb='24px'>
                         <Box>
                             <Label label="지원 마감일 또는 전형 진행일" required={true} />
-                            <Box display='flex' alignItems='center' gap='8px'>
+                            <Box display='flex' alignItems='center' gap='8px' flexDirection='column' justifyContent='flex-end'>
                                 <DatePicker
                                     selected={date}
                                     onChange={(date: Date | null) => setDate(date)}
@@ -171,17 +184,26 @@ const DashboardPage = () => {
                                         <CalendarInput
                                             value={date ? date.toLocaleDateString() : ''}
                                             onClick={() => datePickerRef.current?.setOpen(true)}
-                                            placeholder='날짜를 선택해주세요'
                                         />
                                     }
                                     ref={datePickerRef} 
                                 />
                             </Box>
-                            <Typography mt='4px'>
-                                서류 준비중일 경우 지원 마감일을 면접 또는 중간전형 준비 중일 경우 진행일을 입력해주세요.
+                            <Typography mt='4px' style={typography.xxSmallReg} color={colors.neutral[45]}>
+                                서류 준비중일 경우 지원 마감일을 <br />면접 또는 중간전형 준비 중일 경우 진행일을 입력해주세요.
                             </Typography>
                         </Box>
                     </Box>
+                    <Box mb='152px'>
+                        <Label label="지원 공고 링크" required={false} />
+                        <Textfield
+                            showCharCount={false}
+                            value={link} 
+                            onChange={(e) => setLink(e.target.value)} 
+                            placeholder="지원 공고의 링크를 붙여넣기 해주세요."
+                        />
+                    </Box>
+                    </>
                 )}
             </Modal>
         </Box>

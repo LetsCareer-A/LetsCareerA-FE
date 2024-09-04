@@ -5,16 +5,15 @@ import colors from '../styles/colors';
 interface CalendarInputProps {
     value: string;
     onClick: () => void;
-    placeholder: string;
 }
 
-const CalendarInput: React.FC<CalendarInputProps> = ({ value, onClick, placeholder }) => (
+const CalendarInput: React.FC<CalendarInputProps> = ({ value, onClick }) => (
     <div style={{ position: 'relative', width: '100%' }}>
         <input
             type="text"
             value={value}
             onClick={onClick}
-            placeholder={placeholder}
+            placeholder='날짜를 선택해주세요'
             readOnly
             style={{
                 width: '372px',
