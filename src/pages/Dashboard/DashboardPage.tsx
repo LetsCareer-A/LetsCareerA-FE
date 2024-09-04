@@ -39,6 +39,7 @@ const DashboardPage = () => {
     isCheckboxChecked,
     setCheckboxChecked,
     dropdownItem,
+    setDropdownItem,
     stageDetailInput,
     setStageDetailInput,
     link,
@@ -55,6 +56,7 @@ const DashboardPage = () => {
     }
   }, [isCheckboxChecked, modalStep]);
 
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     resetState();
@@ -66,7 +68,6 @@ const DashboardPage = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCheckboxChecked(event.target.checked);
   };
-
 
   const handleConfirm = () => {
     if (modalStep === 1) {
@@ -175,6 +176,7 @@ const DashboardPage = () => {
                   buttonText="준비 단계를 선택해주세요."
                   items={items}
                   renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} image={item.image}/>}
+                  onSelect={(item) => setDropdownItem(item.text)}
                 />
                 {dropdownItem === '중간 전형(직접 입력)' && (
                   <Box flexGrow={1}>

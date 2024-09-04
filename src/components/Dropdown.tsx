@@ -46,9 +46,10 @@ interface DropdownProps {
   buttonText: string;
   items: DropdownItem[]; 
   renderItem?: (item: DropdownItem) => React.ReactNode; 
+  onSelect?: (item: DropdownItem) => void; // 추가된 부분
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSelect }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
   const open = Boolean(anchorEl);
@@ -63,6 +64,9 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem }) =>
 
   const handleItemClick = (item: DropdownItem) => {
     setSelectedItem(item); 
+    if (onSelect) {
+      onSelect(item); // 선택된 항목을 부모 컴포넌트로 전달
+    }
     handleClose(); 
   };
 
