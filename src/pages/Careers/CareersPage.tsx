@@ -5,6 +5,7 @@ import Card from './components/Card';
 import typography from '../../styles/typography';
 import Plus from '../../assets/plus.svg';
 import colors from '../../styles/colors';
+import CareerBanner from '../../assets/careerBanner.png';
 
 const cardData = Array.from({ length: 30 }, (_, index) => ({
   chipText: `Chip ${index + 1}`,
@@ -44,6 +45,7 @@ const CareersPage = () => {
           <img src={Plus} alt='플러스 아이콘' />
         </PrimaryButton>
       </Box>
+      <img style={{width: '1043px', marginTop:'14px'}} src={CareerBanner} />
       
       <Box
         display='grid'
