@@ -1,7 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
-import colors from '../styles/colors';
 import typography from '../styles/typography';
 
 const StyledChip = styled('div')<{ backgroundColor?: string }>(({ backgroundColor }) => ({
@@ -13,7 +12,7 @@ const StyledChip = styled('div')<{ backgroundColor?: string }>(({ backgroundColo
   gap: '10px',
   flexShrink: 0,
   borderRadius: '6px',
-  backgroundColor: backgroundColor || '#1BC47D', // 기본 색상
+  backgroundColor: backgroundColor || '#1BC47D', 
   color: '#FFF',
 }));
 
@@ -21,17 +20,19 @@ interface ChipProps {
   text: string;
   backgroundColor?: string;
   textColor?: string; 
+  image?: string; 
 }
 
-const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor }) => {
+const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor, image }) => {
   return (
     <StyledChip backgroundColor={backgroundColor}>
+      {image && <img src={image} alt={text} />} 
       <Typography 
-      sx={{ 
-        color: textColor || 'white' ,
-        ...typography.xxSmall2
-      }}
->
+        sx={{ 
+          color: textColor || 'white',
+          ...typography.xxSmall2,
+        }}
+      >
         {text}
       </Typography>
     </StyledChip>

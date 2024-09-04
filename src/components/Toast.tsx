@@ -1,8 +1,15 @@
 import { Box, Typography, IconButton } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import typography from '../styles/typography';
 
-const Toast = () => {
+interface ToastProps {
+  message: string;
+  description: string;
+  onClose: () => void;
+}
+
+const Toast = ({ message, description, onClose }: ToastProps) => {
   return (
     <Box
       sx={{
@@ -43,7 +50,6 @@ const Toast = () => {
           }}
         >
           <Typography
-            variant="h6"
             component="div"
             sx={{
               color: 'white',
@@ -51,18 +57,19 @@ const Toast = () => {
               fontFamily: 'Pretendard',
               lineHeight: '1.75',
             }}
+            style={typography.smallBold}
           >
-            ‘네이버클라우드 UX리서처’ 중간 전형에 대한 회고를 완료했어요!
+            {message}
           </Typography>
-          <Typography
-            variant="body2"
+          <Typography 
             sx={{
               color: 'white',
               fontFamily: 'Pretendard',
               lineHeight: '1.5',
             }}
+            style={typography.small2Reg}
           >
-            조금 더 성장에 한 걸음 가까워졌어요 :
+            {description}
           </Typography>
         </Box>
       </Box>
@@ -72,8 +79,7 @@ const Toast = () => {
           height: 24,
           backgroundColor: 'transparent',
         }}
-        onClick={() => console.log('Close button clicked')} // 닫기 버튼 클릭 핸들러
-
+        onClick={onClose}
       >
         <CloseIcon sx={{ color: 'white' }} />
       </IconButton>
