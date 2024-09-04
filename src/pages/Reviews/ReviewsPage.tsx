@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
-import { Box, Typography, Stack, Pagination } from '@mui/material';
-import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx';
+import { Box, Typography, Stack, Pagination, Modal } from '@mui/material';
 import BoardGather from './components/BoardGather';
-
+import ReviewModal from './components/ReviewModal';
 
 const ReviewPage = () => {
-  const company = [
+  const [open, setOpen] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
+
+  const companyData = [
     { company: '네이버', department: 'UI 엔지니어', reviews: [{ type: '중간 전형 회고', freeReview: '이 회사의 UI 엔지니어는 매우 만족스럽습니다.' }] },
     { company: '삼성', department: '프론트엔드', reviews: [{ type: '면접 회고', freeReview: '프론트엔드 개발 환경이 불편했습니다.' }] },
     { company: '엘지', department: '백엔드', reviews: [{ type: '중간 전형 회고', freeReview: '백엔드 업무가 매우 힘들었습니다.' }] }
   ];
+
+  const handleOpen = (company) => {
+    setSelectedCompany(company);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedCompany(null);
+  };
 
   return (
     <Box sx={{ width: '100%', padding: '40px' }}>
@@ -36,13 +48,14 @@ const ReviewPage = () => {
 
         {/* 회고록 박스 나열 */}
         <Stack direction="row" spacing={2}>
-          {company.map((item, index) => (
-            <BoardGather
-              key={index}
-              company={item.company}
-              department={item.department}
-              reviews={item.reviews}
-            />
+          {companyData.map((item, index) => (
+            <Box key={index} onClick={() => handleOpen(item)}>
+              <BoardGather
+                company={item.company}
+                department={item.department}
+                reviews={item.reviews}
+              />
+            </Box>
           ))}
         </Stack>
       </Stack>
@@ -60,6 +73,16 @@ const ReviewPage = () => {
           }}
         />
       </Box>
+
+      {/* 모달 창 */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <ReviewModal companyData={selectedCompany} handleClose={handleClose} />
+      </Modal>
     </Box>
   );
 };
