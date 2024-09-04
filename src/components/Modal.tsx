@@ -7,6 +7,7 @@ import colors from '../styles/colors';
 const StyledDialog = styled(Dialog)<{ width?: string }>(({ width }) => ({
   '& .MuiPaper-root': {
     width: width || '706px',
+    maxHeight: '729px',
     flexShrink: 0,
     borderRadius: '16px',
     background: '#FFF',
