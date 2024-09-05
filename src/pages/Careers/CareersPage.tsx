@@ -59,9 +59,10 @@ const CareersPage = () => {
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
+  
 
   const startIndex = (currentPage - 1) * CardsPerPage;
   const endIndex = startIndex + CardsPerPage;

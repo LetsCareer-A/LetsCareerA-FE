@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { DateClickArg, EventClickArg } from '@fullcalendar/core';
 import { Box, Typography, useTheme } from '@mui/material';
 import '../../../styles/calendar.css';
 import colors from '../../../styles/colors';
@@ -21,14 +20,14 @@ const Calendar: React.FC = () => {
     { title: 'Event 2', date: '2024-09-10' },
   ]);
 
-  const handleDateClick = (arg: DateClickArg) => {
+  const handleDateClick = (arg: any) => {
     const newEventTitle = prompt('Enter event title');
     if (newEventTitle) {
       setEvents([...events, { title: newEventTitle, date: arg.dateStr }]);
     }
   };
 
-  const handleEventClick = (arg: EventClickArg) => {
+  const handleEventClick = (arg: any) => {
     alert(`Event: ${arg.event.title}`);
   };
 
