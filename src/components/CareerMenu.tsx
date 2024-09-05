@@ -1,0 +1,30 @@
+import { Box, Typography } from "@mui/material";
+import Delete from '../assets/delete.svg';
+import typography from "../styles/typography";
+
+const CareerMenu = () => {
+  return (
+    <Box 
+      padding='20px 40px'
+      sx={{
+        position: 'fixed',
+        top: '0', 
+        left: 0,
+        width: '381px',
+        height: '100%',
+        backgroundColor: 'white',
+        zIndex: 1000, 
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' 
+      }}
+    >
+      <Box display='flex' justifyContent='space-between'>
+        <Typography style={typography.smallBold}>
+          어필할 커리어
+        </Typography>
+        <img src={Delete} alt="Delete" />
+      </Box>
+    </Box>
+  )
+}
+
+export default CareerMenu;
