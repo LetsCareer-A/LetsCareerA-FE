@@ -1,17 +1,21 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography } from "@mui/material";
 import Delete from '../assets/delete.svg';
 import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 
 const CareerMenu = () => {
-  const [isVisible, setIsVisible] = useState(true); // 상태 추가
+  const [isVisible, setIsVisible] = useState(true); 
+  const [isSliding, setIsSliding] = useState(false); 
 
   const handleClose = () => {
-    setIsVisible(false); // 상태 변경: 창을 숨김
+    setIsSliding(true); 
+    setTimeout(() => {
+      setIsVisible(false); 
+    }, 300); 
   };
 
-  if (!isVisible) return null; // visible 상태가 false면 아무것도 렌더링하지 않음
+  if (!isVisible) return null; 
 
   return (
     <Box 
@@ -24,7 +28,9 @@ const CareerMenu = () => {
         height: '100%',
         backgroundColor: 'white',
         zIndex: 1000, 
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' 
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+        transform: isSliding ? 'translateX(-100%)' : 'translateX(0)', 
+        transition: 'transform 0.3s ease-in-out'
       }}
     >
       <Box display='flex' justifyContent='space-between'>
