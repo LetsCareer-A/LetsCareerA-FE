@@ -57,7 +57,7 @@ const CareersPage = () => {
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
-  const [selectedCard, setSelectedCard] = useState<CardData | null>(null); // 타입 수정
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);

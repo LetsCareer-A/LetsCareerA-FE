@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
 import typography from '../../../styles/typography';
 import Chip from '../../../components/Chips';
@@ -21,8 +21,9 @@ const ITEMS_PER_PAGE = 5;
 const DetailList: React.FC = () => {
   const [page, setPage] = useState(1);
 
-  const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
-    setPage(newPage);
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage); 
   };
 
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
@@ -47,7 +48,6 @@ const DetailList: React.FC = () => {
         width: 370,
         padding: 2,
         background: 'white',
-
       }}
     >
       <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
@@ -62,25 +62,28 @@ const DetailList: React.FC = () => {
         </Box>
       </Box>
     
-        {currentData.map(item => (
-          <Box
-            key={item.id}
-            sx={{
-              border: '1px solid #ddd',
-              borderRadius: 1,
-              mb: '8px', 
-              p: 2,
-            }}
-          >
-            <Typography mb='8px' style={typography.xSmall2Bold}>{item.title} | </Typography>
-            <Chip text="서류 마감까지 D-1" backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
-            </Box>
-        ))}
+      {currentData.map(item => (
+        <Box
+          key={item.id}
+          sx={{
+            border: '1px solid #ddd',
+            borderRadius: 1,
+            mb: '8px', 
+            p: 2,
+          }}
+        >
+          <Typography mb='8px' style={typography.xSmall2Bold}>
+            {item.title} |
+          </Typography>
+          <Chip text="서류 마감까지 D-1" backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
+        </Box>
+      ))}
+
       <Box display="flex" justifyContent="center" mt={2}> 
         <Pagination
           count={Math.ceil(data.length / ITEMS_PER_PAGE)}
           page={page}
-          onChange={handleChangePage}
+          onChange={handlePageChange} 
           sx={{
             '& .MuiPaginationItem-root': {
               fontSize: '14px', 
