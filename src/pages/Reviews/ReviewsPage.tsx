@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import { Box, Typography, Stack, Pagination, Modal } from '@mui/material';
 import BoardGather from './components/BoardGather';
 import ReviewModal from './components/ReviewModal';
 
+interface Review {
+  type: string;
+  freeReview: string;
+}
+
+interface Company {
+  company: string;
+  department: string;
+  reviews: Review[];
+}
+
+
+
 const ReviewPage = () => {
   const [open, setOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
   const companyData = [
     { company: '네이버', department: 'UI 엔지니어', reviews: [{ type: '중간 전형 회고', freeReview: '이 회사의 UI 엔지니어는 매우 만족스럽습니다.' }] },
@@ -15,7 +28,7 @@ const ReviewPage = () => {
     { company: '엘지', department: '백엔드', reviews: [{ type: '중간 전형 회고', freeReview: '백엔드 업무가 매우 힘들었습니다.' }] }
   ];
 
-  const handleOpen = (company) => {
+  const handleOpen = (company: Company) => {
     setSelectedCompany(company);
     setOpen(true);
   };

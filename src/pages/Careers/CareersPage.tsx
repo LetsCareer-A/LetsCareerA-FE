@@ -57,7 +57,7 @@ const CareersPage = () => {
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
-  const [selectedCard, setSelectedCard] = useState<CardData | null>(null); // 타입 수정
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -288,13 +288,7 @@ const CareersPage = () => {
               Situation (상황)
             </Typography>
             <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문본문본문본<br/>문본문본<br/>문본문본문본문<br/>본문본문본문본<br/>문본문본<br/>문본문본문본문본<br/>문본문본문본문본문본문본문본문본<br/>문본문본문본문본문본문본문
-              본문본문본문본문본문본문본문본<br/>문본문본문본문<br/>
-              본문본문본<br/>문본문본문본문본<br/>문본문본문본문본문
-              본문본<br/>문본문본문본문본문<br/>본문
-              본문본문<br/>본문본문<br/>문본문본문
-              본문본문본<br/>문본문본문
-              본문본문본문본문<br/>
+              본문본문본문본
             </Typography>
           </Box>
          <Box>

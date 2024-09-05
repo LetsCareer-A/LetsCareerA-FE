@@ -1,10 +1,26 @@
-import React from 'react';
 import { Box, Typography, Stack, IconButton } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import CloseIcon from '@mui/icons-material/Close';
 
-const ModalStyle = ({ question, answer }) => {
+interface Review {
+  type: string;
+  freeReview: string;
+}
+
+interface CompanyData {
+  company: string;
+  department: string;
+  reviews: Review[];
+}
+interface ReviewModalProps {
+  companyData: CompanyData | null;
+  handleClose: () => void;
+}
+
+
+
+const ModalStyle = ({ question, answer }: { question: string; answer: string }) => {
   return (
     <Box 
       sx={{
@@ -15,17 +31,17 @@ const ModalStyle = ({ question, answer }) => {
         alignSelf: 'stretch'
       }}
     >
-      <Typography color={colors.neutral[20]} typography={typography.xSmallSemiBold}>
+      <Typography color={colors.neutral[20]} style={typography.xSmallSemiold}>
         {question}
       </Typography>
-      <Typography color={colors.neutral[40]} typography={typography.xSmallMed}>
+      <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
         {answer}
       </Typography>
     </Box>
   );
 };
 
-const ReviewModal = ({ companyData, handleClose }) => {
+const ReviewModal: React.FC<ReviewModalProps> = ({ companyData, handleClose }) => {
   if (!companyData) return null;
 
   return (
@@ -48,7 +64,7 @@ const ReviewModal = ({ companyData, handleClose }) => {
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography 
             id="modal-title" 
-            typography={typography.medium2Bold} 
+            style={typography.medium2Bold} 
             component="h2" 
             color={colors.neutral[10]}
           >
@@ -60,7 +76,7 @@ const ReviewModal = ({ companyData, handleClose }) => {
         </Box>
         <Typography 
           id="modal-description" 
-          typography={typography.xxSmallReg} 
+          style={typography.xxSmallReg} 
           color={colors.neutral[40]} 
           sx={{ mt: 1 }}
         >
