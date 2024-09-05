@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Checkbox, Typography } from "@mui/material";
 import Chip from "./Chips";
 import colors from "../styles/colors";
@@ -10,6 +11,12 @@ interface CareerCardProps {
 }
 
 const CareerCard: React.FC<CareerCardProps> = ({ chipText, title, description }) => {
+  const [checked, setChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setChecked(prevChecked => !prevChecked);
+  };
+
   return (
     <Box 
       width='301px' 
@@ -17,8 +24,8 @@ const CareerCard: React.FC<CareerCardProps> = ({ chipText, title, description })
       p='12px' 
       sx={{
         borderRadius: '12px', 
-        border: `1px solid ${colors.neutral[85]}`, 
-        background: colors.neutral[95], 
+        border: `1px solid ${checked ? colors.primary[30] : colors.neutral[85]}`, 
+        background: checked ? colors.primary[10] : colors.neutral[95], 
         boxShadow: '0px 0px 29px 0px rgba(0, 0, 0, 0.04)', 
         position: 'relative'
       }}
@@ -26,6 +33,8 @@ const CareerCard: React.FC<CareerCardProps> = ({ chipText, title, description })
       <Box display='flex' justifyContent='space-between' mb='8px'>
         <Chip text={chipText} />
         <Checkbox
+          checked={checked}
+          onChange={handleCheckboxChange}
           sx={{
             position: 'absolute',
             top: '5px',
