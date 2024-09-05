@@ -4,7 +4,7 @@ import { BsList } from "react-icons/bs";
 
 const Navbar: React.FC = () => {
   return (
-    <div className="flex items-center justify-between w-full h-16 px-10 bg-white border-b border-gray-200">
+    <div className="flex items-center justify-between w-full h-[70px] px-10 bg-white border-b border-gray-200">
       {/* 왼쪽 사이드 - 로고&메뉴 */}
       <div className="flex items-center gap-[32px] ml-[120px]">
         <img src="public/Logo.svg" className="w-[79px] h-auto" alt="Logo" />
