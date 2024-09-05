@@ -5,11 +5,5 @@
       "destination": "https://letscareer.site/$1",
       "permanent": true
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
   ]
 }
