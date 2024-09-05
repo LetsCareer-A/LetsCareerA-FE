@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Delete from '../assets/delete.svg';
 import typography from "../styles/typography";
+import { PrimaryButton } from "./CustomButton";
 
 const CareerMenu = () => {
   return (
@@ -23,8 +24,27 @@ const CareerMenu = () => {
         </Typography>
         <img src={Delete} alt="Delete" />
       </Box>
+
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          width: '381px',
+          height: '132px',
+          padding: '20px 40px 68px 40px',
+          backgroundColor: '#FFF',
+          boxShadow: '0px 16px 20px rgba(0, 0, 0, 0.12), 0px 8px 16px rgba(0, 0, 0, 0.08), 0px 0px 8px rgba(0, 0, 0, 0.08)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexShrink: 0
+        }}
+      >
+        <PrimaryButton>어필할 커리어 추가 완료하기</PrimaryButton>
+      </Box>
     </Box>
-  )
+  );
 }
 
 export default CareerMenu;
