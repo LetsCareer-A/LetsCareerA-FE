@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
-import Chip from '/Users/l_yesme/Desktop/LetsCareerA-FE/src/components/Chips.tsx'; 
+import Chip from '../../../components/Chips'; 
 
 const BoardGather = ({ company, department, reviews }) => {
   return (
