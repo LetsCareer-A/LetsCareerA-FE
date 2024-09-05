@@ -1,9 +1,18 @@
+import { useState } from 'react';
 import { Box, Typography } from "@mui/material";
 import Delete from '../assets/delete.svg';
 import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 
 const CareerMenu = () => {
+  const [isVisible, setIsVisible] = useState(true); // 상태 추가
+
+  const handleClose = () => {
+    setIsVisible(false); // 상태 변경: 창을 숨김
+  };
+
+  if (!isVisible) return null; // visible 상태가 false면 아무것도 렌더링하지 않음
+
   return (
     <Box 
       padding='20px 40px'
@@ -22,7 +31,12 @@ const CareerMenu = () => {
         <Typography style={typography.smallBold}>
           어필할 커리어
         </Typography>
-        <img src={Delete} alt="Delete" />
+        <img 
+          src={Delete} 
+          alt="Delete" 
+          style={{ cursor: 'pointer' }} 
+          onClick={handleClose} 
+        />
       </Box>
 
       <Box
@@ -41,10 +55,12 @@ const CareerMenu = () => {
           flexShrink: 0
         }}
       >
-        <PrimaryButton>어필할 커리어 추가 완료하기</PrimaryButton>
+        <PrimaryButton sx={{ width: '100%' }}>
+          어필할 커리어 추가 완료하기
+        </PrimaryButton>
       </Box>
     </Box>
   );
-}
+};
 
 export default CareerMenu;
