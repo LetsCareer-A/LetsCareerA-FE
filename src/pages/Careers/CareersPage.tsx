@@ -78,28 +78,28 @@ const CareersPage = () => {
   }, [title, situation, task, action, result, selectedExperience]);
 
   const handleCloseModal = () => {
-    setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
-    setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
-    setShowToast(true);
     setIsModalOpen(false);
     resetState();  
   };
-
-  const handleCloseToast = () => {
-    setShowToast(false);
+  
+  const handleConfirm = () => {
+    setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
+    setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
+    setShowToast(true);  
+    setIsModalOpen(false);  
+    resetState(); 
   };
   
-
-  const handleConfirm = () => {
-    console.log('Confirm clicked');
-    handleCloseModal();
+  const handleCloseToast = () => {
+    setShowToast(false);  
   };
+  
 
   return (
     <Box>
       <Box display='flex' justifyContent='space-between'>
         <Box display='flex' gap='16px' alignItems='center'>
-          <Typography variant="body2">지원 일정관리</Typography>
+          <Typography variant="body2">경험 관리</Typography>
           <Typography style={typography.small2Reg} color={colors.neutral[40]}>
             진행한 활동들을 저장하고 기업 상세페이지에서 핵심 경험으로 꺼내 쓸 수 있어요!
           </Typography>
