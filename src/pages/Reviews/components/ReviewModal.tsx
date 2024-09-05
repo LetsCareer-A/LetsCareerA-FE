@@ -31,7 +31,7 @@ const ModalStyle = ({ question, answer }: { question: string; answer: string }) 
         alignSelf: 'stretch'
       }}
     >
-      <Typography color={colors.neutral[20]} style={typography.xSmallSemiBold}>
+      <Typography color={colors.neutral[20]} style={typography.xSmallSemiold}>
         {question}
       </Typography>
       <Typography color={colors.neutral[40]} style={typography.xSmallMed}>

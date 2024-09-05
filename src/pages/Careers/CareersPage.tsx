@@ -288,13 +288,7 @@ const CareersPage = () => {
               Situation (상황)
             </Typography>
             <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문본문본문본<br/>문본문본<br/>문본문본문본문<br/>본문본문본문본<br/>문본문본<br/>문본문본문본문본<br/>문본문본문본문본문본문본문본문본<br/>문본문본문본문본문본문본문
-              본문본문본문본문본문본문본문본<br/>문본문본문본문<br/>
-              본문본문본<br/>문본문본문본문본<br/>문본문본문본문본문
-              본문본<br/>문본문본문본문본문<br/>본문
-              본문본문<br/>본문본문<br/>문본문본문
-              본문본문본<br/>문본문본문
-              본문본문본문본문<br/>
+              본문본문본문본
             </Typography>
           </Box>
          <Box>
