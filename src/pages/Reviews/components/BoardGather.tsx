@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
@@ -20,9 +19,9 @@ const BoardGather = ({ company, department, reviews }) => {
     >
       {/* 회사 이름 및 부서 */}
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
-        <Typography sx={{ typography: typography.small2Bold }}>{company}</Typography>
-        <Typography sx={{ typography: typography.small2Bold }}> | </Typography> 
-        <Typography sx={{ typography: typography.small2Bold }}>{department}</Typography>
+        <Typography style={typography.small2Bold}>{company}</Typography>
+        <Typography style={typography.small2Bold}> | </Typography> 
+        <Typography style={typography.small2Bold}>{department}</Typography>
       </Box>
 
       {/* 회고 상태 리스트 */}
