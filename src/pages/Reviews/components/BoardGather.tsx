@@ -3,7 +3,19 @@ import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import Chip from '../../../components/Chips'; 
 
-const BoardGather = ({ company, department, reviews }) => {
+interface Review {
+  type: string;
+  freeReview: string;
+}
+
+interface BoardGatherProps {
+  company: string;
+  department: string;
+  reviews: Review[];
+}
+
+
+const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews }) => {
   return (
     <Box 
       sx={{
