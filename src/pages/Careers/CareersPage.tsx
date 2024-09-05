@@ -139,6 +139,11 @@ const CareersPage = () => {
           page={currentPage}
           onChange={handlePageChange}
           color="primary"
+          sx={{
+            '& .MuiPaginationItem-root': {
+              fontSize: '14px',
+              alignItems: 'center',
+            }}}
         />
       </Box>
 
