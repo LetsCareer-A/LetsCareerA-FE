@@ -7,12 +7,19 @@ interface TextfieldProps {
   showCharCount?: boolean;
   placeholder?: string;
   fullWidth?: boolean;
+  maxLength?: number; 
+  height?: string;
+  placeholderVerticalAlign?: string; 
 }
+
 const Textfield: React.FC<TextfieldProps> = ({
   value,
   onChange,
   showCharCount = true,
-  placeholder = '텍스트를 입력하세요.'
+  placeholder = '텍스트를 입력하세요.',
+  maxLength = 500,
+  height = 'auto',
+  placeholderVerticalAlign = 'center' 
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -20,7 +27,7 @@ const Textfield: React.FC<TextfieldProps> = ({
   const [hasError, setHasError] = useState(false);
 
   const checkError = () => {
-    if (value.length > 500) {
+    if (value.length > maxLength) {
       setHasError(true);
     } else {
       setHasError(false);
@@ -66,6 +73,7 @@ const Textfield: React.FC<TextfieldProps> = ({
         border: `1px solid ${hasError ? '#F64E39' : (isFocused ? '#9499F9' : isHovered ? '#CACCFC' : '#e7e7e7')}`,
         position: 'relative',
         padding: '11px 12px',
+        height: height, 
       }}
     >
       <TextField
@@ -81,12 +89,14 @@ const Textfield: React.FC<TextfieldProps> = ({
             fontSize: '0.75rem',
             color: isFocused || isBlurred ? '#2a2d34' : '#7a7d84',
             fontFamily: 'Pretendard',
-            height: '100%',
+            height: '100%', 
+            display: 'flex',
+            alignItems: placeholderVerticalAlign === 'top' ? 'flex-start' : placeholderVerticalAlign === 'bottom' ? 'flex-end' : 'center', // Adjust placeholder alignment
           },
         }}
         sx={{
           width: '100%',
-          height: '100%',
+          height: '100%', 
           backgroundColor: 'transparent',
         }}
       />
@@ -121,7 +131,7 @@ const Textfield: React.FC<TextfieldProps> = ({
               fontFamily: 'Pretendard',
             }}
           >
-            /500
+            /{maxLength}
           </Typography>
         </Box>
       )}

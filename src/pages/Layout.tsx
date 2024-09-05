@@ -11,7 +11,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <Box display="flex">
-      <Box flexGrow={1} display="flex" flexDirection="column" minHeight="100vh">
+      <Box flexGrow={1} display="flex" flexDirection="column">
         <Navbar />
         <Box display='flex'>
         <Sidebar />

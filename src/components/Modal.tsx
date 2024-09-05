@@ -40,42 +40,57 @@ interface ModalProps {
   open: boolean;
   onClose: () => void;
   title?: string;
+  subtitle?: string; 
   children: React.ReactNode;
   confirmText?: string;
   onConfirm?: () => void;
   width?: string;
-  isButtonDisabled: boolean; 
+  isButtonDisabled?: boolean;
+  showConfirmButton?: boolean; 
 }
 
 const Modal: React.FC<ModalProps> = ({
   open,
   onClose,
   title,
+  subtitle, 
   children,
   confirmText = '확인',
   onConfirm,
   width,
-  isButtonDisabled, 
+  isButtonDisabled = false, 
+  showConfirmButton = true, 
 }) => {
   return (
     <StyledDialog open={open} onClose={onClose} width={width}>
-      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }} style={typography.medium2Bold}>
-        {title}
-        <IconButton aria-label="close" onClick={onClose} sx={{ color: (theme) => theme.palette.grey[500] }}>
+      <DialogTitle 
+        sx={{ display: 'flex', flexDirection: 'column', padding: 0 }} 
+        style={typography.medium2Bold}
+      >
+        <span>{title}</span>
+        {subtitle && (
+          <span style={{ ...typography.xSmall2Reg, color: colors.neutral[40] }}>
+            {subtitle}
+          </span>
+        )}
+
+        <IconButton aria-label="close" onClick={onClose} sx={{ color: (theme) => theme.palette.grey[500], position: 'absolute', top: 10, right: 10 }}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ p: 0 }}>
         {children}
       </DialogContent>
-      <StyledConfirmButton 
-        onClick={() => {
-          if (onConfirm) onConfirm();
-        }}
-        disabled={isButtonDisabled}  
-      >
-        {confirmText}
-      </StyledConfirmButton>
+      {showConfirmButton && (
+        <StyledConfirmButton 
+          onClick={() => {
+            if (onConfirm) onConfirm();
+          }}
+          disabled={isButtonDisabled}  
+        >
+          {confirmText}
+        </StyledConfirmButton>
+      )}
     </StyledDialog>
   );
 };
