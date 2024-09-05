@@ -13,12 +13,20 @@ import { useStore } from '../../store/careerModalStore';
 import Experience from './components/Experience';
 import Toast from '../../components/Toast';
 
-const cardData = Array.from({ length: 30 }, (_, index) => ({
+interface CardData {
+  chipText: string;
+  chipBackgroundColor: string;
+  chipTextColor: string;
+  title: string;
+  summary: string;
+}
+
+const cardData: CardData[] = Array.from({ length: 30 }, (_, index) => ({
   chipText: `Chip ${index + 1}`,
-  chipBackgroundColor: index % 2 === 0 ? '#4D55F5' : '#1BC47D', 
-  chipTextColor: '#FFFFFF', 
+  chipBackgroundColor: index % 2 === 0 ? '#4D55F5' : '#1BC47D',
+  chipTextColor: '#FFFFFF',
   title: `Card ${index + 1}`,
-  summary: `This is the summary for Card ${index + 1}.`
+  summary: `This is the summary for Card ${index + 1}.`,
 }));
 
 const CardsPerPage = 15; 
@@ -48,8 +56,9 @@ const CareersPage = () => {
   const [showToast, setShowToast] = useState(false); 
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null); // 타입 수정
   
-
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
@@ -93,7 +102,16 @@ const CareersPage = () => {
   const handleCloseToast = () => {
     setShowToast(false);  
   };
-  
+
+  const handleCardClick = (card: CardData) => {
+    setSelectedCard(card);
+    setIsCardModalOpen(true);
+  };
+
+  const handleCardModalClose = () => {
+    setIsCardModalOpen(false);
+    setSelectedCard(null);
+  };
 
   return (
     <Box>
@@ -129,6 +147,7 @@ const CareersPage = () => {
             chipTextColor={card.chipTextColor}
             title={card.title}
             summary={card.summary}
+            onClick={() => handleCardClick(card)}
           />
         ))}
       </Box>
@@ -256,6 +275,60 @@ const CareersPage = () => {
           />
         </Box>
       </Modal>
+      <Modal
+        open={isCardModalOpen}
+        onClose={handleCardModalClose}
+        title={selectedCard?.title || '제목이 없습니다'} 
+        subtitle={selectedCard?.chipText || '제목이 없습니다'} 
+        showConfirmButton={false}
+      >
+        <Box display='flex' flexDirection='column' gap='32px'>
+          <Box>
+            <Typography mt='36px' style={typography.xSmallSemiold}>
+              Situation (상황)
+            </Typography>
+            <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
+              본문본문본문본<br/>문본문본<br/>문본문본문본문<br/>본문본문본문본<br/>문본문본<br/>문본문본문본문본<br/>문본문본문본문본문본문본문본문본<br/>문본문본문본문본문본문본문
+              본문본문본문본문본문본문본문본<br/>문본문본문본문<br/>
+              본문본문본<br/>문본문본문본문본<br/>문본문본문본문본문
+              본문본<br/>문본문본문본문본문<br/>본문
+              본문본문<br/>본문본문<br/>문본문본문
+              본문본문본<br/>문본문본문
+              본문본문본문본문<br/>
+            </Typography>
+          </Box>
+         <Box>
+          <Typography style={typography.xSmallSemiold}>
+          Task (과제)
+          </Typography>
+          <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
+              본문
+            </Typography>    
+         </Box>
+         <Box>
+          <Typography style={typography.xSmallSemiold}>
+          Action (행동)
+        </Typography>
+        <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
+              본문
+            </Typography> 
+         </Box>
+
+         <Box>
+          <Typography style={typography.xSmallSemiold}>
+         Result (결과)
+        </Typography> 
+        <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
+              본문
+            </Typography>
+         </Box>
+
+
+
+        </Box>
+        
+
+      </Modal>
 
       {showToast && (
         <Toast
@@ -264,8 +337,6 @@ const CareersPage = () => {
           onClose={handleCloseToast}
         />
       )}
-
-
     </Box>
   );
 };
