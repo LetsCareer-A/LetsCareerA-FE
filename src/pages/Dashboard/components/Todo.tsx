@@ -5,6 +5,7 @@ import Delete from '../../../assets/delete.svg';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import Textfield from '../../../components/Textfield';
+import { postTodo } from '../../../api/Dashboard/postTodos'; // 수정된 API 함수 임포트
 
 const TodoList: React.FC = () => {
   const initialTodos = [
@@ -13,33 +14,39 @@ const TodoList: React.FC = () => {
     { id: 3, text: '체크리스트 항목 3', completed: false },
     { id: 4, text: '체크리스트 항목 4', completed: false },
     { id: 5, text: '체크리스트 항목 5', completed: false },
-    { id: 6, text: '체크리스트 항목 6', completed: false },
-    { id: 7, text: '체크리스트 항목 7', completed: false },
-    { id: 8, text: '체크리스트 항목 8', completed: false },
-    { id: 9, text: '체크리스트 항목 9', completed: false },
   ];
 
   const [todos, setTodos] = useState(initialTodos);
   const [newTodo, setNewTodo] = useState('');
-  const [isAdding, setIsAdding] = useState(false); 
+  const [isAdding, setIsAdding] = useState(false);
 
   const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
   };
 
-  const addTodo = () => {
+  const addTodo = async () => {
     if (newTodo.trim() === '') return;
-
-    const newTask = {
-      id: Date.now(),
-      text: newTodo,
-      completed: false,
-    };
-
-    setTodos([...todos, newTask]);
-    setNewTodo('');
-    setIsAdding(false); 
+  
+    try {
+      console.log('Adding todo:', newTodo);
+  
+      const response = await postTodo(newTodo);
+      console.log('Server response:', response);
+  
+      const newTask = {
+        id: response.id, 
+        text: newTodo,
+        completed: false,
+      };
+  
+      setTodos([...todos, newTask]);
+      setNewTodo('');
+      setIsAdding(false);
+    } catch (error) {
+      console.error('Failed to add todo:', error);
+    }
   };
+  
 
   const toggleTodo = (id: number) => {
     setTodos(
@@ -53,7 +60,7 @@ const TodoList: React.FC = () => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  const isAddButtonDisabled = todos.length >= 10; 
+  const isAddButtonDisabled = todos.length >= 10;
 
   return (
     <Box
@@ -73,7 +80,7 @@ const TodoList: React.FC = () => {
         <NormalButton
           onClick={() => setIsAdding(true)}
           style={typography.xxSmallSemibold}
-          disabled={isAddButtonDisabled} 
+          disabled={isAddButtonDisabled}
         >
           Todo 추가하기 +
         </NormalButton>
@@ -148,7 +155,7 @@ const TodoList: React.FC = () => {
           <NormalButton
             onClick={addTodo}
             style={typography.xxSmallSemibold}
-            disabled={isAddButtonDisabled} 
+            disabled={isAddButtonDisabled}
           >
             추가
           </NormalButton>
