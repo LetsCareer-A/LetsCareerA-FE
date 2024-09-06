@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Checkbox, Typography } from '@mui/material';
+import { Box, Checkbox, Typography, TextField } from '@mui/material';
 import { NormalButton } from '../../../components/CustomButton';
 import Delete from '../../../assets/delete.svg';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
+import Textfield from '../../../components/Textfield';
 
 const TodoList: React.FC = () => {
   const initialTodos = [
@@ -16,10 +17,15 @@ const TodoList: React.FC = () => {
     { id: 7, text: '체크리스트 항목 7', completed: false },
     { id: 8, text: '체크리스트 항목 8', completed: false },
     { id: 9, text: '체크리스트 항목 9', completed: false },
-    { id: 10, text: '체크리스트 항목 10', completed: false },
   ];
+
   const [todos, setTodos] = useState(initialTodos);
   const [newTodo, setNewTodo] = useState('');
+  const [isAdding, setIsAdding] = useState(false); // 할 일 추가 입력 필드 상태
+
+  const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodo(event.target.value);
+  };
 
   const addTodo = () => {
     if (newTodo.trim() === '') return;
@@ -32,6 +38,7 @@ const TodoList: React.FC = () => {
 
     setTodos([...todos, newTask]);
     setNewTodo('');
+    setIsAdding(false); // 추가 후 텍스트 필드를 숨김
   };
 
   const toggleTodo = (id: number) => {
@@ -59,10 +66,10 @@ const TodoList: React.FC = () => {
         padding: '16px',
       }}
     >
-      <Box display="flex" alignItems="center" justifyContent='space-between'>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography style={typography.small2Bold}>Todo</Typography> 
         <NormalButton
-          onClick={addTodo}
+          onClick={() => setIsAdding(true)} // 추가하기 버튼을 누르면 입력 필드 표시
           style={typography.xxSmallSemibold}
         >
           Todo 추가하기 +
@@ -92,7 +99,7 @@ const TodoList: React.FC = () => {
             sx={{
               borderBottom: '1px solid #EFEFEF',
               borderRadius: '8px',
-              background: todo.completed ? colors.primary[10] : colors.neutral[95], // Change background color based on completion
+              background: todo.completed ? colors.primary[10] : colors.neutral[95], 
             }}
           >
             <Box display="flex" alignItems="center">
@@ -113,11 +120,34 @@ const TodoList: React.FC = () => {
               src={Delete}
               alt="Delete"
               onClick={() => deleteTodo(todo.id)}
-              style={{ cursor: 'pointer',marginRight:'12px' }} 
+              style={{ cursor: 'pointer', marginRight: '12px' }}
             />
           </Box>
         ))}
       </Box>
+
+      {isAdding && (
+        <Box display="flex" alignItems="center" mt='20px'>
+          <Checkbox checked={false} disabled /> 
+          <Box sx={{ flexGrow: 1 }}>
+            <Textfield
+              value={newTodo}
+              onChange={handleNewTodoChange}
+              showCharCount={false}
+              placeholder="Todo를 입력해주세요."
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  addTodo();
+                }
+              }}
+            />
+          </Box>
+          <NormalButton onClick={addTodo} style={typography.xxSmallSemibold}>
+            추가
+          </NormalButton>
+        </Box>
+      )}
+
     </Box>
   );
 };

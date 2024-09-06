@@ -4,6 +4,7 @@ import { Box, TextField, Typography } from '@mui/material';
 interface TextfieldProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void; 
   showCharCount?: boolean;
   placeholder?: string;
   fullWidth?: boolean;
@@ -15,6 +16,7 @@ interface TextfieldProps {
 const Textfield: React.FC<TextfieldProps> = ({
   value,
   onChange,
+  onKeyPress, 
   showCharCount = true,
   placeholder = '텍스트를 입력하세요.',
   maxLength = 500,
@@ -81,6 +83,7 @@ const Textfield: React.FC<TextfieldProps> = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
+        onKeyPress={onKeyPress} 
         placeholder={isFocused ? '' : placeholder}
         variant="standard"
         InputProps={{
