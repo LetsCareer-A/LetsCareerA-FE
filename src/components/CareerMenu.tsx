@@ -34,7 +34,7 @@ const CareerMenu = () => {
       display='flex'
       sx={{
         position: 'fixed',
-        top: '0', 
+        top: '70px', 
         left: 0,
         width: '381px',
         height: '100%',
@@ -49,7 +49,7 @@ const CareerMenu = () => {
     >
       <Box display='flex' justifyContent='space-between' padding='20px 40px'>
         <Typography style={typography.smallBold}>
-          어필할 커리어
+          어필할 경험
         </Typography>
         <img 
           src={Delete} 
@@ -60,12 +60,12 @@ const CareerMenu = () => {
       </Box>
       
       <Box 
-        mt='12px'
-        padding='0 40px'
+        padding='12px 40px 0 40px'
         sx={{
           flexGrow: 1,
           overflowY: 'auto',
-          paddingBottom: '140px'  
+          marginBottom: '200px',  
+          overflowX:'hidden',
         }}
       >
         {careerCards.map((card, index) => (
@@ -81,10 +81,10 @@ const CareerMenu = () => {
       <Box
         sx={{
           position: 'fixed',
-          bottom: 0,
+          bottom: '60px',
           left: 0,
           width: '381px',
-          height: '132px',
+          height: '124px',
           padding: '20px 40px 68px 40px',
           backgroundColor: '#FFF',
           boxShadow: '0px 16px 20px rgba(0, 0, 0, 0.12), 0px 8px 16px rgba(0, 0, 0, 0.08), 0px 0px 8px rgba(0, 0, 0, 0.08)',
@@ -95,7 +95,7 @@ const CareerMenu = () => {
         }}
       >
         <PrimaryButton sx={{ width: '100%' }}>
-          어필할 커리어 추가 완료하기
+          어필할 경험 추가 완료하기
         </PrimaryButton>
       </Box>
     </Box>
