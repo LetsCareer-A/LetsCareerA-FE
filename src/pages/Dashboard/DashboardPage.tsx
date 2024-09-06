@@ -145,7 +145,6 @@ const DashboardPage = () => {
 
   return (
     <Box>
-      <CareerMenu />
       <Box display='flex' justifyContent='space-between'>
         <Typography variant="body2">지원 일정관리</Typography>
         <PrimaryButton style={{ marginTop: '-6px', height: '44px' }} onClick={handleOpen}>
