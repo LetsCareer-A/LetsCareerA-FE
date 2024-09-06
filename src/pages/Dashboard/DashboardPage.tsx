@@ -71,40 +71,46 @@ const DashboardPage = () => {
   };
 
   const handleConfirm = async () => {
-    try {
-      console.log('companyName:', companyName);
-      console.log('jobTitle:', jobTitle);
-      console.log('dropdownItem:', dropdownItem);
-      console.log('stageDetailInput:', stageDetailInput);
-      console.log('isCheckboxChecked:', isCheckboxChecked);
-      console.log('date:', date);
-      console.log('link:', link);
-  
-      const scheduleData = {
-        company: companyName, 
-        department: jobTitle, 
-        type: dropdownItem === '서류 준비 중' ? 'DOC' : dropdownItem === '면접 준비 중' ? 'INT' : 'MID', 
-        mid_name: dropdownItem === '중간 전형(직접 입력)' ? stageDetailInput : '', 
-        always: isCheckboxChecked, 
-        date: isCheckboxChecked ? '' : (date ? date.toISOString().split('T')[0] : ''),
-        url: link || '', 
-      };
-  
-      console.log('scheduleData:', scheduleData);
-  
-      await postScheduleData(scheduleData);
-  
-      setToastMessage(`‘${companyName} ${jobTitle}’ 중간 전형에 대한 회고를 완료했어요!`);
-      setToastDescription('렛츠커리어와 함께 합격까지 달려보아요!');
-      setShowToast(true);
-      handleClose();
-    } catch (error) {
-      console.error('Error during confirm:', error);
-      setToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
-      setToastDescription('');
-      setShowToast(true);
+    if (buttonText === '등록 완료하기') {
+      try {
+        console.log('companyName:', companyName);
+        console.log('jobTitle:', jobTitle);
+        console.log('dropdownItem:', dropdownItem);
+        console.log('stageDetailInput:', stageDetailInput);
+        console.log('isCheckboxChecked:', isCheckboxChecked);
+        console.log('date:', date);
+        console.log('link:', link);
+    
+        const scheduleData = {
+          company: companyName,
+          department: jobTitle,
+          type: dropdownItem === '서류 준비 중' ? 'DOC' : dropdownItem === '면접 준비 중' ? 'INT' : 'MID',
+          mid_name: dropdownItem === '중간 전형(직접 입력)' ? stageDetailInput : '',
+          always: isCheckboxChecked,
+          date: isCheckboxChecked ? '' : (date ? date.toISOString().split('T')[0] : ''),
+          url: link || '',
+        };
+    
+        console.log('scheduleData:', scheduleData);
+    
+        await postScheduleData(scheduleData);
+    
+        setToastMessage(`‘${companyName} ${jobTitle}’ 중간 전형에 대한 회고를 완료했어요!`);
+        setToastDescription('렛츠커리어와 함께 합격까지 달려보아요!');
+        setShowToast(true);
+        handleClose();
+      } catch (error) {
+        console.error('Error during confirm:', error);
+        setToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
+        setToastDescription('');
+        setShowToast(true);
+      }
+    } else {
+      setModalStep(2);
+      setButtonText('등록 완료하기'); 
     }
   };
+  
   
     
   
