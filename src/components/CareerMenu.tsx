@@ -49,7 +49,7 @@ const CareerMenu = () => {
     >
       <Box display='flex' justifyContent='space-between' padding='20px 40px'>
         <Typography style={typography.smallBold}>
-          어필할 커리어
+          어필할 경험
         </Typography>
         <img 
           src={Delete} 
@@ -95,7 +95,7 @@ const CareerMenu = () => {
         }}
       >
         <PrimaryButton sx={{ width: '100%' }}>
-          어필할 커리어 추가 완료하기
+          어필할 경험 추가 완료하기
         </PrimaryButton>
       </Box>
     </Box>
