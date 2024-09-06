@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Checkbox, Typography, TextField } from '@mui/material';
+import { Box, Checkbox, Typography } from '@mui/material';
 import { NormalButton } from '../../../components/CustomButton';
 import Delete from '../../../assets/delete.svg';
 import colors from '../../../styles/colors';
@@ -21,7 +21,7 @@ const TodoList: React.FC = () => {
 
   const [todos, setTodos] = useState(initialTodos);
   const [newTodo, setNewTodo] = useState('');
-  const [isAdding, setIsAdding] = useState(false); // 할 일 추가 입력 필드 상태
+  const [isAdding, setIsAdding] = useState(false); 
 
   const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
@@ -38,7 +38,7 @@ const TodoList: React.FC = () => {
 
     setTodos([...todos, newTask]);
     setNewTodo('');
-    setIsAdding(false); // 추가 후 텍스트 필드를 숨김
+    setIsAdding(false); 
   };
 
   const toggleTodo = (id: number) => {
@@ -52,6 +52,8 @@ const TodoList: React.FC = () => {
   const deleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
+
+  const isAddButtonDisabled = todos.length >= 10; 
 
   return (
     <Box
@@ -69,8 +71,9 @@ const TodoList: React.FC = () => {
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography style={typography.small2Bold}>Todo</Typography> 
         <NormalButton
-          onClick={() => setIsAdding(true)} // 추가하기 버튼을 누르면 입력 필드 표시
+          onClick={() => setIsAdding(true)}
           style={typography.xxSmallSemibold}
+          disabled={isAddButtonDisabled} 
         >
           Todo 추가하기 +
         </NormalButton>
@@ -142,7 +145,11 @@ const TodoList: React.FC = () => {
               }}
             />
           </Box>
-          <NormalButton onClick={addTodo} style={typography.xxSmallSemibold}>
+          <NormalButton
+            onClick={addTodo}
+            style={typography.xxSmallSemibold}
+            disabled={isAddButtonDisabled} 
+          >
             추가
           </NormalButton>
         </Box>
