@@ -21,7 +21,6 @@ import Toast from '../../components/Toast';
 import File from '../../assets/file.svg';
 import Communication from '../../assets/communication.svg';
 import Edit from '../../assets/edit.svg';
-import CareerMenu from '../../components/CareerMenu';
 
 const DashboardPage = () => {
   const [open, setOpen] = useState(false);
@@ -117,7 +116,6 @@ const DashboardPage = () => {
 
   return (
     <Box>
-      <CareerMenu />
       <Box display='flex' justifyContent='space-between'>
         <Typography variant="body2">지원 일정관리</Typography>
         <PrimaryButton style={{ marginTop: '-6px', height: '44px' }} onClick={handleOpen}>
