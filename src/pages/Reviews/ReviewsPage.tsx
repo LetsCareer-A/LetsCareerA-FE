@@ -39,7 +39,7 @@ const ReviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', padding: '40px' }}>
+    <Box>
       {/* 페이지 상단의 제목 및 설명 */}
       <Stack spacing={4}>
         <Box 
@@ -53,7 +53,7 @@ const ReviewPage = () => {
             gap: '16px'
           }}
         >
-          <Typography sx={{ typography: typography.mediumBold, marginLeft: '12px' }}>회고마스터</Typography>
+          <Typography sx={{ typography: typography.mediumBold, marginLeft: '12px' }}>회고 관리</Typography>
           <Typography sx={{ typography: typography.small2Reg, color: colors.neutral[40] }}>
             기업별로 진행한 회고를 볼 수 있어요
           </Typography>
