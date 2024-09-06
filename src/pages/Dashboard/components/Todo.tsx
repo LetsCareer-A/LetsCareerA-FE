@@ -1,24 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Checkbox, Typography } from '@mui/material';
 import { NormalButton } from '../../../components/CustomButton';
 import Delete from '../../../assets/delete.svg';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import Textfield from '../../../components/Textfield';
-import { postTodo } from '../../../api/Dashboard/postTodos'; // 수정된 API 함수 임포트
+import { postTodo } from '../../../api/Dashboard/postTodos'; 
+import { getTodo } from '../../../api/Dashboard/getTodos'; 
 
 const TodoList: React.FC = () => {
-  const initialTodos = [
-    { id: 1, text: '체크리스트 항목 1', completed: false },
-    { id: 2, text: '체크리스트 항목 2', completed: false },
-    { id: 3, text: '체크리스트 항목 3', completed: false },
-    { id: 4, text: '체크리스트 항목 4', completed: false },
-    { id: 5, text: '체크리스트 항목 5', completed: false },
-  ];
-
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState<{ id: number, text: string, completed: boolean }[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await getTodo();
+        console.log('Fetched todos:', response);
+
+        if (response.code === 200 && response.data?.todos) {
+          const loadedTodos = response.data.todos.map((todo: { todo: string, isChecked: boolean }, index: number) => ({
+            id: index + 1,
+            text: todo.todo,
+            completed: todo.isChecked,
+          }));
+          setTodos(loadedTodos);
+        }
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      }
+    };
+
+    fetchTodos();
+  }, []);
 
   const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
@@ -34,7 +49,7 @@ const TodoList: React.FC = () => {
       console.log('Server response:', response);
   
       const newTask = {
-        id: response.id, 
+        id: Date.now(), 
         text: newTodo,
         completed: false,
       };
@@ -161,7 +176,6 @@ const TodoList: React.FC = () => {
           </NormalButton>
         </Box>
       )}
-
     </Box>
   );
 };
