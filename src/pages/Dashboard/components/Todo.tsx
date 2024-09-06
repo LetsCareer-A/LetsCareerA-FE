@@ -7,6 +7,7 @@ import typography from '../../../styles/typography';
 import Textfield from '../../../components/Textfield';
 import { postTodo } from '../../../api/Dashboard/postTodos'; 
 import { getTodo } from '../../../api/Dashboard/getTodos'; 
+import { delTodo } from '../../../api/Dashboard/delTodo'; 
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<{ id: number, text: string, completed: boolean }[]>([]);
@@ -21,7 +22,7 @@ const TodoList: React.FC = () => {
 
         if (response.code === 200 && response.data?.todos) {
           const loadedTodos = response.data.todos.map((todo: { todo: string, isChecked: boolean }, index: number) => ({
-            id: index + 1,
+            id: index + 1, 
             text: todo.todo,
             completed: todo.isChecked,
           }));
@@ -61,7 +62,6 @@ const TodoList: React.FC = () => {
       console.error('Failed to add todo:', error);
     }
   };
-  
 
   const toggleTodo = (id: number) => {
     setTodos(
@@ -71,8 +71,13 @@ const TodoList: React.FC = () => {
     );
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const deleteTodo = async (id: number) => {
+    try {
+      await delTodo(id);
+      setTodos(todos.filter(todo => todo.id !== id)); 
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+    }
   };
 
   const isAddButtonDisabled = todos.length >= 10;
