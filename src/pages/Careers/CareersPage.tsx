@@ -16,7 +16,7 @@ import { postCareers } from '../../api/Careerboard/postCareers';
 import { getCareers } from '../../api/Careerboard/getCareers';
 
 interface CardData {
-  chipText: string;
+  category: string;
   chipBackgroundColor: string;
   chipTextColor: string;
   title: string;
@@ -186,7 +186,7 @@ const CareersPage = () => {
         {cards.map((card, index) => (
           <Card 
             key={index} 
-            chipText={card.chipText}
+            chipText={card.category}
             chipBackgroundColor={card.chipBackgroundColor}
             chipTextColor={card.chipTextColor}
             title={card.title}
