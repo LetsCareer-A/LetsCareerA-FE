@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { Box, Button, Stack, Typography } from '@mui/material';
+=======
+import { Box, Stack, Typography } from '@mui/material';
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Chip from '../../components/Chips';
 import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
+<<<<<<< HEAD
 import { DropdownItem } from '../../components/Dropdown'; 
 import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
@@ -39,8 +44,25 @@ const IntroduceBox = ({ questionTextFieldValue, handleQuestionTextFieldChange, a
         />
     </Box>
 );
+=======
+import { DropdownItem } from '../../components/Dropdown'; // Ensure this import is correct
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
 
+const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, chipTextColor, title, summary, onClick }) => {
+    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
 
+    // Define dropdown items
+    const dropdownItems: DropdownItem[] = [
+        { text: '공고진행중', color: colors.primary.normal },
+        { text: '공고진행예정', color: colors.secondary[30] },
+        { text: '공고마감', color: colors.neutral[70]}
+    ];
+
+    const handleDropdownSelect = (item: DropdownItem) => {
+        setSelectedChip(item);
+    };
+
+<<<<<<< HEAD
 const ExperinceBox = () => (
     <Box sx={{ display: 'flex', width: '260px', height: '55px', padding: '16px 8px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', border: `1px solid ${colors.neutral[85]}`, bgcolor: `${colors.neutral[100]}` }}>
         <AddIcon sx={{ width: '24px', height: '24px' }} />
@@ -111,6 +133,42 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                 </Box>
             </Stack>
         
+=======
+    return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
+        <Stack spacing={'16px'} direction={'row'} alignItems="center">
+          <ArrowBackIosNewIcon />
+          <Chip
+            image={notebook}
+            text='D-4'
+            backgroundColor="rgba(81, 119, 255, 0.1)"
+            textColor={colors.primary.normal}
+            imageWidth="16px"
+            imageHeight="16px"
+          />
+          <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+            삼성전자
+          </Typography>
+          <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+            |
+          </Typography>
+          <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+            직무
+          </Typography>
+          <Dropdown
+            buttonText={selectedChip ? selectedChip.text : '공고상태'}
+            items={dropdownItems}
+            onSelect={handleDropdownSelect}
+            renderItem={(item) => (
+              <Box display="flex" alignItems="center">
+                {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
+                {item.text}
+              </Box>
+            )}
+          />
+        </Stack>
+      
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
             <Stack spacing={'16px'} mt={3}>
                 {/* 서류 전형 단계 박스 */}
                 <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
@@ -124,6 +182,7 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                         </Typography>
                     </Stack>
                 </Box>
+<<<<<<< HEAD
                 <Box
                     sx={{
                         width: '1043px',
@@ -134,18 +193,25 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                     }}
                     onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}  // 클릭 시 URL로 이동
                 />
+=======
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
 
                 {/* 배너 및 컨텐츠 */}
                 <Stack spacing={'16px'} direction={'row'}>
                     {/* 자기소개서 */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', height: '394px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
+<<<<<<< HEAD
                         <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'16px'}>
+=======
+                        <Box gap={'16px'}>
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
                                 자기소개서
                             </Typography>
                             <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
                                 준비하는 기업의 자기소개서를 미리 써봐요.
                             </Typography>
+<<<<<<< HEAD
                             <Button
                                 variant="contained"
                                 sx={{
@@ -177,15 +243,30 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                                 handleAnswerTextFieldChange={handleAnswerTextFieldChange}
                             />
                             </Box>
+=======
+                        </Box>
+                        <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
+                            <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
+                                문항 1
+                            </Typography>
+                            {/* 텍스트 필드 추가 */}
+                        </Box>
+                        {/* 텍스트 필드 추가 */}
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
                     </Box>
 
                     {/* 핵심경험 */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
+<<<<<<< HEAD
                         <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
+=======
+                        <Box gap={'8px'}>
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
                                 핵심경험
                             </Typography>
                             <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
+<<<<<<< HEAD
                                 어필할 핵심 경험을 추가해보세요.
                             </Typography>
                         </Box>
@@ -194,6 +275,13 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                             <ExperinceBox />
                             <ExperinceBox />
                             <ExperinceBox />
+=======
+                                준비하는 기업의 자기소개서를 미리 써봐요.
+                            </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {/* Card box 추가 */}
+>>>>>>> 9258f94 (#37 [Chore] conflict 해결)
                         </Box>
                     </Box>
                 </Stack>
