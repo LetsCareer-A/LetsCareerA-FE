@@ -10,6 +10,7 @@ import { DropdownItem } from '../../components/Dropdown';
 import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
+import fileImage from '../../assets/ill_file.png';
 
 interface DetailProps {
     chipText: string;
@@ -124,6 +125,9 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
             <Stack spacing={'16px'} mt={3}>
                 <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                     <Stack spacing={'4px'} direction={'column'}>
+                        <Box sx={{ display: 'flex', width: 100, height: 100, padding: '3px 3px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', bgcolor: `${colors.primary[80]}`}}>
+                            <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
+                        </Box>
                         <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
                             서류전형
                         </Typography>
