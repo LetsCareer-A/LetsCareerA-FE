@@ -14,13 +14,19 @@ import Experience from './components/Experience';
 import Toast from '../../components/Toast';
 import { postCareers } from '../../api/Careerboard/postCareers';
 import { getCareers } from '../../api/Careerboard/getCareers';
+import { getCareerDetail } from '../../api/Careerboard/getCareerDetail';
 
 interface CardData {
+  careerId: string;
   category: string;
   chipBackgroundColor: string;
   chipTextColor: string;
   title: string;
   summary: string;
+  situation?: string;  
+  task?: string;  
+  action?: string;  
+  result?: string;  
 }
 
 const CardsPerPage = 15; 
@@ -145,9 +151,14 @@ const CareersPage = () => {
     setShowToast(false);  
   };
 
-  const handleCardClick = (card: CardData) => {
-    setSelectedCard(card);
-    setIsCardModalOpen(true);
+  const handleCardClick = async (card: CardData) => {
+    try {
+      const response = await getCareerDetail(card.careerId); 
+      setSelectedCard(response.data);
+      setIsCardModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching career details:', error);
+    }
   };
 
   const handleCardModalClose = () => {
@@ -333,7 +344,7 @@ const CareersPage = () => {
               Situation (상황)
             </Typography>
             <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문본문본문본
+            {selectedCard?.situation || '데이터 없음'}
             </Typography>
           </Box>
          <Box>
@@ -341,7 +352,7 @@ const CareersPage = () => {
           Task (과제)
           </Typography>
           <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문
+          {selectedCard?.task || '데이터 없음'}
             </Typography>    
          </Box>
          <Box>
@@ -349,7 +360,7 @@ const CareersPage = () => {
           Action (행동)
         </Typography>
         <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문
+        {selectedCard?.action || '데이터 없음'}
             </Typography> 
          </Box>
 
@@ -358,7 +369,7 @@ const CareersPage = () => {
          Result (결과)
         </Typography> 
         <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문
+        {selectedCard?.result || '데이터 없음'}
             </Typography>
          </Box>
 
