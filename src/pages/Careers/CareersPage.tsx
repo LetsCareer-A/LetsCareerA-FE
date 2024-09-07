@@ -182,6 +182,7 @@ const CareersPage = () => {
         gridTemplateColumns='repeat(3, 1fr)'
         gap='16px'
         mt='32px'
+        height='584px'
       >
         {cards.map((card, index) => (
           <Card 
@@ -323,7 +324,7 @@ const CareersPage = () => {
         open={isCardModalOpen}
         onClose={handleCardModalClose}
         title={selectedCard?.title || '제목이 없습니다'} 
-        subtitle={selectedCard?.chipText || '제목이 없습니다'} 
+        subtitle={selectedCard?.category || '제목이 없습니다'} 
         showConfirmButton={false}
       >
         <Box display='flex' flexDirection='column' gap='32px'>

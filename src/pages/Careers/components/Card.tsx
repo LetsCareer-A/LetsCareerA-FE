@@ -16,6 +16,7 @@ const Card: React.FC<CardProps> = ({ chipText, chipBackgroundColor, chipTextColo
   <Box 
     sx={{ 
       width: '337px', 
+      height:'104px',
       background: 'white', 
       borderRadius: '12px', 
       padding: '12px',
