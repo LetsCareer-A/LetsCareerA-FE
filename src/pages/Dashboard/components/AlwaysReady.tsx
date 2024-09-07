@@ -4,6 +4,7 @@ import colors from '../.././../styles/colors';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import typography from '../../../styles/typography';
 import { getAlways } from '../../../api/Dashboard/getAlways'; 
+import completeIcon from '../../../assets/complete.svg';
 
 const ReadyTextStyles = {
     colors: `${colors.neutral[10]}`,
@@ -41,12 +42,15 @@ const ReadyBoardItem: React.FC<ReadyBoardItemProps> = ({ company, department, st
             <Typography sx={ReadyTextStyles}>{department}</Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <CreateOutlinedIcon sx={{ width: '16px', color: `${colors.primary.normal}` }} />
-        <Typography sx={{ color: `${colors.primary.normal}`, display: 'flex', alignItems: 'center' }} style={typography.xSmall2Med}>
-            {status}
-        </Typography>
+            {status === '준비 진행중' ? (
+                <CreateOutlinedIcon sx={{ width: '16px', color: `${colors.primary.normal}` }} />
+            ) : (
+                <img src={completeIcon} alt='complete'/>
+            )}
+            <Typography sx={{ color: `${colors.primary.normal}`, display: 'flex', alignItems: 'center' }} style={typography.xSmall2Med}>
+                {status}
+            </Typography>
         </Box>
-
     </Box>
 );
 
