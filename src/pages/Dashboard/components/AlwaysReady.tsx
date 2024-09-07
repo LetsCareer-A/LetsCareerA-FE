@@ -42,7 +42,7 @@ const ReadyBoardItem: React.FC<ReadyBoardItemProps> = ({ company, department, st
             <Typography sx={ReadyTextStyles}>{department}</Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            {status === '준비 진행중' ? (
+            {status === '준비 진행 중' ? (
                 <CreateOutlinedIcon sx={{ width: '16px', color: `${colors.primary.normal}` }} />
             ) : (
                 <img src={completeIcon} alt='complete'/>
