@@ -22,7 +22,6 @@ import File from '../../assets/file.svg';
 import Communication from '../../assets/communication.svg';
 import Edit from '../../assets/edit.svg';
 import { postScheduleData } from '../../api/Dashboard/postSchedules';
-import CareerMenu from '../../components/CareerMenu';
 
 const DashboardPage = () => {
   const [open, setOpen] = useState(false);

@@ -6,20 +6,34 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Chip from '../../components/Chips';
 import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
-import { DropdownItem } from '../../components/Dropdown'; 
+import { DropdownItem } from '../../components/Dropdown';
 import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
-import banner from '../../assets/banner.png'
+import banner from '../../assets/banner.png';
 
-const IntroduceBox = ({ questionTextFieldValue, handleQuestionTextFieldChange, answerTextFieldValue, handleAnswerTextFieldChange }) => (
+interface DetailProps {
+    chipText: string;
+    chipBackgroundColor: string;
+    chipTextColor: string;
+    title: string;
+    summary: string; // summary 추가됨
+    onClick: () => void;
+}
+
+const IntroduceBox: React.FC<{
+    questionTextFieldValue: string;
+    handleQuestionTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    answerTextFieldValue: string;
+    handleAnswerTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ questionTextFieldValue, handleQuestionTextFieldChange, answerTextFieldValue, handleAnswerTextFieldChange }) => (
     <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
         <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
             문항 1
         </Typography>
         <Textfield
             placeholder="문항의 제목 또는 기업에서 제시한 문항을 적어주세요"
-            value={questionTextFieldValue}  // 문항 텍스트 필드 값 바인딩
-            onChange={handleQuestionTextFieldChange}  // 문항 필드 onChange 핸들러 설정
+            value={questionTextFieldValue}
+            onChange={handleQuestionTextFieldChange}
             showCharCount={true}
             fullWidth={true}
             maxLength={40}
@@ -27,19 +41,18 @@ const IntroduceBox = ({ questionTextFieldValue, handleQuestionTextFieldChange, a
         />
         <Textfield
             placeholder="해당 문항에 대한 답변 또는 자기소개 내용을 적어주세요."
-            value={answerTextFieldValue}  // 답변 텍스트 필드 값 바인딩
-            onChange={handleAnswerTextFieldChange}  // 답변 필드 onChange 핸들러 설정
+            value={answerTextFieldValue}
+            onChange={handleAnswerTextFieldChange}
             showCharCount={true}
-            fullWidth={true}  // fullWidth는 false로 설정
+            fullWidth={true}
             maxLength={1500}
-            multiline  // 여러 줄 입력을 허용
-            rows={10}  // 초기 4줄을 표시
-            maxRows={10}  // 최대 10줄까지 확장
-            sx={{ height: '270px' }}  
+            multiline
+            rows={10}
+            maxRows={10}
+            sx={{ height: '270px' }}
         />
     </Box>
 );
-
 
 const ExperinceBox = () => (
     <Box sx={{ display: 'flex', width: '260px', height: '55px', padding: '16px 8px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', border: `1px solid ${colors.neutral[85]}`, bgcolor: `${colors.neutral[100]}` }}>
@@ -50,11 +63,9 @@ const ExperinceBox = () => (
 const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, chipTextColor, title, summary, onClick }) => {
     const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
 
-    // 각 텍스트 필드에 대해 별도의 상태 관리
-    const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');  // 문항 1의 상태
-    const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');  // 답변 필드의 상태
+    const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
+    const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
 
-    // Define dropdown items
     const dropdownItems: DropdownItem[] = [
         { text: '공고진행중', color: colors.primary.normal },
         { text: '공고진행예정', color: colors.secondary[30] },
@@ -65,7 +76,6 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
         setSelectedChip(item);
     };
 
-    // 각 필드의 상태 변경 핸들러
     const handleQuestionTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setQuestionTextFieldValue(event.target.value);
     };
@@ -79,15 +89,15 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
             <Stack spacing={'16px'} direction={'row'} alignItems="center" sx={{ position: 'relative' }}>
                 <ArrowBackIosNewIcon />
                 <Chip
+                    text={chipText}  // chipText 사용
+                    backgroundColor={chipBackgroundColor}  // chipBackgroundColor 사용
+                    textColor={chipTextColor}  // chipTextColor 사용
                     image={notebook}
-                    text='D-4'
-                    backgroundColor="rgba(81, 119, 255, 0.1)"
-                    textColor={colors.primary.normal}
                     imageWidth="16px"
                     imageHeight="16px"
                 />
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    삼성전자
+                    {title}  // title 사용
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
@@ -106,16 +116,14 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                                 {item.text}
                             </Box>
                         )}
-                        sx={{ minWidth: '150px' }}  // 드롭다운 너비 조정
+                        sx={{ minWidth: '150px' }}
                     />
                 </Box>
             </Stack>
-        
+
             <Stack spacing={'16px'} mt={3}>
-                {/* 서류 전형 단계 박스 */}
                 <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                     <Stack spacing={'4px'} direction={'column'}>
-                        <Box sx={{ width: 95, height: 95, marginLeft: '25px', marginTop: '31px', backgroundColor: `${colors.purple}` }}></Box>
                         <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
                             서류전형
                         </Typography>
@@ -130,14 +138,12 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                         height: '55px',
                         backgroundImage: `url(${banner})`,
                         border: `1px solid ${colors.neutral[95]}`,
-                        cursor: 'pointer'  // 클릭 가능한 커서 모양 추가
+                        cursor: 'pointer'
                     }}
-                    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}  // 클릭 시 URL로 이동
+                    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
                 />
 
-                {/* 배너 및 컨텐츠 */}
                 <Stack spacing={'16px'} direction={'row'}>
-                    {/* 자기소개서 */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', height: '394px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                         <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'16px'}>
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
@@ -160,14 +166,13 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                                     lineHeight: '20px',
                                     letterSpacing: '-0.21px',
                                     color: `${colors.primary.normal}`,
-                                    marginRight: '0px !important'  // 오른쪽 여백 강제 제거
+                                    marginRight: '0px !important'
                                 }}
                                 endIcon={<AddIcon />}
+                                onClick={onClick}  // onClick 사용
                             >
                                 문항 추가하기
                             </Button>
-
-
                         </Box>
                         <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
                             <IntroduceBox
@@ -176,10 +181,9 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                                 answerTextFieldValue={answerTextFieldValue}
                                 handleAnswerTextFieldChange={handleAnswerTextFieldChange}
                             />
-                            </Box>
+                        </Box>
                     </Box>
 
-                    {/* 핵심경험 */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                         <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
@@ -198,6 +202,16 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                     </Box>
                 </Stack>
             </Stack>
+
+            {/* summary를 화면에 표시 */}
+            <Box sx={{ marginTop: '24px' }}>
+                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+                    Summary
+                </Typography>
+                <Typography color={colors.neutral[45]} style={typography.xSmall2Reg}>
+                    {summary}  {/* summary 사용 */}
+                </Typography>
+            </Box>
         </Box>
     );
 };

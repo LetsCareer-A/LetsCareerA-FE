@@ -1,10 +1,11 @@
+// Dropdown.tsx
 import React, { useState, MouseEvent } from 'react';
 import { Box, Button, Menu, styled } from '@mui/material';
 import Chip from './Chips'; // Chip 컴포넌트 가져오기
 import colors from '../styles/colors';
 import Arrow from '../assets/arrow.svg';
 
-interface DropdownItem {
+export interface DropdownItem {
   text: string;
   color?: string;
   image?: string;
@@ -23,7 +24,6 @@ const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   color: open ? colors.neutral[10] : colors.neutral[40],
   position: 'relative',
   zIndex: 1,
-  sx:{},
 }));
 
 const StyledMenu = styled(Menu)(() => ({
@@ -46,10 +46,10 @@ interface DropdownProps {
   items: DropdownItem[]; 
   renderItem?: (item: DropdownItem) => React.ReactNode; 
   onSelect?: (item: DropdownItem) => void;
-  sx: {};
+  sx?: object;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSelect }) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSelect, sx = {} }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
   const open = Boolean(anchorEl);
@@ -72,7 +72,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
 
   return (
     <div>
-      <StyledButton onClick={handleClick} open={open}>
+      <StyledButton onClick={handleClick} open={open} sx={sx}>
         {selectedItem ? (
           <Chip 
             text={selectedItem.text}
@@ -104,12 +104,16 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
             onClick={() => handleItemClick(item)}
             sx={{ margin: '4px 0' }} // 적절한 마진 추가
           >
-            <Chip 
-              text={item.text}
-              backgroundColor={item.color}
-              image={item.image}
-              sx={{ width: '100%', display: 'flex', alignItems: 'center' }} // Chip 스타일 조정
-            />
+            {renderItem ? (
+              renderItem(item) // renderItem이 있는 경우 이를 사용
+            ) : (
+              <Chip 
+                text={item.text}
+                backgroundColor={item.color}
+                image={item.image}
+                sx={{ width: '100%', display: 'flex', alignItems: 'center' }} // Chip 스타일 조정
+              />
+            )}
           </Box>
         ))}
       </StyledMenu>
