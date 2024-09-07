@@ -62,7 +62,7 @@ const AlwaysReady = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getAlways();
+                const response = await getAlways(page, 5);
                 if (response.code === 200) {
                     const alwaysData = response.data.always.map((item: { company: string; department: string; status: string }) => ({
                         company: item.company,
@@ -70,7 +70,7 @@ const AlwaysReady = () => {
                         status: item.status,
                     }));
                     setReadyBoardData(alwaysData);
-                    setTotalPages(Math.ceil(response.data.size / 4)); 
+                    setTotalPages(Math.ceil(response.data.size / 5));
                 }
             } catch (error) {
                 console.error('Failed to fetch always ready data:', error);
@@ -78,7 +78,7 @@ const AlwaysReady = () => {
         };
 
         fetchData();
-    }, [page]);
+    }, [page]); 
 
     return (
         <Box sx={{ 
@@ -109,7 +109,7 @@ const AlwaysReady = () => {
                     count={totalPages}
                     color="primary"
                     page={page}
-                    onChange={(_, value) => setPage(value)}
+                    onChange={(_, value) => setPage(value)} 
                     sx={{
                         '& .MuiPaginationItem-root': {
                             fontSize: '14px',
