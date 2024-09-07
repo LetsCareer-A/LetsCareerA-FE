@@ -115,7 +115,9 @@ const CareerMenu = () => {
           flexShrink: 0
         }}
       >
-        <PrimaryButton>어필할 커리어 추가 완료하기</PrimaryButton>
+        <PrimaryButton sx={{ width: '100%' }}>
+          어필할 커리어 추가 완료하기
+        </PrimaryButton>
       </Box>
     </Box>
   );
