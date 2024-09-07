@@ -14,6 +14,7 @@ const StyledChip = styled('div')<{ backgroundColor?: string }>(({ backgroundColo
   borderRadius: '6px',
   backgroundColor: backgroundColor || '#1BC47D', 
   color: '#FFF',
+  sx: {},
 }));
 
 interface ChipProps {
@@ -23,6 +24,7 @@ interface ChipProps {
   image?: string; 
   imageWidth?: string; // Add imageWidth prop
   imageHeight?: string; // Add imageHeight prop
+  sx?: object;
 }
 
 const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor, image, imageWidth = '20px', imageHeight = '20px' }) => {

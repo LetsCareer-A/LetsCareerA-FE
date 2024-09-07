@@ -8,6 +8,7 @@ interface DropdownItem {
   text: string;
   color?: string;
   image?: string;
+  sx?: object;
 }
 
 const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
@@ -22,6 +23,7 @@ const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   color: open ? colors.neutral[10] : colors.neutral[40],
   position: 'relative',
   zIndex: 1,
+  sx:{},
 }));
 
 const StyledMenu = styled(Menu)(() => ({
@@ -44,6 +46,7 @@ interface DropdownProps {
   items: DropdownItem[]; 
   renderItem?: (item: DropdownItem) => React.ReactNode; 
   onSelect?: (item: DropdownItem) => void;
+  sx: {};
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSelect }) => {
