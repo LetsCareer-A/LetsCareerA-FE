@@ -12,25 +12,35 @@ import Textfield from '../../components/Textfield';
 import { useStore } from '../../store/careerModalStore';
 import Experience from './components/Experience';
 import Toast from '../../components/Toast';
+import { postCareers } from '../../api/Careerboard/postCareers';
+import { getCareers } from '../../api/Careerboard/getCareers';
+import { getCareerDetail } from '../../api/Careerboard/getCareerDetail';
 
 interface CardData {
-  chipText: string;
+  careerId: string;
+  category: string;
   chipBackgroundColor: string;
   chipTextColor: string;
   title: string;
   summary: string;
+  situation?: string;  
+  task?: string;  
+  action?: string;  
+  result?: string;  
 }
 
-const cardData: CardData[] = Array.from({ length: 30 }, (_, index) => ({
-  chipText: `Chip ${index + 1}`,
-  chipBackgroundColor: index % 2 === 0 ? '#4D55F5' : '#1BC47D',
-  chipTextColor: '#FFFFFF',
-  title: `Card ${index + 1}`,
-  summary: `This is the summary for Card ${index + 1}.`,
-}));
-
 const CardsPerPage = 15; 
-const TotalPages = Math.ceil(cardData.length / CardsPerPage);
+const GridColumns = 3;
+const GridRows = 5;
+
+const experienceCategoryMap: { [key: string]: string } = {
+  "대외활동": "ACTIVITY",
+  "공모전": "COMPETITION",
+  "실무": "TASK",
+  "자격증": "CERTIFICATION",
+  "프로젝트": "PROJECT",
+  "기타": "OTHER"
+};
 
 const CareersPage = () => {
   const { 
@@ -51,22 +61,34 @@ const CareersPage = () => {
     resetState  
   } = useStore(); 
 
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [cards, setCards] = useState<CardData[]>([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [showToast, setShowToast] = useState(false); 
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   
+  const fetchCards = async () => {
+    try {
+      const response = await getCareers(currentPage, CardsPerPage);
+      const { data } = response;
+      setCards(data.careers || []);
+      setTotalPages(data.totalPages || 0);
+    } catch (error) {
+      console.error('Error fetching careers:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCards();
+  }, [currentPage]);
+
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
-  
-
-  const startIndex = (currentPage - 1) * CardsPerPage;
-  const endIndex = startIndex + CardsPerPage;
-  const currentCards = cardData.slice(startIndex, endIndex);
 
   const handleExperienceChange = (label: string) => {
     setSelectedExperience(selectedExperience === label ? null : label);
@@ -91,22 +113,56 @@ const CareersPage = () => {
     setIsModalOpen(false);
     resetState();  
   };
+
+  interface CareerData {
+    category: string;
+    title: string;
+    situation: string;
+    task: string;
+    action: string;
+    result: string;
+  }
   
-  const handleConfirm = () => {
-    setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
-    setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
-    setShowToast(true);  
-    setIsModalOpen(false);  
-    resetState(); 
+  const handleConfirm = async () => {
+    const category = experienceCategoryMap[selectedExperience || '기타']; 
+
+    const careerData: CareerData = { 
+      category,
+      title,
+      situation,
+      task,
+      action,
+      result,
+    };
+
+    try {
+      await postCareers(careerData); 
+      setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
+      setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
+      setShowToast(true);  
+      setIsModalOpen(false);  
+      resetState(); 
+      fetchCards();
+    } catch (error) {
+      console.error('Error adding experience:', error);
+      setToastMessage('경험 추가에 실패했어요.');
+      setToastDescription('다시 시도해 주세요.');
+      setShowToast(true);  
+    }
   };
   
   const handleCloseToast = () => {
     setShowToast(false);  
   };
 
-  const handleCardClick = (card: CardData) => {
-    setSelectedCard(card);
-    setIsCardModalOpen(true);
+  const handleCardClick = async (card: CardData) => {
+    try {
+      const response = await getCareerDetail(card.careerId); 
+      setSelectedCard(response.data);
+      setIsCardModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching career details:', error);
+    }
   };
 
   const handleCardModalClose = () => {
@@ -138,14 +194,16 @@ const CareersPage = () => {
       
       <Box
         display='grid'
-        gridTemplateColumns='repeat(3, 1fr)'
+        gridTemplateColumns={`repeat(${GridColumns}, 1fr)`}
+        gridTemplateRows={`repeat(${GridRows}, 1fr)`}
         gap='16px'
         mt='32px'
+        height='584px'
       >
-        {currentCards.map((card, index) => (
+        {cards.map((card, index) => (
           <Card 
             key={index} 
-            chipText={card.chipText}
+            chipText={card.category}
             chipBackgroundColor={card.chipBackgroundColor}
             chipTextColor={card.chipTextColor}
             title={card.title}
@@ -157,7 +215,7 @@ const CareersPage = () => {
 
       <Box display='flex' justifyContent='center' mt='32px'>
         <Pagination
-          count={TotalPages}
+          count={totalPages}
           page={currentPage}
           onChange={handlePageChange}
           color="primary"
@@ -282,7 +340,7 @@ const CareersPage = () => {
         open={isCardModalOpen}
         onClose={handleCardModalClose}
         title={selectedCard?.title || '제목이 없습니다'} 
-        subtitle={selectedCard?.chipText || '제목이 없습니다'} 
+        subtitle={selectedCard?.category || '제목이 없습니다'} 
         showConfirmButton={false}
       >
         <Box display='flex' flexDirection='column' gap='32px'>
@@ -291,7 +349,7 @@ const CareersPage = () => {
               Situation (상황)
             </Typography>
             <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문본문본문본
+            {selectedCard?.situation || '데이터 없음'}
             </Typography>
           </Box>
          <Box>
@@ -299,7 +357,7 @@ const CareersPage = () => {
           Task (과제)
           </Typography>
           <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문
+          {selectedCard?.task || '데이터 없음'}
             </Typography>    
          </Box>
          <Box>
@@ -307,7 +365,7 @@ const CareersPage = () => {
           Action (행동)
         </Typography>
         <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문
+        {selectedCard?.action || '데이터 없음'}
             </Typography> 
          </Box>
 
@@ -316,7 +374,7 @@ const CareersPage = () => {
          Result (결과)
         </Typography> 
         <Typography mt='6px' style={typography.xSmallMed} color={colors.neutral[40]}>
-              본문
+        {selectedCard?.result || '데이터 없음'}
             </Typography>
          </Box>
 
