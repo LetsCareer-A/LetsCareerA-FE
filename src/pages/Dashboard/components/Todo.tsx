@@ -47,7 +47,7 @@ const TodoList: React.FC = () => {
     try {
       console.log('Adding todo:', newTodo);
   
-      const response = await postTodo(newTodo);
+      const response = await postTodo(newTodo );
       console.log('Server response:', response);
   
       const newTask = {
