@@ -112,6 +112,7 @@ const Textfield: React.FC<TextfieldProps> = ({
           width: '100%',
           height: '100%', 
           backgroundColor: 'transparent',
+          ...sx, 
         }}
       />
       {showCharCount && (
