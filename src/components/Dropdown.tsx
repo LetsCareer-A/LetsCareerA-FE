@@ -1,6 +1,6 @@
 import React, { useState, MouseEvent } from 'react';
-import { Box, Button, Menu, MenuItem, styled } from '@mui/material';
-import Chip from './Chips'; 
+import { Box, Button, Menu, styled } from '@mui/material';
+import Chip from './Chips'; // Chip 컴포넌트 가져오기
 import colors from '../styles/colors';
 import Arrow from '../assets/arrow.svg';
 
@@ -8,6 +8,7 @@ interface DropdownItem {
   text: string;
   color?: string;
   image?: string;
+  sx?: object;
 }
 
 const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
@@ -20,6 +21,9 @@ const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   border: open ? `1px solid ${colors.primary[60]}` : `1px solid ${colors.neutral[80]}`, 
   background: open ? colors.primary[10] : colors.neutral[95], 
   color: open ? colors.neutral[10] : colors.neutral[40],
+  position: 'relative',
+  zIndex: 1,
+  sx:{},
 }));
 
 const StyledMenu = styled(Menu)(() => ({
@@ -27,18 +31,13 @@ const StyledMenu = styled(Menu)(() => ({
     borderRadius: '8px',
     padding: '8px',
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.12), 0px 1px 4px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08)',
+    zIndex: 0,
   },
   '& .MuiList-root': {
-    padding: 0, 
-    margin: 0, 
-  },
-}));
-
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
-  '&:hover': {
-    backgroundColor: theme.palette.action.selected,
-    borderRadius: '6px',
-    color: theme.palette.primary.light,
+    padding: 0,
+    margin: 0,
+    maxHeight: '200px', // 메뉴의 최대 높이 설정
+    overflowY: 'auto', // 스크롤 가능하게 설정
   },
 }));
 
@@ -46,7 +45,8 @@ interface DropdownProps {
   buttonText: string;
   items: DropdownItem[]; 
   renderItem?: (item: DropdownItem) => React.ReactNode; 
-  onSelect?: (item: DropdownItem) => void; // 추가된 부분
+  onSelect?: (item: DropdownItem) => void;
+  sx: {};
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSelect }) => {
@@ -63,11 +63,11 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
   };
 
   const handleItemClick = (item: DropdownItem) => {
-    setSelectedItem(item); 
+    setSelectedItem(item);
     if (onSelect) {
-      onSelect(item); // 선택된 항목을 부모 컴포넌트로 전달
+      onSelect(item);
     }
-    handleClose(); 
+    handleClose();
   };
 
   return (
@@ -87,6 +87,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
               alt="icon" 
               style={{ 
                 transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
+                transition: 'transform 0.3s',
               }} 
             />
           </Box>
@@ -98,17 +99,18 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
         onClose={handleClose}
       >
         {items.map((item, index) => (
-          <StyledMenuItem
+          <Box 
             key={index}
-            onClick={() => handleItemClick(item)} 
+            onClick={() => handleItemClick(item)}
+            sx={{ margin: '4px 0' }} // 적절한 마진 추가
           >
-            {renderItem ? renderItem(item) : (
-              <Box display="flex" alignItems="center">
-                {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
-                {item.text}
-              </Box>
-            )}
-          </StyledMenuItem>
+            <Chip 
+              text={item.text}
+              backgroundColor={item.color}
+              image={item.image}
+              sx={{ width: '100%', display: 'flex', alignItems: 'center' }} // Chip 스타일 조정
+            />
+          </Box>
         ))}
       </StyledMenu>
     </div>

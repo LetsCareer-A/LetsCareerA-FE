@@ -6,6 +6,7 @@ import Layout from './pages/Layout';
 import ReviewsPage from './pages/Reviews/ReviewsPage';
 import CareersPage from './pages/Careers/CareersPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
+import StepDetailPage from './pages/StepDetail/StepDetailPage';
 
 const queryClient = new QueryClient();
 
@@ -15,12 +16,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Layout>
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/reviews" element={<ReviewsPage />} />
-              <Route path="/careers" element={<CareersPage />} />
-            </Routes>
+<StepDetailPage/>
           </Layout>
         </Router>
       </ThemeProvider>
