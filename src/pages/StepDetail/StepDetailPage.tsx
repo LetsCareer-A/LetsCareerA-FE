@@ -63,6 +63,7 @@ const ExperinceBox = () => (
 
 const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, chipTextColor, title, summary, onClick }) => {
     const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
+    // const [typeChip, typeChip] = useState<DropdownItem | null>(null);
 
     const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
     const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
@@ -124,7 +125,7 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
 
             <Stack spacing={'16px'} mt={3}>
                 <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                    <Stack spacing={'4px'} direction={'column'}>
+                    <Box sx={{display: 'flex', width: '100px', paddingBottom: '4px', flexDirection: 'column', alignItems: 'center', gap: '4px', marginLeft: '23px', marginTop: '28px'}} >
                         <Box sx={{ display: 'flex', width: 100, height: 100, padding: '3px 3px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', bgcolor: `${colors.primary[80]}`}}>
                             <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
                         </Box>
@@ -134,7 +135,19 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                         <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
                             24.08.30
                         </Typography>
-                    </Stack>
+                        <Dropdown
+                            buttonText={selectedChip ? selectedChip.text : '공고상태'}
+                            items={dropdownItems}
+                            onSelect={handleDropdownSelect}
+                            renderItem={(item) => (
+                                <Box display="flex" alignItems="center">
+                                    {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
+                                    {item.text}
+                                </Box>
+                            )}
+                            sx={{ minWidth: '150px' }}
+                        />
+                    </Box>
                 </Box>
                 <Box
                     sx={{
