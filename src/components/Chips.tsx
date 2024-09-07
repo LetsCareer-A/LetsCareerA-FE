@@ -21,12 +21,14 @@ interface ChipProps {
   backgroundColor?: string;
   textColor?: string; 
   image?: string; 
+  imageWidth?: string; // Add imageWidth prop
+  imageHeight?: string; // Add imageHeight prop
 }
 
-const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor, image }) => {
+const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor, image, imageWidth = '20px', imageHeight = '20px' }) => {
   return (
     <StyledChip backgroundColor={backgroundColor}>
-      {image && <img src={image} alt={text} />} 
+      {image && <img src={image} alt={text} style={{ width: imageWidth, height: imageHeight }} />} 
       <Typography 
         sx={{ 
           color: textColor || 'white',
