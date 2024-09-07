@@ -34,16 +34,19 @@ interface ReadyBoardItemProps {
 }
 
 const ReadyBoardItem: React.FC<ReadyBoardItemProps> = ({ company, department, status }) => (
-    <Box sx={{ ...StyledReadyBoard, flexDirection: 'column' }}>
-        <Box sx={{ display: 'flex', gap: '8px', flexDirection: 'row', marginTop: '5px' }}>
+    <Box padding='12px' sx={{ ...StyledReadyBoard, flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', gap: '8px', flexDirection: 'row' }}>
             <Typography sx={ReadyTextStyles}>{company}</Typography>
             <Typography sx={ReadyTextStyles}>|</Typography>
             <Typography sx={ReadyTextStyles}>{department}</Typography>
         </Box>
-        <Box sx={{ display: 'flex', height: '28px', gap: '8px', padding: '0px 12px' }}>
-            <CreateOutlinedIcon sx={{ width: '16px', height: '16px', color: `${colors.primary.normal}` }} />
-            <Typography sx={{ color: `${colors.primary.normal}`, fontSize: '14px', letterSpacing: '-0.21px' }}>{status}</Typography>
+        <Box sx={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <CreateOutlinedIcon sx={{ width: '16px', color: `${colors.primary.normal}` }} />
+        <Typography sx={{ color: `${colors.primary.normal}`, display: 'flex', alignItems: 'center' }} style={typography.xSmall2Med}>
+            {status}
+        </Typography>
         </Box>
+
     </Box>
 );
 
