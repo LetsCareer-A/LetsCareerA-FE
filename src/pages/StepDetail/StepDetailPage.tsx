@@ -139,6 +139,7 @@ const StepDetailPage = () => {
             </Stack>
 
             <Stack spacing={'16px'} mt={3}>
+                {/* 서류 전형 단계 박스 */}
                 <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                     <Box sx={{display: 'flex', width: '100px', paddingBottom: '4px', flexDirection: 'column', alignItems: 'center', gap: '4px', marginLeft: '23px', marginTop: '28px'}} >
                         <Box sx={{ display: 'flex', width: 100, height: 100, padding: '3px 3px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', bgcolor: `${colors.primary[80]}`}}>
@@ -175,7 +176,9 @@ const StepDetailPage = () => {
                     onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
                 />
 
+                {/* 배너 및 컨텐츠 */}
                 <Stack spacing={'16px'} direction={'row'}>
+                    {/* 자기소개서 */}                    
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', height: '394px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                         <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'16px'}>
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
@@ -216,6 +219,7 @@ const StepDetailPage = () => {
                         </Box>
                     </Box>
 
+                    {/* 핵심경험 */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
                         <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
@@ -234,16 +238,6 @@ const StepDetailPage = () => {
                     </Box>
                 </Stack>
             </Stack>
-
-            {/* summary를 화면에 표시 */}
-            <Box sx={{ marginTop: '24px' }}>
-                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    Summary
-                </Typography>
-                <Typography color={colors.neutral[45]} style={typography.xSmall2Reg}>
-                    {summary} {/* summary 사용 */}
-                </Typography>
-            </Box>
         </Box>
     );
 };
