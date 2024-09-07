@@ -11,6 +11,10 @@ interface TextfieldProps {
   maxLength?: number; 
   height?: string;
   placeholderVerticalAlign?: string; 
+  multiline?: boolean;  
+  rows?: number;       
+  maxRows?: number;    
+  sx?: object;
 }
 
 const Textfield: React.FC<TextfieldProps> = ({
@@ -21,7 +25,11 @@ const Textfield: React.FC<TextfieldProps> = ({
   placeholder = '텍스트를 입력하세요.',
   maxLength = 500,
   height = 'auto',
-  placeholderVerticalAlign = 'center' 
+  placeholderVerticalAlign = 'center',
+  multiline = false,   // 기본값 false로 설정
+  rows = 1,            // 기본값 1행
+  maxRows,              // 선택적 maxRows
+  sx={}
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -86,6 +94,9 @@ const Textfield: React.FC<TextfieldProps> = ({
         onKeyPress={onKeyPress} 
         placeholder={isFocused ? '' : placeholder}
         variant="standard"
+        multiline={multiline}  // multiline 속성 전달
+        rows={rows}            // rows 속성 전달
+        maxRows={maxRows}      // maxRows 속성 전달
         InputProps={{
           disableUnderline: true,
           style: {
@@ -94,7 +105,7 @@ const Textfield: React.FC<TextfieldProps> = ({
             fontFamily: 'Pretendard',
             height: '100%', 
             display: 'flex',
-            alignItems: placeholderVerticalAlign === 'top' ? 'flex-start' : placeholderVerticalAlign === 'bottom' ? 'flex-end' : 'center', // Adjust placeholder alignment
+            alignItems: placeholderVerticalAlign === 'top' ? 'flex-start' : placeholderVerticalAlign === 'bottom' ? 'flex-end' : 'center',
           },
         }}
         sx={{
