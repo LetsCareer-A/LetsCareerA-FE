@@ -81,32 +81,41 @@ const AlwaysReady = () => {
     }, [page]);
 
     return (
-        <Box sx={{ width: '370px', height: '594px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, background: 'white', boxShadow: '0px 0px 25px 0px rgba(0, 0, 0, 0.02)', padding: '16px' }}>
-            <Box sx={{ flexDirection: 'row' }}>
-                <Box>
-                    <Typography style={typography.small2Bold}>상시 준비 보드</Typography>
-                    <Typography mt="4px" mb="16px" style={typography.xxSmallReg} color="#7A7D84">
-                        마감 기한 없는 채용이나 채용 공고가 뜨지 않은 준비 건이에요.
-                    </Typography>
-                </Box>
+        <Box sx={{ 
+            width: '370px', 
+            height: '594px', 
+            borderRadius: '12px', 
+            border: `1px solid ${colors.neutral[85]}`, 
+            background: 'white', 
+            boxShadow: '0px 0px 25px 0px rgba(0, 0, 0, 0.02)', 
+            padding: '16px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'space-between' 
+        }}>
+            <Box>
+                <Typography style={typography.small2Bold}>상시 준비 보드</Typography>
+                <Typography mt="4px" mb="16px" style={typography.xxSmallReg} color="#7A7D84">
+                    마감 기한 없는 채용이나 채용 공고가 뜨지 않은 준비 건이에요.
+                </Typography>
                 <Box sx={{ display: 'flex', width: 338, flexDirection: 'column', gap: '8px' }}>
                     {readyBoardData.map((item, index) => (
                         <ReadyBoardItem key={index} company={item.company} department={item.department} status={item.status} />
                     ))}
                 </Box>
-                <Box display="flex" justifyContent="center" mt={2}>
-                    <Pagination
-                        count={totalPages}
-                        color="primary"
-                        page={page}
-                        onChange={(_, value) => setPage(value)}
-                        sx={{
-                            '& .MuiPaginationItem-root': {
-                                fontSize: '14px',
-                            },
-                        }}
-                    />
-                </Box>
+            </Box>
+            <Box display="flex" justifyContent="center" mt={2}>
+                <Pagination
+                    count={totalPages}
+                    color="primary"
+                    page={page}
+                    onChange={(_, value) => setPage(value)}
+                    sx={{
+                        '& .MuiPaginationItem-root': {
+                            fontSize: '14px',
+                        },
+                    }}
+                />
             </Box>
         </Box>
     );
