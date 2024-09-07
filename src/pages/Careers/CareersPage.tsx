@@ -13,6 +13,7 @@ import { useStore } from '../../store/careerModalStore';
 import Experience from './components/Experience';
 import Toast from '../../components/Toast';
 import { postCareers } from '../../api/Careerboard/postCareers';
+import { getCareers } from '../../api/Careerboard/getCareers';
 
 interface CardData {
   chipText: string;
@@ -22,16 +23,7 @@ interface CardData {
   summary: string;
 }
 
-const cardData: CardData[] = Array.from({ length: 30 }, (_, index) => ({
-  chipText: `Chip ${index + 1}`,
-  chipBackgroundColor: index % 2 === 0 ? '#4D55F5' : '#1BC47D',
-  chipTextColor: '#FFFFFF',
-  title: `Card ${index + 1}`,
-  summary: `This is the summary for Card ${index + 1}.`,
-}));
-
 const CardsPerPage = 15; 
-const TotalPages = Math.ceil(cardData.length / CardsPerPage);
 
 const experienceCategoryMap: { [key: string]: string } = {
   "대외활동": "ACTIVITY",
@@ -61,22 +53,33 @@ const CareersPage = () => {
     resetState  
   } = useStore(); 
 
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [cards, setCards] = useState<CardData[]>([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [showToast, setShowToast] = useState(false); 
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const response = await getCareers(currentPage, CardsPerPage);
+        const { data } = response;
+        setCards(data.careers || []);
+        setTotalPages(data.totalPages || 0);
+      } catch (error) {
+        console.error('Error fetching careers:', error);
+      }
+    };
+    fetchCards();
+  }, [currentPage]);
+
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
-  
-
-  const startIndex = (currentPage - 1) * CardsPerPage;
-  const endIndex = startIndex + CardsPerPage;
-  const currentCards = cardData.slice(startIndex, endIndex);
 
   const handleExperienceChange = (label: string) => {
     setSelectedExperience(selectedExperience === label ? null : label);
@@ -110,7 +113,6 @@ const CareersPage = () => {
     action: string;
     result: string;
   }
-  
   
   const handleConfirm = async () => {
     const category = experienceCategoryMap[selectedExperience || '기타']; 
@@ -181,7 +183,7 @@ const CareersPage = () => {
         gap='16px'
         mt='32px'
       >
-        {currentCards.map((card, index) => (
+        {cards.map((card, index) => (
           <Card 
             key={index} 
             chipText={card.chipText}
@@ -196,7 +198,7 @@ const CareersPage = () => {
 
       <Box display='flex' justifyContent='center' mt='32px'>
         <Pagination
-          count={TotalPages}
+          count={totalPages}
           page={currentPage}
           onChange={handlePageChange}
           color="primary"
