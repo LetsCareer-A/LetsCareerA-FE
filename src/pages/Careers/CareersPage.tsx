@@ -12,6 +12,7 @@ import Textfield from '../../components/Textfield';
 import { useStore } from '../../store/careerModalStore';
 import Experience from './components/Experience';
 import Toast from '../../components/Toast';
+import { postCareers } from '../../api/Careerboard/postCareers';
 
 interface CardData {
   chipText: string;
@@ -31,6 +32,15 @@ const cardData: CardData[] = Array.from({ length: 30 }, (_, index) => ({
 
 const CardsPerPage = 15; 
 const TotalPages = Math.ceil(cardData.length / CardsPerPage);
+
+const experienceCategoryMap: { [key: string]: string } = {
+  "대외활동": "ACTIVITY",
+  "공모전": "COMPETITION",
+  "실무": "TASK",
+  "자격증": "CERTIFICATION",
+  "프로젝트": "PROJECT",
+  "기타": "OTHER"
+};
 
 const CareersPage = () => {
   const { 
@@ -91,13 +101,42 @@ const CareersPage = () => {
     setIsModalOpen(false);
     resetState();  
   };
+
+  interface CareerData {
+    category: string;
+    title: string;
+    situation: string;
+    task: string;
+    action: string;
+    result: string;
+  }
   
-  const handleConfirm = () => {
-    setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
-    setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
-    setShowToast(true);  
-    setIsModalOpen(false);  
-    resetState(); 
+  
+  const handleConfirm = async () => {
+    const category = experienceCategoryMap[selectedExperience || '기타']; 
+
+    const careerData: CareerData = { 
+      category,
+      title,
+      situation,
+      task,
+      action,
+      result,
+    };
+
+    try {
+      await postCareers(careerData); 
+      setToastMessage(`${title} 을(를) 경험 정리에 추가했어요!`);
+      setToastDescription('차곡차곡 쌓아온 경험들은 지원 일정별 상세페이지에서 핵심 경험으로 등록할 수도 있어요!');
+      setShowToast(true);  
+      setIsModalOpen(false);  
+      resetState(); 
+    } catch (error) {
+      console.error('Error adding experience:', error);
+      setToastMessage('경험 추가에 실패했어요.');
+      setToastDescription('다시 시도해 주세요.');
+      setShowToast(true);  
+    }
   };
   
   const handleCloseToast = () => {
