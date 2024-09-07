@@ -8,6 +8,7 @@ import Textfield from '../../../components/Textfield';
 import { postTodo } from '../../../api/Dashboard/postTodos'; 
 import { getTodo } from '../../../api/Dashboard/getTodos'; 
 import { delTodo } from '../../../api/Dashboard/delTodo'; 
+import { updateTodo } from '../../../api/Dashboard/updateTodo';
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<{ id: number, text: string, completed: boolean }[]>([]);
@@ -21,8 +22,8 @@ const TodoList: React.FC = () => {
         console.log('Fetched todos:', response);
 
         if (response.code === 200 && response.data?.todos) {
-          const loadedTodos = response.data.todos.map((todo: { todo: string, isChecked: boolean }, index: number) => ({
-            id: index + 1, 
+          const loadedTodos = response.data.todos.map((todo: { todoId: number, todo: string, isChecked: boolean }) => ({
+            id: todo.todoId, 
             text: todo.todo,
             completed: todo.isChecked,
           }));
@@ -50,7 +51,7 @@ const TodoList: React.FC = () => {
       console.log('Server response:', response);
   
       const newTask = {
-        id: Date.now(), 
+        id: response.data.todoId, 
         text: newTodo,
         completed: false,
       };
@@ -63,17 +64,27 @@ const TodoList: React.FC = () => {
     }
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+  const toggleTodo = async (id: number) => {
+    const todoToUpdate = todos.find(todo => todo.id === id);
+    if (!todoToUpdate) return;
+
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
+    setTodos(updatedTodos);
+
+    try {
+      await updateTodo(id, !todoToUpdate.completed);
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+      setTodos(todos);
+    }
   };
 
   const deleteTodo = async (id: number) => {
     try {
-      await delTodo(id);
+      const response = await delTodo(id);
+      console.log('Server response after delete:', response);
       setTodos(todos.filter(todo => todo.id !== id)); 
     } catch (error) {
       console.error('Failed to delete todo:', error);
