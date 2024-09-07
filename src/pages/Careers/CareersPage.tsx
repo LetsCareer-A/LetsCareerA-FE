@@ -30,6 +30,8 @@ interface CardData {
 }
 
 const CardsPerPage = 15; 
+const GridColumns = 3;
+const GridRows = 5;
 
 const experienceCategoryMap: { [key: string]: string } = {
   "대외활동": "ACTIVITY",
@@ -69,17 +71,18 @@ const CareersPage = () => {
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   
+  const fetchCards = async () => {
+    try {
+      const response = await getCareers(currentPage, CardsPerPage);
+      const { data } = response;
+      setCards(data.careers || []);
+      setTotalPages(data.totalPages || 0);
+    } catch (error) {
+      console.error('Error fetching careers:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const response = await getCareers(currentPage, CardsPerPage);
-        const { data } = response;
-        setCards(data.careers || []);
-        setTotalPages(data.totalPages || 0);
-      } catch (error) {
-        console.error('Error fetching careers:', error);
-      }
-    };
     fetchCards();
   }, [currentPage]);
 
@@ -139,6 +142,7 @@ const CareersPage = () => {
       setShowToast(true);  
       setIsModalOpen(false);  
       resetState(); 
+      fetchCards();
     } catch (error) {
       console.error('Error adding experience:', error);
       setToastMessage('경험 추가에 실패했어요.');
@@ -190,7 +194,8 @@ const CareersPage = () => {
       
       <Box
         display='grid'
-        gridTemplateColumns='repeat(3, 1fr)'
+        gridTemplateColumns={`repeat(${GridColumns}, 1fr)`}
+        gridTemplateRows={`repeat(${GridRows}, 1fr)`}
         gap='16px'
         mt='32px'
         height='584px'
