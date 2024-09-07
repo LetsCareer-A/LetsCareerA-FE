@@ -1,50 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Checkbox, Typography } from '@mui/material';
 import { NormalButton } from '../../../components/CustomButton';
 import Delete from '../../../assets/delete.svg';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
+import Textfield from '../../../components/Textfield';
+import { postTodo } from '../../../api/Dashboard/postTodos'; 
+import { getTodo } from '../../../api/Dashboard/getTodos'; 
+import { delTodo } from '../../../api/Dashboard/delTodo'; 
+import { updateTodo } from '../../../api/Dashboard/updateTodo';
 
 const TodoList: React.FC = () => {
-  const initialTodos = [
-    { id: 1, text: '체크리스트 항목 1', completed: false },
-    { id: 2, text: '체크리스트 항목 2', completed: false },
-    { id: 3, text: '체크리스트 항목 3', completed: false },
-    { id: 4, text: '체크리스트 항목 4', completed: false },
-    { id: 5, text: '체크리스트 항목 5', completed: false },
-    { id: 6, text: '체크리스트 항목 6', completed: false },
-    { id: 7, text: '체크리스트 항목 7', completed: false },
-    { id: 8, text: '체크리스트 항목 8', completed: false },
-    { id: 9, text: '체크리스트 항목 9', completed: false },
-    { id: 10, text: '체크리스트 항목 10', completed: false },
-  ];
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState<{ id: number, text: string, completed: boolean }[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
-  const addTodo = () => {
-    if (newTodo.trim() === '') return;
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await getTodo();
+        console.log('Fetched todos:', response);
 
-    const newTask = {
-      id: Date.now(),
-      text: newTodo,
-      completed: false,
+        if (response.code === 200 && response.data?.todos) {
+          const loadedTodos = response.data.todos.map((todo: { todoId: number, todo: string, isChecked: boolean }) => ({
+            id: todo.todoId, 
+            text: todo.todo,
+            completed: todo.isChecked,
+          }));
+          setTodos(loadedTodos);
+        }
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      }
     };
 
-    setTodos([...todos, newTask]);
-    setNewTodo('');
+    fetchTodos();
+  }, []);
+
+  const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodo(event.target.value);
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+  const addTodo = async () => {
+    if (newTodo.trim() === '') return;
+  
+    try {
+      console.log('Adding todo:', newTodo);
+  
+      const response = await postTodo(newTodo);
+      console.log('Server response:', response);
+  
+      const newTask = {
+        id: response.data.todoId, 
+        text: newTodo,
+        completed: false,
+      };
+  
+      setTodos([...todos, newTask]);
+      setNewTodo('');
+      setIsAdding(false);
+    } catch (error) {
+      console.error('Failed to add todo:', error);
+    }
+  };
+
+  const toggleTodo = async (id: number) => {
+    const todoToUpdate = todos.find(todo => todo.id === id);
+    if (!todoToUpdate) return;
+
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
+    setTodos(updatedTodos);
+
+    try {
+      await updateTodo(id, !todoToUpdate.completed);
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+      setTodos(todos);
+    }
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const deleteTodo = async (id: number) => {
+    try {
+      const response = await delTodo(id);
+      console.log('Server response after delete:', response);
+      setTodos(todos.filter(todo => todo.id !== id)); 
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+    }
   };
+
+  const isAddButtonDisabled = todos.length >= 10;
 
   return (
     <Box
@@ -59,11 +106,12 @@ const TodoList: React.FC = () => {
         padding: '16px',
       }}
     >
-      <Box display="flex" alignItems="center" justifyContent='space-between'>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography style={typography.small2Bold}>Todo</Typography> 
         <NormalButton
-          onClick={addTodo}
+          onClick={() => setIsAdding(true)}
           style={typography.xxSmallSemibold}
+          disabled={isAddButtonDisabled}
         >
           Todo 추가하기 +
         </NormalButton>
@@ -92,7 +140,7 @@ const TodoList: React.FC = () => {
             sx={{
               borderBottom: '1px solid #EFEFEF',
               borderRadius: '8px',
-              background: todo.completed ? colors.primary[10] : colors.neutral[95], // Change background color based on completion
+              background: todo.completed ? colors.primary[10] : colors.neutral[95], 
             }}
           >
             <Box display="flex" alignItems="center">
@@ -113,11 +161,37 @@ const TodoList: React.FC = () => {
               src={Delete}
               alt="Delete"
               onClick={() => deleteTodo(todo.id)}
-              style={{ cursor: 'pointer',marginRight:'12px' }} 
+              style={{ cursor: 'pointer', marginRight: '12px' }}
             />
           </Box>
         ))}
       </Box>
+
+      {isAdding && (
+        <Box display="flex" alignItems="center" mt='20px'>
+          <Checkbox checked={false} disabled /> 
+          <Box sx={{ flexGrow: 1 }}>
+            <Textfield
+              value={newTodo}
+              onChange={handleNewTodoChange}
+              showCharCount={false}
+              placeholder="Todo를 입력해주세요."
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  addTodo();
+                }
+              }}
+            />
+          </Box>
+          <NormalButton
+            onClick={addTodo}
+            style={typography.xxSmallSemibold}
+            disabled={isAddButtonDisabled}
+          >
+            추가
+          </NormalButton>
+        </Box>
+      )}
     </Box>
   );
 };
