@@ -64,6 +64,7 @@ const DashboardPage = () => {
     setDate,
   } = useModalStore();
 
+
   const datePickerRef = useRef<DatePicker>(null);
 
   useEffect(() => {
@@ -111,13 +112,6 @@ const DashboardPage = () => {
   const handleConfirm = async () => {
     if (buttonText === '등록 완료하기') {
       try {
-        console.log('companyName:', companyName);
-        console.log('jobTitle:', jobTitle);
-        console.log('dropdownItem:', dropdownItem);
-        console.log('stageDetailInput:', stageDetailInput);
-        console.log('isCheckboxChecked:', isCheckboxChecked);
-        console.log('date:', date);
-        console.log('link:', link);
   
         const convertToKoreanTime = (date: Date | null) => {
           if (!date) return '';
@@ -151,6 +145,7 @@ const DashboardPage = () => {
           const eventMonth = new Date(newEvent.date).getMonth() + 1;
           if (eventMonth === currentMonth) {
             setEvents([...events, newEvent]);
+            setCurrentMonth(currentMonth);
           }
   
           if (scheduleData.type === 'DOC') {
@@ -224,13 +219,7 @@ const DashboardPage = () => {
         borderRadius='12px'
         sx={{ overflow: 'hidden' }}
       >
-        <Calendar 
-          events={events} 
-          docCount={docCount} 
-          midCount={midCount} 
-          interviewCount={interviewCount} 
-          setCurrentMonth={setCurrentMonth} 
-        />
+        <Calendar />
         <DetailList />
       </Box>
       <Box display='flex' gap='4px' justifyContent='space-between' borderRadius='12px' sx={{ overflow: 'hidden' }}>
