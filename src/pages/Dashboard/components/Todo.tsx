@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Checkbox, Typography } from '@mui/material';
-import { NormalButton } from '../../../components/CustomButton';
+import { NormalButton, PrimaryButton } from '../../../components/CustomButton';
 import Delete from '../../../assets/delete.svg';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
@@ -14,6 +14,7 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<{ id: number, text: string, completed: boolean }[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(true);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -39,26 +40,31 @@ const TodoList: React.FC = () => {
 
   const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
+    setIsAddButtonDisabled(event.target.value.trim() === ''); 
   };
 
   const addTodo = async () => {
     if (newTodo.trim() === '') return;
-  
+
     try {
       console.log('Adding todo:', newTodo);
-  
-      const response = await postTodo(newTodo );
-      console.log('Server response:', response);
-  
-      const newTask = {
-        id: response.data.todoId, 
-        text: newTodo,
-        completed: false,
-      };
-  
-      setTodos([...todos, newTask]);
+
+      await postTodo(newTodo);
       setNewTodo('');
       setIsAdding(false);
+      setIsAddButtonDisabled(true);
+      
+      const response = await getTodo();
+      console.log('Fetched todos after adding new:', response);
+
+      if (response.code === 200 && response.data?.todos) {
+        const loadedTodos = response.data.todos.map((todo: { todoId: number, todo: string, isChecked: boolean }) => ({
+          id: todo.todoId, 
+          text: todo.todo,
+          completed: todo.isChecked,
+        }));
+        setTodos(loadedTodos);
+      }
     } catch (error) {
       console.error('Failed to add todo:', error);
     }
@@ -85,13 +91,12 @@ const TodoList: React.FC = () => {
     try {
       const response = await delTodo(id);
       console.log('Server response after delete:', response);
+      
       setTodos(todos.filter(todo => todo.id !== id)); 
     } catch (error) {
       console.error('Failed to delete todo:', error);
     }
   };
-
-  const isAddButtonDisabled = todos.length >= 10;
 
   return (
     <Box
@@ -111,7 +116,7 @@ const TodoList: React.FC = () => {
         <NormalButton
           onClick={() => setIsAdding(true)}
           style={typography.xxSmallSemibold}
-          disabled={isAddButtonDisabled}
+          disabled={todos.length >= 10}
         >
           Todo 추가하기 +
         </NormalButton>
@@ -168,8 +173,7 @@ const TodoList: React.FC = () => {
       </Box>
 
       {isAdding && (
-        <Box display="flex" alignItems="center" mt='20px'>
-          <Checkbox checked={false} disabled /> 
+        <Box display="flex" alignItems="center" mt='20px'gap='8px'>
           <Box sx={{ flexGrow: 1 }}>
             <Textfield
               value={newTodo}
@@ -183,13 +187,16 @@ const TodoList: React.FC = () => {
               }}
             />
           </Box>
-          <NormalButton
+          <PrimaryButton
             onClick={addTodo}
             style={typography.xxSmallSemibold}
             disabled={isAddButtonDisabled}
+            width="44px"
+            height="48px"
+            padding='0'
           >
-            추가
-          </NormalButton>
+            +
+          </PrimaryButton>
         </Box>
       )}
     </Box>
