@@ -62,19 +62,6 @@
   border: none !important;
 }
 
-h2{
-  margin: 0 16px;
-  font-family: Pretendard;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 26px;  
-  letter-spacing: -0.022px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-
-}
 
 #fc-dom-256{
   margin: 0 16px;
