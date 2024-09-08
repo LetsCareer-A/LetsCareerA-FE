@@ -4,6 +4,7 @@ import typography from '../../../styles/typography';
 import Chip from '../../../components/Chips';
 import colors from '../../../styles/colors';
 import { getDetailSchedule } from '../../../api/Dashboard/getDetailSchedule';
+import useCalendarStore from '../../../store/calendarStore'; 
 
 interface Schedule {
   scheduleId: number;
@@ -16,22 +17,30 @@ interface Schedule {
   progress: string;
 }
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 5;
 
 const DetailList: React.FC = () => {
   const [page, setPage] = useState(1);
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [allSchedules, setAllSchedules] = useState<Schedule[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const { selectedDate } = useCalendarStore();
+
+  const currentDate = selectedDate || new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
-        const response = await getDetailSchedule(formattedDate);
+        const response = await getDetailSchedule(currentDate);
         if (response.code === 200) {
-          setSchedules(response.data.schedules);
+          const fetchedSchedules = response.data.schedules;
+          setAllSchedules(fetchedSchedules);
           setTotalCount(response.data.totalCount);
+
+          // 현재 페이지의 데이터를 설정
+          const startIndex = (page - 1) * ITEMS_PER_PAGE;
+          const endIndex = startIndex + ITEMS_PER_PAGE;
+          setSchedules(fetchedSchedules.slice(startIndex, endIndex));
         }
       } catch (error) {
         console.error('Error fetching schedules:', error);
@@ -39,14 +48,21 @@ const DetailList: React.FC = () => {
     };
 
     fetchSchedules();
-  }, [page]);
+  }, [currentDate, page]);
+
+  useEffect(() => {
+    // 페이지 변경 시 데이터 필터링
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    setSchedules(allSchedules.slice(startIndex, endIndex));
+  }, [page, allSchedules]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
   const getCurrentDateWithDay = () => {
-    const today = new Date();
+    const today = new Date(currentDate);
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -70,38 +86,35 @@ const DetailList: React.FC = () => {
     >
       <Box>
         <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
-        <Typography style={typography.smallBold}>세부 일정</Typography>
-        <Box display='flex'>
-          <Typography mr='8px' style={typography.smallBold}>
-            {date}
-          </Typography>
-          <Typography sx={{ color: 'gray', display: 'flex', alignItems: 'center' }} style={typography.xSmallMed}>
-            {dayOfWeek}
-          </Typography>
+          <Typography style={typography.smallBold}>세부 일정</Typography>
+          <Box display='flex'>
+            <Typography mr='8px' style={typography.smallBold}>
+              {date}
+            </Typography>
+            <Typography sx={{ color: 'gray', display: 'flex', alignItems: 'center' }} style={typography.xSmallMed}>
+              {dayOfWeek}
+            </Typography>
+          </Box>
+        </Box>
+        <Box>
+          {schedules.map(item => (
+            <Box
+              key={item.scheduleId}
+              sx={{
+                border: '1px solid #ddd',
+                borderRadius: 1,
+                mb: '8px',
+                p: 2,
+              }}
+            >
+              <Typography mb='8px' style={typography.xSmall2Bold}>
+                {item.company} | {item.department}
+              </Typography>
+              <Chip text={`서류 마감까지 D${item.dday}`} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
+            </Box>
+          ))}
         </Box>
       </Box>
-      <Box>
-        {schedules.map(item => (
-        <Box
-          key={item.scheduleId}
-          sx={{
-            border: '1px solid #ddd',
-            borderRadius: 1,
-            mb: '8px',
-            p: 2,
-          }}
-        >
-          <Typography mb='8px' style={typography.xSmall2Bold}>
-            {item.company} | {item.department}
-          </Typography>
-          <Chip text={`서류 마감까지 D${item.dday}`} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
-        </Box>
-      ))}
-      </Box>
-      </Box>
-      
-
-      
 
       <Box display="flex" justifyContent="center" mt={2}>
         <Pagination
