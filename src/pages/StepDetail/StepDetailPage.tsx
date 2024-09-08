@@ -13,6 +13,7 @@ import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import fileImage from '../../assets/ill_file.png';
+import Toast from '../../components/Toast';
 
 const items = [
     { 
@@ -69,16 +70,25 @@ const ExperinceBox = () => (
 );
 
 const StepDetailPage = () => {
-    const { scheduleId } = useParams<{ scheduleId: string }>(); // URL 파라미터에서 scheduleId 추출
+    const { scheduleId } = useParams<{ scheduleId: string }>();
 
     const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
     const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
     const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
-    const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false); // CareerMenu 상태 추가
+    const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState(''); // Toast 메시지 상태 추가
+    const [toastDescription, setToastDescription] = useState(''); // 추가된 상태
+
 
     const handleExperienceBoxClick = () => {
         console.log('핵심경험 사이드바 열기')
         setIsCareerMenuVisible(!isCareerMenuVisible);
+    };
+
+    const handleCompleteButtonClick = () => {
+        setToastMessage('핵심경험이 추가되었습니다!'); // 토스트 메시지 설정
+        setTimeout(() => setToastMessage(''), 3000); // 3초 후 토스트 메시지 숨김
+        setIsCareerMenuVisible(false); // CareerMenu 닫기
     };
 
     const dropdownItems: DropdownItem[] = [
@@ -328,10 +338,19 @@ const StepDetailPage = () => {
             {isCareerMenuVisible && (
         <CareerMenu
         onClose={() => setIsCareerMenuVisible(false)}
+        onComplete={handleCompleteButtonClick} // 완료 버튼 클릭 시 핸들러 추가
       />            )}
 
                 </Stack>
             </Stack>
+            {/* Toast 컴포넌트 추가 */}
+            {toastMessage && (
+                <Toast
+                    message={'핵심 경험 등록을 완료했어요!'}
+                    description={'정리된 상세 내용을 자세히 보시려면 각 커리어를 클릭해서 확인해보세요.'}
+                    onClose={() => setToastMessage('')}
+                />
+            )}
         </Box>
     );
 };

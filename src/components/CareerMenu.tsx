@@ -7,12 +7,21 @@ import CareerCard from './CareerCard';
 
 type CareerMenuProps = {
   onClose: () => void;
+  onComplete: () => void; // 완료 버튼 클릭 시 핸들러 추가
 };
 
-
-const CareerMenu =  ({ onClose }: CareerMenuProps) => {
+const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
   const [isVisible, setIsVisible] = useState(true); 
   const [isSliding, setIsSliding] = useState(false); 
+
+  const handleCompleteClose = () => {
+    setIsSliding(true); 
+    setTimeout(() => {
+      setIsVisible(false); 
+      onComplete(); // 완료 핸들러 호출
+      onClose(); // 부모 컴포넌트의 상태를 변경
+    }, 300); 
+  };
 
   const handleClose = () => {
     setIsSliding(true); 
@@ -71,7 +80,7 @@ const CareerMenu =  ({ onClose }: CareerMenuProps) => {
           flexGrow: 1,
           overflowY: 'auto',
           marginBottom: '200px',  
-          overflowX:'hidden',
+          overflowX: 'hidden',
         }}
       >
         {careerCards.map((card, index) => (
@@ -100,7 +109,7 @@ const CareerMenu =  ({ onClose }: CareerMenuProps) => {
           flexShrink: 0
         }}
       >
-        <PrimaryButton sx={{ width: '100%' }} onClick={handleClose} >
+        <PrimaryButton sx={{ width: '100%' }} onClick={handleCompleteClose}>
           어필할 경험 추가 완료하기
         </PrimaryButton>
       </Box>

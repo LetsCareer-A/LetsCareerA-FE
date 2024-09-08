@@ -76,7 +76,7 @@ const Toast = ({ message, description, onClose }: ToastProps) => {
               fontFamily: 'Pretendard',
               lineHeight: '1.5',
             }}
-            style={typography.small2Reg}
+            style={typography.xSmall2Reg}
           >
             {description}
           </Typography>
