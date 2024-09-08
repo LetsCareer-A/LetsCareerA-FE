@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
 import typography from '../../../styles/typography';
-import Chip from '../../../components/Chips'; // Import the Chip component
+import Chip from '../../../components/Chips';
 import colors from '../../../styles/colors';
 import { getDetailSchedule } from '../../../api/Dashboard/getDetailSchedule';
 import useCalendarStore from '../../../store/calendarStore'; 
 import File from '../../../assets/blueFile.svg';
-import Edit from '../../../assets/edit.svg';
 import Communication from '../../../assets/communication.png';
 import Interface from '../../../assets/interface.svg';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
