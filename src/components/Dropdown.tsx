@@ -7,8 +7,10 @@ import Arrow from '../assets/arrow.svg';
 
 export interface DropdownItem {
   text: string;
-  color?: string;
+  backgroundColor?: string;
+  textColor?: string; 
   image?: string;
+  icon?: string;
   sx?: object;
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
 import { useParams } from 'react-router-dom';
-import CareerMenu from '../../components/CareerMenu'; // CareerMenu import 추가
+import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -14,30 +14,34 @@ import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import fileImage from '../../assets/ill_file.png';
 import Toast from '../../components/Toast';
-import hat from '../../assets/hat.png';
 
-const items = [
-    { 
-      text: '공고 진행중', 
-      color: '#4D55F5', 
-    },
-    { 
-      text: '최종 합격', 
-      color: '#4D55F5', 
-    },
-    { 
-      text: '최종 불합격', 
-      color: '#FF566A',
-    },
+const items: DropdownItem[] = [
+    { text: '공고 진행중', color: '#4D55F5' },
+    { text: '최종 합격', color: '#4D55F5' },
+    { text: '최종 불합격', color: '#FF566A' },
 ];
 
-const IntroduceBox: React.FC<{
+const Stateitems: DropdownItem[] = [
+    { text: '진행중'},
+    { text: '진행완료'},
+    { text: '합격'},
+    { text: '불합격'},
+];
+
+interface IntroduceBoxProps {
     questionTextFieldValue: string;
     handleQuestionTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     answerTextFieldValue: string;
     handleAnswerTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ questionTextFieldValue, handleQuestionTextFieldChange, answerTextFieldValue, handleAnswerTextFieldChange }) => (
-    <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
+}
+
+const IntroduceBox: React.FC<IntroduceBoxProps> = ({
+    questionTextFieldValue,
+    handleQuestionTextFieldChange,
+    answerTextFieldValue,
+    handleAnswerTextFieldChange,
+}) => (
+    <Box gap="8px" display="flex" flexDirection="column">
         <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
             문항 1
         </Typography>
@@ -45,8 +49,8 @@ const IntroduceBox: React.FC<{
             placeholder="문항의 제목 또는 기업에서 제시한 문항을 적어주세요"
             value={questionTextFieldValue}
             onChange={handleQuestionTextFieldChange}
-            showCharCount={true}
-            fullWidth={true}
+            showCharCount
+            fullWidth
             maxLength={40}
             height="44px"
         />
@@ -54,8 +58,8 @@ const IntroduceBox: React.FC<{
             placeholder="해당 문항에 대한 답변 또는 자기소개 내용을 적어주세요."
             value={answerTextFieldValue}
             onChange={handleAnswerTextFieldChange}
-            showCharCount={true}
-            fullWidth={true}
+            showCharCount
+            fullWidth
             maxLength={1500}
             multiline
             rows={10}
@@ -64,9 +68,39 @@ const IntroduceBox: React.FC<{
     </Box>
 );
 
-const ExperinceBox = () => (
-    <Box sx={{ display: 'flex', width: '260px', height: '55px', padding: '16px 8px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', border: `1px solid ${colors.neutral[85]}`, bgcolor: `${colors.neutral[100]}` }}>
-        <AddIcon sx={{ width: '24px', height: '24px' }} />
+interface ExperienceBoxProps {
+    card?: { chipText: string; title: string };
+    onClick: () => void;
+}
+
+const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
+    <Box
+        sx={{
+            display: 'flex',
+            width: '260px',
+            height: '55px',
+            padding: '16px 8px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '8px',
+            border: `1px solid ${colors.neutral[85]}`,
+            bgcolor: colors.neutral[100],
+            cursor: 'pointer',
+        }}
+        onClick={onClick}
+    >
+        {card ? (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography style={typography.xSmallBold} color={colors.neutral[10]}>
+                    {card.chipText}
+                </Typography>
+                <Typography style={typography.smallBold} color={colors.neutral[10]}>
+                    {card.title}
+                </Typography>
+            </Box>
+        ) : (
+            <AddIcon sx={{ width: '24px', height: '24px' }} />
+        )}
     </Box>
 );
 
@@ -77,40 +111,36 @@ const StepDetailPage = () => {
     const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
     const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
-    const [toastMessage, setToastMessage] = useState(''); // Toast 메시지 상태 추가
-
+    const [toastMessage, setToastMessage] = useState('');
+    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
 
     const handleExperienceBoxClick = () => {
-        console.log('핵심경험 사이드바 열기')
-        setIsCareerMenuVisible(!isCareerMenuVisible);
+        setIsCareerMenuVisible((prev) => !prev);
     };
 
-    const handleCompleteButtonClick = () => {
-        setToastMessage('핵심경험이 추가되었습니다!'); // 토스트 메시지 설정
-        setTimeout(() => setToastMessage(''), 3000); // 3초 후 토스트 메시지 숨김
-        setIsCareerMenuVisible(false); // CareerMenu 닫기
+    const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
+        setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]);
+        setToastMessage('핵심경험이 추가되었습니다!');
+        setTimeout(() => setToastMessage(''), 3000);
+        setIsCareerMenuVisible(false);
     };
-
-    const dropdownItems: DropdownItem[] = [
-        { text: '공고진행중', color: colors.primary.normal },
-        { text: '공고진행예정', color: colors.secondary[30] },
-        { text: '공고마감', color: colors.neutral[70] }
-    ];
 
     useEffect(() => {
-        // scheduleId에 기반하여 데이터 로드 (예: API 호출)
         fetch(`/api/schedules/${scheduleId}`)
-            .then(response => response.json())
-            .then(data => {
-                // 예: API 응답에서 데이터를 상태로 설정
+            .then((response) => response.json())
+            .then((data) => {
                 setQuestionTextFieldValue(data.question || '');
                 setAnswerTextFieldValue(data.answer || '');
             })
-            .catch(error => console.error('데이터 로드 오류:', error));
+            .catch((error) => console.error('데이터 로드 오류:', error));
     }, [scheduleId]);
 
     const handleDropdownSelect = (item: DropdownItem) => {
         setSelectedChip(item);
+    };
+
+    const handleDropdownStateSelect = (Stateitems: DropdownItem) => {
+        setSelectedChip(Stateitems);
     };
 
     const handleQuestionTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,11 +153,11 @@ const StepDetailPage = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
-            <Stack spacing={'16px'} direction={'row'} alignItems="center" sx={{ position: 'relative' }}>
+            <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
                 <ArrowBackIosNewIcon />
                 <Chip
-                    text={'D-4'}
-                    backgroundColor={'rgba(81, 119, 255, 0.10)'}
+                    text="D-4"
+                    backgroundColor="rgba(81, 119, 255, 0.10)"
                     textColor={colors.primary.normal}
                     image={notebook}
                     imageWidth="16px"
@@ -146,107 +176,112 @@ const StepDetailPage = () => {
                     <Dropdown
                         buttonText="준비 단계를 선택해주세요."
                         items={items}
-                        renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} image={item.image}/>}
+                        renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} />}
                         onSelect={handleDropdownSelect}
                     />
                 </Box>
             </Stack>
 
-            <Stack spacing={'16px'} mt={3}>
-                {/* 서류 전형 단계 박스 */}
-                <Box sx={{ 
-    display: 'flex', 
-    width: '1043px', 
-    height: '273px', 
-    flexDirection: 'column', 
-    padding: '25px', 
-    borderRadius: '12px', 
-    border: `1px solid ${colors.neutral[85]}`, 
-    backgroundColor: colors.neutral[100],
-    position: 'relative' // 부모 컨테이너에 상대적 위치 설정 추가
-}}>
-    {/* ::before 가상 요소를 통해 파란색 선 추가 */}
-    <Box
-        sx={{
-            content: '""', // 빈 문자열로 설정
-            position: 'absolute',
-            top: '0px', // 상단에 배치
-            left: '50px',
-            width: '96px', // 부모 요소의 전체 너비로 설정
-            height: '3px', // 파란 선 높이
-            backgroundColor: `${colors.primary[80]}`, // 파란색 선 색상
-            bordertRadius: '12px', // 박스의 border-radius와 맞추기
-        }}
-    />
-    
-    <Box 
-        sx={{ 
-            display: 'flex', 
-            width: '100px', 
-            paddingBottom: '4px', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            gap: '4px', 
-            marginLeft: '23px', 
-            marginTop: '10px',
-            position: 'relative' 
-        }} 
-    >
-        <Box 
-            sx={{ 
-                display: 'flex', 
-                width: 100, 
-                height: 100, 
-                padding: '3px 3px', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                borderRadius: '8px', 
-                bgcolor: `${colors.primary[80]}` 
-            }}
-        >
-            <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
-        </Box>
-        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-            서류전형
-        </Typography>
-        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-            24.08.30
-        </Typography>
-        <Dropdown
-            buttonText={'진행중'}
-            items={dropdownItems}
-            renderItem={(item) => (
-                <div
-                    className={`flex items-center rounded-md px-3 py-1 bg-${item.color} text-primary-normal`}
+            <Stack spacing="16px" mt={3}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        width: '1043px',
+                        height: '273px',
+                        flexDirection: 'column',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        border: `1px solid ${colors.neutral[85]}`,
+                        backgroundColor: colors.neutral[100],
+                        position: 'relative',
+                    }}
                 >
-                    {item.text}
-                </div>
-            )}
-            onSelect={handleDropdownSelect}
-        />
-    </Box>
-</Box>
+                    <Box
+                        sx={{
+                            content: '""',
+                            position: 'absolute',
+                            top: '0px',
+                            left: '50px',
+                            width: '96px',
+                            height: '3px',
+                            backgroundColor: colors.primary[80],
+                            borderRadius: '12px',
+                        }}
+                    />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: '100px',
+                            paddingBottom: '4px',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '4px',
+                            marginLeft: '23px',
+                            marginTop: '15px',
+                            position: 'relative',
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                width: 100,
+                                height: 100,
+                                padding: '3px 3px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '8px',
+                                bgcolor: colors.primary[80],
+                            }}
+                        >
+                            <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
+                        </Box>
+                        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
+                            서류전형
+                        </Typography>
+                        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
+                            24.08.30
+                        </Typography>
+                        <Dropdown
+                            buttonText="진행중"
+                            items={Stateitems}
+                            renderItem={(Stateitems) => (
+                                <div
+                                    className={`flex items-center rounded-md px-3 py-1`}
+                                    style={{color: colors.primary.normal }}
+                                >
+                                    {Stateitems.text}
+                                </div>
+                            )}
+                            onSelect={handleDropdownStateSelect}
+                        />
+                    </Box>
+                </Box>
 
+                <Box
+                    sx={{
+                        width: '1043px',
+                        height: '55px',
+                        backgroundImage: `url(${banner})`,
+                        border: `1px solid ${colors.neutral[95]}`,
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
+                />
 
-{/* 하단 박스 */}
-<Box
-    sx={{
-        width: '1043px',
-        height: '55px',
-        backgroundImage: `url(${banner})`,
-        border: `1px solid ${colors.neutral[95]}`,
-        cursor: 'pointer'
-    }}
-    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
-/>
-
-
-                {/* 배너 및 컨텐츠 */}
-                <Stack spacing={'16px'} direction={'row'}>
-                    {/* 자기소개서 */}                    
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                    <Box display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} gap={'16px'}>
-                            <Box display={'flex'} flexDirection={'row'} gap={'16px'}  alignItems={'center'}  >
+                <Stack spacing="16px" direction="row">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '737px',
+                            padding: '16px',
+                            gap: '10px',
+                            border: `1px solid ${colors.neutral[85]}`,
+                            backgroundColor: colors.neutral[100],
+                        }}
+                    >
+                        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
+                            <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
                                 <Typography color={colors.neutral[10]} style={typography.smallBold}>
                                     자기소개서
                                 </Typography>
@@ -257,36 +292,35 @@ const StepDetailPage = () => {
                             <Button
                                 variant="contained"
                                 sx={{
-                                    display: 'flex', 
-                                    alignSelf: 'flex-end', // 오른쪽 배치
+                                    display: 'flex',
+                                    alignSelf: 'flex-end',
                                     width: '123px',
                                     height: '32px',
                                     padding: '8px 8px',
                                     gap: '8px',
-                                    border: '1px solid transparent', // 기본 투명한 border 설정
+                                    border: '1px solid transparent',
                                     borderRadius: '8px',
-                                    bgcolor: `${colors.primary[10]}`,
+                                    bgcolor: colors.primary[10],
                                     fontSize: '13px',
                                     fontWeight: '500',
                                     lineHeight: '20px',
                                     letterSpacing: '-0.21px',
-                                    color: `${colors.primary.normal}`,
-                                    boxShadow: 'none', // 그림자 제거
+                                    color: colors.primary.normal,
+                                    boxShadow: 'none',
                                     marginRight: '0px !important',
                                     '&:hover': {
-                                        border: `1px solid ${colors.primary.normal}`, // 테두리 색상 변경
-                                        bgcolor: `${colors.primary[10]}`, // 배경색을 그대로 유지
-                                        padding: 'none',
-                                        boxShadow: 'none', // 그림자 제거
-                                    }
+                                        border: `1px solid ${colors.primary.normal}`,
+                                        bgcolor: colors.primary[10],
+                                        boxShadow: 'none',
+                                    },
                                 }}
                                 endIcon={<AddIcon />}
-                                onClick={() => alert('문항 추가하기 버튼 클릭됨')} 
+                                onClick={() => alert('문항 추가하기 버튼 클릭됨')}
                             >
                                 문항 추가하기
                             </Button>
                         </Box>
-                        <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
+                        <Box gap="8px" display="flex" flexDirection="column">
                             <IntroduceBox
                                 questionTextFieldValue={questionTextFieldValue}
                                 handleQuestionTextFieldChange={handleQuestionTextFieldChange}
@@ -296,103 +330,48 @@ const StepDetailPage = () => {
                         </Box>
                     </Box>
 
-                    {/* 핵심경험 */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: isCareerMenuVisible? `1px solid ${colors.primary[30]}`: `1px solid ${colors.neutral[85]}`, backgroundColor: isCareerMenuVisible? ` ${colors.primary[10]}`: colors.neutral[100] }}>
-                <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
-                    <Typography color={colors.neutral[10]} style={typography.smallBold}>
-                        핵심경험
-                    </Typography>
-                    <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-                        어필할 핵심 경험을 추가해보세요.
-                    </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <Box
                         sx={{
                             display: 'flex',
-                            width: '260px',
-                            height: '55px',
-                            padding: '16px 8px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: '8px',
-                            border: `1px solid ${colors.neutral[85]}`,
-                            bgcolor: `${colors.neutral[100]}`,
-                            cursor: 'pointer',
+                            flexDirection: 'column',
+                            width: '290px',
+                            height: '317px',
+                            padding: '16px',
+                            gap: '15px',
+                            borderRadius: '12px',
+                            border: isCareerMenuVisible ? `1px solid ${colors.primary[30]}` : `1px solid ${colors.neutral[85]}`,
+                            backgroundColor: isCareerMenuVisible ? colors.primary[10] : colors.neutral[100],
                         }}
-                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
                     >
-                        <AddIcon sx={{ width: '24px', height: '24px' }} />
+                        <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
+                            <Typography color={colors.neutral[10]} style={typography.smallBold}>
+                                핵심경험
+                            </Typography>
+                            <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
+                                어필할 핵심 경험을 추가해보세요.
+                            </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                        </Box>
                     </Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            width: '260px',
-                            height: '55px',
-                            padding: '16px 8px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: '8px',
-                            border: `1px solid ${colors.neutral[85]}`,
-                            bgcolor: `${colors.neutral[100]}`,
-                            cursor: 'pointer',
-                        }}
-                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
-                    >
-                        <AddIcon sx={{ width: '24px', height: '24px' }} />
-                    </Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            width: '260px',
-                            height: '55px',
-                            padding: '16px 8px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: '8px',
-                            border: `1px solid ${colors.neutral[85]}`,
-                            bgcolor: `${colors.neutral[100]}`,
-                            cursor: 'pointer',
-                        }}
-                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
-                    >
-                        <AddIcon sx={{ width: '24px', height: '24px' }} />
-                    </Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            width: '260px',
-                            height: '55px',
-                            padding: '16px 8px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: '8px',
-                            border: `1px solid ${colors.neutral[85]}`,
-                            bgcolor: `${colors.neutral[100]}`,
-                            cursor: 'pointer',
-                        }}
-                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
-                    >
-                        <AddIcon sx={{ width: '24px', height: '24px' }} />
-                    </Box>
-                    
-                </Box>
-            </Box>
 
-            {/* CareerMenu 오버레이 */}
-            {isCareerMenuVisible && (
-        <CareerMenu
-        onClose={() => setIsCareerMenuVisible(false)}
-        onComplete={handleCompleteButtonClick} // 완료 버튼 클릭 시 핸들러 추가
-      />            )}
-
+                    {isCareerMenuVisible && (
+                        <CareerMenu
+                            onClose={() => setIsCareerMenuVisible(false)}
+                            onComplete={handleCompleteButtonClick}
+                        />
+                    )}
                 </Stack>
             </Stack>
-            {/* Toast 컴포넌트 추가 */}
+
             {toastMessage && (
                 <Toast
-                    message={'핵심 경험 등록을 완료했어요!'}
-                    description={'정리된 상세 내용을 자세히 보시려면 각 커리어를 클릭해서 확인해보세요.'}
+                    message="핵심 경험 등록을 완료했어요!"
+                    description="정리된 상세 내용을 자세히 보시려면 각 커리어를 클릭해서 확인해보세요."
                     onClose={() => setToastMessage('')}
                 />
             )}
