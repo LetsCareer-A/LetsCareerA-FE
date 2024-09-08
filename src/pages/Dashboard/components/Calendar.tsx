@@ -12,8 +12,9 @@ import useCalendarStore from '../../../store/calendarStore';
 interface Event {
   title: string;
   date: string;
-  company: string;
-  department: string;
+  color: string;
+  backgroundColor: string; 
+  textColor: string;
 }
 
 const Calendar: React.FC = () => {
@@ -30,12 +31,33 @@ const Calendar: React.FC = () => {
       try {
         const response = await getCalendar(month);
         if (response.code === 200) {
-          const fetchedEvents = response.data.schedules.map((item: any) => ({
-            title: `${item.company} - ${item.department}`,
-            date: item.deadline,
-            company: item.company,
-            department: item.department,
-          }));
+          const fetchedEvents = response.data.schedules.map((item: any) => {
+            let backgroundColor;
+            let textColor;
+            switch (item.type) {
+              case '서류':
+                backgroundColor = 'rgba(81, 119, 255, 0.20)';
+                textColor = colors.system.PositiveBlue
+                break;
+              case '중간':
+                backgroundColor = colors.neutral[90];
+                textColor = colors.neutral[20]; 
+                break;
+              case '면접':
+                backgroundColor = colors.secondary[10]
+                textColor = colors.secondary.normal
+                break;
+              default:
+                backgroundColor = '#000000'; 
+                textColor = '#FFFFFF'; 
+            }
+            return {
+              title: `${item.company} - ${item.department}`,
+              date: item.deadline,
+              backgroundColor, 
+              textColor, 
+            };
+          });
           setEvents(fetchedEvents);
           setDocCount(response.data.docCount); 
           setMidCount(response.data.midCount); 
