@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
+import { DropdownItem } from '../../components/Dropdown';
+import { useParams } from 'react-router-dom';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Chip from '../../components/Chips';
 import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
-import { DropdownItem } from '../../components/Dropdown';
 import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import fileImage from '../../assets/ill_file.png';
 
-interface DetailProps {
-    chipText: string;
-    chipBackgroundColor: string;
-    chipTextColor: string;
-    title: string;
-    summary: string; // summary 추가됨
-    onClick: () => void;
-}
+const items = [
+    { 
+      text: '공고 진행중', 
+      color: '#4D55F5', 
+    },
+    { 
+      text: '최종 합격', 
+      color: '#4D55F5', 
+    },
+    { 
+      text: '최종 불합격', 
+      color: '#FF566A',
+    },
+];
 
 const IntroduceBox: React.FC<{
     questionTextFieldValue: string;
@@ -61,18 +68,32 @@ const ExperinceBox = () => (
     </Box>
 );
 
-const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, chipTextColor, title, summary, onClick }) => {
-    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
-    // const [typeChip, typeChip] = useState<DropdownItem | null>(null);
+const StepDetailPage = () => {
+    const { scheduleId } = useParams<{ scheduleId: string }>(); // URL 파라미터에서 scheduleId 추출
 
+    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
     const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
     const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
+    const [summary, setSummary] = useState(''); // summary 상태 추가
 
     const dropdownItems: DropdownItem[] = [
         { text: '공고진행중', color: colors.primary.normal },
         { text: '공고진행예정', color: colors.secondary[30] },
         { text: '공고마감', color: colors.neutral[70] }
     ];
+
+    useEffect(() => {
+        // scheduleId에 기반하여 데이터 로드 (예: API 호출)
+        fetch(`/api/schedules/${scheduleId}`)
+            .then(response => response.json())
+            .then(data => {
+                // 예: API 응답에서 데이터를 상태로 설정
+                setQuestionTextFieldValue(data.question || '');
+                setAnswerTextFieldValue(data.answer || '');
+                setSummary(data.summary || '');
+            })
+            .catch(error => console.error('데이터 로드 오류:', error));
+    }, [scheduleId]);
 
     const handleDropdownSelect = (item: DropdownItem) => {
         setSelectedChip(item);
@@ -91,15 +112,15 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
             <Stack spacing={'16px'} direction={'row'} alignItems="center" sx={{ position: 'relative' }}>
                 <ArrowBackIosNewIcon />
                 <Chip
-                    text={chipText}  // chipText 사용
-                    backgroundColor={chipBackgroundColor}  // chipBackgroundColor 사용
-                    textColor={chipTextColor}  // chipTextColor 사용
+                    text={'D-4'}
+                    backgroundColor={'rgba(81, 119, 255, 0.10)'}
+                    textColor={colors.primary.normal}
                     image={notebook}
                     imageWidth="16px"
                     imageHeight="16px"
                 />
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {title}  // title 사용
+                    회사이름
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
@@ -109,16 +130,10 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText={selectedChip ? selectedChip.text : '공고상태'}
-                        items={dropdownItems}
+                        buttonText="준비 단계를 선택해주세요."
+                        items={items}
+                        renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} image={item.image}/>}
                         onSelect={handleDropdownSelect}
-                        renderItem={(item) => (
-                            <Box display="flex" alignItems="center">
-                                {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
-                                {item.text}
-                            </Box>
-                        )}
-                        sx={{ minWidth: '150px' }}
                     />
                 </Box>
             </Stack>
@@ -186,7 +201,7 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                                     marginRight: '0px !important'
                                 }}
                                 endIcon={<AddIcon />}
-                                onClick={onClick}  // onClick 사용
+                                onClick={() => alert('문항 추가하기 버튼 클릭됨')} // onClick 핸들러 추가
                             >
                                 문항 추가하기
                             </Button>
@@ -226,7 +241,7 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                     Summary
                 </Typography>
                 <Typography color={colors.neutral[45]} style={typography.xSmall2Reg}>
-                    {summary}  {/* summary 사용 */}
+                    {summary} {/* summary 사용 */}
                 </Typography>
             </Box>
         </Box>

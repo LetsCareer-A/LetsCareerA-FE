@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import typography from '../../../styles/typography';
 import Chip from '../../../components/Chips'; // Import the Chip component
 import colors from '../../../styles/colors';
