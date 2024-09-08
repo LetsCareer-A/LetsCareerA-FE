@@ -152,16 +152,22 @@ const StepDetailPage = () => {
                             24.08.30
                         </Typography>
                         <Dropdown
-                            buttonText={selectedChip ? selectedChip.text : '공고상태'}
-                            items={dropdownItems}
-                            onSelect={handleDropdownSelect}
+                            buttonText={
+                                <div className="inline-flex h-7 py-[3px] pl-3 pr-2 justify-center items-center gap-2 flex-shrink-0">
+                                    <Typography className="text-sm text-primary-normal">
+                                        진행중
+                                    </Typography>
+                                </div>
+                            }
+                            items={items}
                             renderItem={(item) => (
-                                <Box display="flex" alignItems="center">
-                                    {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
+                                <div
+                                    className={`flex items-center rounded-md px-3 py-1 bg-${item.color} text-primary-normal`}
+                                >
                                     {item.text}
-                                </Box>
+                                </div>
                             )}
-                            sx={{ minWidth: '150px' }}
+                            onSelect={handleDropdownSelect}
                         />
                     </Box>
                 </Box>
@@ -179,32 +185,44 @@ const StepDetailPage = () => {
                 {/* 배너 및 컨텐츠 */}
                 <Stack spacing={'16px'} direction={'row'}>
                     {/* 자기소개서 */}                    
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', height: '394px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                        <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'16px'}>
-                            <Typography color={colors.neutral[10]} style={typography.smallBold}>
-                                자기소개서
-                            </Typography>
-                            <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-                                준비하는 기업의 자기소개서를 미리 써봐요.
-                            </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
+                    <Box display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} gap={'16px'}>
+                            <Box display={'flex'} flexDirection={'row'} gap={'16px'}  alignItems={'center'}  >
+                                <Typography color={colors.neutral[10]} style={typography.smallBold}>
+                                    자기소개서
+                                </Typography>
+                                <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
+                                    준비하는 기업의 자기소개서를 미리 써봐요.
+                                </Typography>
+                            </Box>
                             <Button
                                 variant="contained"
                                 sx={{
+                                    display: 'flex', 
+                                    alignSelf: 'flex-end', // 오른쪽 배치
                                     width: '123px',
                                     height: '32px',
                                     padding: '8px 8px',
                                     gap: '8px',
+                                    border: '1px solid transparent', // 기본 투명한 border 설정
                                     borderRadius: '8px',
                                     bgcolor: `${colors.primary[10]}`,
-                                    fontSize: '14px',
+                                    fontSize: '13px',
                                     fontWeight: '500',
                                     lineHeight: '20px',
                                     letterSpacing: '-0.21px',
                                     color: `${colors.primary.normal}`,
-                                    marginRight: '0px !important'
+                                    boxShadow: 'none', // 그림자 제거
+                                    marginRight: '0px !important',
+                                    '&:hover': {
+                                        border: `1px solid ${colors.primary.normal}`, // 테두리 색상 변경
+                                        bgcolor: `${colors.primary[10]}`, // 배경색을 그대로 유지
+                                        padding: 'none',
+                                        boxShadow: 'none', // 그림자 제거
+                                    }
                                 }}
                                 endIcon={<AddIcon />}
-                                onClick={() => alert('문항 추가하기 버튼 클릭됨')} // onClick 핸들러 추가
+                                onClick={() => alert('문항 추가하기 버튼 클릭됨')} 
                             >
                                 문항 추가하기
                             </Button>
