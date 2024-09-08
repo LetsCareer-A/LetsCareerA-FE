@@ -51,11 +51,14 @@ const DetailList: React.FC = () => {
   }, [currentDate, page]);
 
   useEffect(() => {
-    // 페이지 변경 시 데이터 필터링
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     setSchedules(allSchedules.slice(startIndex, endIndex));
   }, [page, allSchedules]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [currentDate]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
@@ -79,6 +82,7 @@ const DetailList: React.FC = () => {
         width: 370,
         padding: 2,
         background: 'white',
+        height: '576px'
       }}
       display='flex'
       flexDirection='column'
@@ -97,22 +101,33 @@ const DetailList: React.FC = () => {
           </Box>
         </Box>
         <Box>
-          {schedules.map(item => (
-            <Box
-              key={item.scheduleId}
-              sx={{
-                border: '1px solid #ddd',
-                borderRadius: 1,
-                mb: '8px',
-                p: 2,
-              }}
-            >
-              <Typography mb='8px' style={typography.xSmall2Bold}>
-                {item.company} | {item.department}
+          {schedules.length === 0 ? (
+            <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' mt='188px'>
+              <Typography style={typography.xSmallBold} color={colors.neutral[10]}>
+                아직 등록된 취업 일정이 없어요!
               </Typography>
-              <Chip text={`서류 마감까지 D${item.dday}`} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
+              <Typography style={typography.xxSmallReg} color={colors.neutral[45]}>
+                새로운 지원 일정을 등록해볼까요?
+              </Typography>
             </Box>
-          ))}
+          ) : (
+            schedules.map(item => (
+              <Box
+                key={item.scheduleId}
+                sx={{
+                  border: '1px solid #ddd',
+                  borderRadius: 1,
+                  mb: '8px',
+                  p: '12px',
+                }}
+              >
+                <Typography mb='8px' style={typography.xSmall2Bold}>
+                  {item.company} | {item.department}
+                </Typography>
+                <Chip text={`서류 마감까지 D${item.dday}`} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
+              </Box>
+            ))
+          )}
         </Box>
       </Box>
 
