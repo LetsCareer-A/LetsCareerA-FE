@@ -1,103 +1,131 @@
 import React, { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
+import { DropdownItem } from '../../components/Dropdown';
+// import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Chip from '../../components/Chips';
 import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
-import { DropdownItem } from '../../components/Dropdown';
-import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
+import Toast from '../../components/Toast';
+import IntroduceBox from './components/IntroduceBox'; 
+import SupportState from './components/SupportState';
 
-interface DetailProps {
-    chipText: string;
-    chipBackgroundColor: string;
-    chipTextColor: string;
-    title: string;
-    summary: string; // summary 추가됨
+// Dropdown 메뉴 아이템
+const items: DropdownItem[] = [
+    { text: '공고 진행중', color: '#4D55F5' },
+    { text: '최종 합격', color: '#4D55F5' },
+    { text: '최종 불합격', color: '#FF566A' },
+];
+
+// 상태 아이템
+const Stateitems: DropdownItem[] = [
+    { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+    { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+    { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+    { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+];
+
+interface ExperienceBoxProps {
+    card?: { chipText: string; title: string };
     onClick: () => void;
 }
 
-const IntroduceBox: React.FC<{
-    questionTextFieldValue: string;
-    handleQuestionTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    answerTextFieldValue: string;
-    handleAnswerTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ questionTextFieldValue, handleQuestionTextFieldChange, answerTextFieldValue, handleAnswerTextFieldChange }) => (
-    <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
-        <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
-            문항 1
-        </Typography>
-        <Textfield
-            placeholder="문항의 제목 또는 기업에서 제시한 문항을 적어주세요"
-            value={questionTextFieldValue}
-            onChange={handleQuestionTextFieldChange}
-            showCharCount={true}
-            fullWidth={true}
-            maxLength={40}
-            height="44px"
-        />
-        <Textfield
-            placeholder="해당 문항에 대한 답변 또는 자기소개 내용을 적어주세요."
-            value={answerTextFieldValue}
-            onChange={handleAnswerTextFieldChange}
-            showCharCount={true}
-            fullWidth={true}
-            maxLength={1500}
-            multiline
-            rows={10}
-            maxRows={10}
-            sx={{ height: '270px' }}
-        />
+const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
+    <Box
+        sx={{
+            display: 'flex',
+            width: '260px',
+            height: '55px',
+            padding: '16px 8px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '8px',
+            border: `1px solid ${colors.neutral[85]}`,
+            bgcolor: colors.neutral[100],
+            cursor: 'pointer',
+        }}
+        onClick={onClick}
+    >
+        {card ? (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography style={typography.xSmallBold} color={colors.neutral[10]}>
+                    {card.chipText}
+                </Typography>
+                <Typography style={typography.smallBold} color={colors.neutral[10]}>
+                    {card.title}
+                </Typography>
+            </Box>
+        ) : (
+            <AddIcon sx={{ width: '24px', height: '24px' }} />
+        )}
     </Box>
 );
 
-const ExperinceBox = () => (
-    <Box sx={{ display: 'flex', width: '260px', height: '55px', padding: '16px 8px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', border: `1px solid ${colors.neutral[85]}`, bgcolor: `${colors.neutral[100]}` }}>
-        <AddIcon sx={{ width: '24px', height: '24px' }} />
-    </Box>
-);
+const StepDetailPage = () => {
+    // 상태 변수들 선언
+    const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
+    const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    // const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]); // 추가
+    // const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null); //페이지 연결할때
 
-const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, chipTextColor, title, summary, onClick }) => {
-    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
-
-    const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
-    const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
-
-    const dropdownItems: DropdownItem[] = [
-        { text: '공고진행중', color: colors.primary.normal },
-        { text: '공고진행예정', color: colors.secondary[30] },
-        { text: '공고마감', color: colors.neutral[70] }
-    ];
-
-    const handleDropdownSelect = (item: DropdownItem) => {
-        setSelectedChip(item);
+    const handleQuestionTextFieldChange = (index: number) => (
+        event: React.ChangeEvent<HTMLInputElement>
+        ) => {
+        const updatedBoxes = [...introduceBoxes];
+        updatedBoxes[index].question = event.target.value;
+        setIntroduceBoxes(updatedBoxes);
     };
 
-    const handleQuestionTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuestionTextFieldValue(event.target.value);
+    const handleAnswerTextFieldChange = (index: number) => (
+    event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+    const updatedBoxes = [...introduceBoxes];
+    updatedBoxes[index].answer = event.target.value;
+    setIntroduceBoxes(updatedBoxes);
     };
 
-    const handleAnswerTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAnswerTextFieldValue(event.target.value);
+    const handleAddIntroduceBox = () => {
+        setIntroduceBoxes([...introduceBoxes, { question: '', answer: '' }]);
+      };
+
+    const handleDeleteIntroduceBox = (index: number) => {
+    setIntroduceBoxes((prevBoxes) => prevBoxes.filter((_, i) => i !== index));
     };
+    
+    const handleExperienceBoxClick = () => {
+        setIsCareerMenuVisible((prev) => !prev);
+    };
+
+    // const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
+        // setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
+    //     setToastMessage('핵심경험이 추가되었습니다!');
+    //     setTimeout(() => setToastMessage(''), 3000);
+    //     setIsCareerMenuVisible(false);
+    // };
+
+    // const handleDropdownSelect = (item: DropdownItem) => {
+    //     // setSelectedChip(item); // 상태 업데이트
+    // };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
-            <Stack spacing={'16px'} direction={'row'} alignItems="center" sx={{ position: 'relative' }}>
+            <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
                 <ArrowBackIosNewIcon />
                 <Chip
-                    text={chipText}  // chipText 사용
-                    backgroundColor={chipBackgroundColor}  // chipBackgroundColor 사용
-                    textColor={chipTextColor}  // chipTextColor 사용
+                    text="D-4"
+                    backgroundColor="rgba(81, 119, 255, 0.10)"
+                    textColor={colors.primary.normal}
                     image={notebook}
                     imageWidth="16px"
                     imageHeight="16px"
                 />
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {title}  // title 사용
+                    회사이름
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
@@ -107,85 +135,169 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText={selectedChip ? selectedChip.text : '공고상태'}
-                        items={dropdownItems}
-                        onSelect={handleDropdownSelect}
-                        renderItem={(item) => (
-                            <Box display="flex" alignItems="center">
-                                {item.image && <img src={item.image} alt="" style={{ width: '16px', height: '16px', marginRight: '8px' }} />}
-                                {item.text}
-                            </Box>
-                        )}
-                        sx={{ minWidth: '150px' }}
+                        buttonText="준비 단계"
+                        items={items}
+                        renderItem={(item) => 
+                        <Chip text={item.text} backgroundColor={item.color} />}
+                        // onSelect={handleDropdownSelect}
+                        sx={{width:142, height:44}}
                     />
                 </Box>
             </Stack>
 
-            <Stack spacing={'16px'} mt={3}>
-                <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                    <Stack spacing={'4px'} direction={'column'}>
-                        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-                            서류전형
-                        </Typography>
-                        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-                            24.08.30
-                        </Typography>
-                    </Stack>
+            <Stack spacing="16px" mt={3}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        width: '1043px',
+                        height: '273px',
+                        flexDirection: 'row',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        border: `1px solid ${colors.neutral[85]}`,
+                        backgroundColor: colors.neutral[100],
+                        position: 'relative',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: '0px',
+                            left: '50px',
+                            width: '96px',
+                            height: '3px',
+                            backgroundColor: colors.primary[80],
+                            borderRadius: '12px',
+                        }}
+                    />
+<SupportState dropdownItems={Stateitems} selectedChip={null} onDropdownSelect={() => {}} />
+
+                    {/* 전형 추가 */}
+                     <Box
+                        sx={{
+                            display: 'flex',
+                            width: '100px',
+                            paddingBottom: '4px',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '4px',
+                            marginLeft: '23px',
+                            marginTop: '25px',
+                            position: 'relative',
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                width: 100,
+                                height: 100,
+                                padding: '3px 3px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '8px',
+                                bgcolor: colors.primary[10],
+                            }}
+                        >
+                            <AddIcon width={'12px'}/>
+                        </Box>
+                        
+                    </Box>
                 </Box>
+
                 <Box
                     sx={{
                         width: '1043px',
                         height: '55px',
                         backgroundImage: `url(${banner})`,
                         border: `1px solid ${colors.neutral[95]}`,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                     }}
                     onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
                 />
 
-                <Stack spacing={'16px'} direction={'row'}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '737px', height: '394px', padding: '16px', gap: '10px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                        <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'16px'}>
-                            <Typography color={colors.neutral[10]} style={typography.smallBold}>
-                                자기소개서
-                            </Typography>
-                            <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-                                준비하는 기업의 자기소개서를 미리 써봐요.
-                            </Typography>
+                <Stack spacing="16px" direction="row">
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '737px',
+                            padding: '16px',
+                            gap: '10px',
+                            border: `1px solid ${colors.neutral[85]}`,
+                            backgroundColor: colors.neutral[100],
+                        }}
+                    >
+                        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
+                            <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
+                                <Typography color={colors.neutral[10]} style={typography.smallBold}>
+                                    자기소개서
+                                </Typography>
+                                <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
+                                    준비하는 기업의 자기소개서를 미리 써봐요.
+                                </Typography>
+                            </Box>
                             <Button
                                 variant="contained"
                                 sx={{
+                                    display: 'flex',
+                                    alignSelf: 'flex-end',
                                     width: '123px',
                                     height: '32px',
                                     padding: '8px 8px',
                                     gap: '8px',
+                                    border: '1px solid transparent',
                                     borderRadius: '8px',
-                                    bgcolor: `${colors.primary[10]}`,
-                                    fontSize: '14px',
+                                    bgcolor: colors.primary[10],
+                                    fontSize: '13px',
                                     fontWeight: '500',
                                     lineHeight: '20px',
                                     letterSpacing: '-0.21px',
-                                    color: `${colors.primary.normal}`,
-                                    marginRight: '0px !important'
+                                    color: colors.primary.normal,
+                                    boxShadow: 'none',
+                                    marginRight: '0px !important',
+                                    '&:hover': {
+                                        border: `1px solid ${colors.primary.normal}`,
+                                        bgcolor: colors.primary[10],
+                                        boxShadow: 'none',
+                                    },
                                 }}
                                 endIcon={<AddIcon />}
-                                onClick={onClick}  // onClick 사용
-                            >
+                                onClick={handleAddIntroduceBox}
+                                
+                                >
                                 문항 추가하기
                             </Button>
                         </Box>
-                        <Box gap={'8px'} display={'flex'} flexDirection={'column'}>
-                            <IntroduceBox
-                                questionTextFieldValue={questionTextFieldValue}
-                                handleQuestionTextFieldChange={handleQuestionTextFieldChange}
-                                answerTextFieldValue={answerTextFieldValue}
-                                handleAnswerTextFieldChange={handleAnswerTextFieldChange}
-                            />
-                        </Box>
-                    </Box>
+          <Box gap="8px" display="flex" flexDirection="column">
+          {introduceBoxes.map((box, index) => (
+              <IntroduceBox
+                key={index}
+                boxNumber={index + 1}
+                questionTextFieldValue={box.question}
+                handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
+                answerTextFieldValue={box.answer}
+                handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
+                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)} // 삭제 핸들러 전달
+                />
+            ))}
+          </Box>
+          </Box>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                        <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
+                    {/*핵심경험*/}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '290px',
+                            height: '317px',
+                            padding: '16px',
+                            gap: '15px',
+                            borderRadius: '12px',
+                            border: isCareerMenuVisible ? `1px solid ${colors.primary[30]}` : `1px solid ${colors.neutral[85]}`,
+                            backgroundColor: isCareerMenuVisible ? colors.primary[10] : colors.neutral[100],
+                        }}
+                    >
+                        <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
                             <Typography color={colors.neutral[10]} style={typography.smallBold}>
                                 핵심경험
                             </Typography>
@@ -194,24 +306,29 @@ const StepDetailPage: React.FC<DetailProps> = ({ chipText, chipBackgroundColor, 
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <ExperinceBox />
-                            <ExperinceBox />
-                            <ExperinceBox />
-                            <ExperinceBox />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            <ExperienceBox onClick={handleExperienceBoxClick} />
                         </Box>
                     </Box>
+
+                    {/* {isCareerMenuVisible && (
+                        <CareerMenu
+                            onClose={() => setIsCareerMenuVisible(false)}
+                            onComplete={handleCompleteButtonClick}
+                        />
+                    )} */}
                 </Stack>
             </Stack>
 
-            {/* summary를 화면에 표시 */}
-            <Box sx={{ marginTop: '24px' }}>
-                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    Summary
-                </Typography>
-                <Typography color={colors.neutral[45]} style={typography.xSmall2Reg}>
-                    {summary}  {/* summary 사용 */}
-                </Typography>
-            </Box>
+            {toastMessage && (
+                <Toast
+                    message="핵심 경험 등록을 완료했어요!"
+                    description="정리된 상세 내용을 자세히 보시려면 각 커리어를 클릭해서 확인해보세요."
+                    onClose={() => setToastMessage('')}
+                />
+            )}
         </Box>
     );
 };

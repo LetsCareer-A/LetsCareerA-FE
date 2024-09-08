@@ -1,4 +1,3 @@
-// Dropdown.tsx
 import React, { useState, MouseEvent } from 'react';
 import { Box, Button, Menu, styled } from '@mui/material';
 import Chip from './Chips'; // Chip 컴포넌트 가져오기
@@ -6,13 +5,16 @@ import colors from '../styles/colors';
 import Arrow from '../assets/arrow.svg';
 
 export interface DropdownItem {
+  color?: string | undefined;
   text: string;
-  color?: string;
+  backgroundColor?: string;
+  textColor?: string; 
   image?: string;
+  icon?: string;
   sx?: object;
 }
 
-const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
+const StyledButton = styled(Button)<{ open: boolean; bgColor?: string }>(({ open, bgColor }) => ({
   display: 'flex',
   padding: '11px 8px 11px 12px',
   alignItems: 'center',
@@ -20,7 +22,7 @@ const StyledButton = styled(Button)<{ open: boolean }>(({ open }) => ({
   alignSelf: 'stretch',
   borderRadius: '8px',
   border: open ? `1px solid ${colors.primary[60]}` : `1px solid ${colors.neutral[80]}`, 
-  background: open ? colors.primary[10] : colors.neutral[95], 
+  background: bgColor || (open ? colors.primary[10] : colors.neutral[95]), // 버튼 배경색 변경
   color: open ? colors.neutral[10] : colors.neutral[40],
   position: 'relative',
   zIndex: 1,
@@ -44,12 +46,13 @@ const StyledMenu = styled(Menu)(() => ({
 interface DropdownProps {
   buttonText: string;
   items: DropdownItem[]; 
+  backgroundColor?: string; // 배경색 추가
   renderItem?: (item: DropdownItem) => React.ReactNode; 
   onSelect?: (item: DropdownItem) => void;
   sx?: object;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSelect, sx = {} }) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor, renderItem, onSelect, sx = {} }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
   const open = Boolean(anchorEl);
@@ -72,27 +75,29 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
 
   return (
     <div>
-      <StyledButton onClick={handleClick} open={open} sx={sx}>
-        {selectedItem ? (
-          <Chip 
-            text={selectedItem.text}
-            backgroundColor={selectedItem.color}
-            image={selectedItem.image}
-          />
-        ) : (
-          <Box display="flex" alignItems="center" gap='8px'>
-            {buttonText}
-            <img 
-              src={Arrow} 
-              alt="icon" 
-              style={{ 
-                transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
-                transition: 'transform 0.3s',
-              }} 
+      <StyledButton onClick={handleClick} open={open} bgColor={backgroundColor} sx={sx}>
+        <Box display="flex" alignItems="center" gap='8px'>
+          {selectedItem ? (
+            <Chip 
+              text={selectedItem.text}
+              backgroundColor={selectedItem.color}
+              image={selectedItem.image}
+              textColor={selectedItem.textColor}
             />
-          </Box>
-        )}
+          ) : (
+            buttonText
+          )}
+          <img 
+            src={Arrow} 
+            alt="icon" 
+            style={{ 
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
+              transition: 'transform 0.3s',
+            }} 
+          />
+        </Box>
       </StyledButton>
+
       <StyledMenu
         anchorEl={anchorEl}
         open={open}

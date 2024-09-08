@@ -6,7 +6,6 @@ import colors from '../../../styles/colors';
 import { getDetailSchedule } from '../../../api/Dashboard/getDetailSchedule';
 import useCalendarStore from '../../../store/calendarStore'; 
 import File from '../../../assets/blueFile.svg';
-import Edit from '../../../assets/edit.svg';
 import Communication from '../../../assets/communication.png';
 import Interface from '../../../assets/interface.svg';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
