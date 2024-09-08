@@ -9,11 +9,12 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Chip from '../../components/Chips';
 import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
-import Textfield from '../../components/Textfield';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import fileImage from '../../assets/ill_file.png';
 import Toast from '../../components/Toast';
+import IntroduceBox from './components/IntroduceBox'; // IntroduceBox 컴포넌트 불러오기
+
 
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
@@ -28,45 +29,6 @@ const Stateitems: DropdownItem[] = [
     { text: '불합격'},
 ];
 
-interface IntroduceBoxProps {
-    questionTextFieldValue: string;
-    handleQuestionTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    answerTextFieldValue: string;
-    handleAnswerTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const IntroduceBox: React.FC<IntroduceBoxProps> = ({
-    questionTextFieldValue,
-    handleQuestionTextFieldChange,
-    answerTextFieldValue,
-    handleAnswerTextFieldChange,
-}) => (
-    <Box gap="8px" display="flex" flexDirection="column">
-        <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
-            문항 1
-        </Typography>
-        <Textfield
-            placeholder="문항의 제목 또는 기업에서 제시한 문항을 적어주세요"
-            value={questionTextFieldValue}
-            onChange={handleQuestionTextFieldChange}
-            showCharCount
-            fullWidth
-            maxLength={40}
-            height="44px"
-        />
-        <Textfield
-            placeholder="해당 문항에 대한 답변 또는 자기소개 내용을 적어주세요."
-            value={answerTextFieldValue}
-            onChange={handleAnswerTextFieldChange}
-            showCharCount
-            fullWidth
-            maxLength={1500}
-            multiline
-            rows={10}
-            sx={{ height: '270px' }}
-        />
-    </Box>
-);
 
 interface ExperienceBoxProps {
     card?: { chipText: string; title: string };
@@ -108,12 +70,34 @@ const StepDetailPage = () => {
     const { scheduleId } = useParams<{ scheduleId: string }>();
 
     const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
-    const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
-    const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
+    const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[] >([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
 
+    const handleQuestionTextFieldChange = (index: number) => (
+        event: React.ChangeEvent<HTMLInputElement>
+        ) => {
+        const updatedBoxes = [...introduceBoxes];
+        updatedBoxes[index].question = event.target.value;
+        setIntroduceBoxes(updatedBoxes);
+    };
+
+    const handleAnswerTextFieldChange = (index: number) => (
+    event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+    const updatedBoxes = [...introduceBoxes];
+    updatedBoxes[index].answer = event.target.value;
+    setIntroduceBoxes(updatedBoxes);
+    };
+
+    const handleAddIntroduceBox = () => {
+        setIntroduceBoxes([...introduceBoxes, { question: '', answer: '' }]);
+      };
+    const handleDeleteIntroduceBox = (index: number) => {
+    setIntroduceBoxes((prevBoxes) => prevBoxes.filter((_, i) => i !== index));
+    };
+    
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
     };
@@ -143,13 +127,13 @@ const StepDetailPage = () => {
         setSelectedChip(Stateitems);
     };
 
-    const handleQuestionTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuestionTextFieldValue(event.target.value);
-    };
+    // const handleQuestionTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setQuestionTextFieldValue(event.target.value);
+    // };
 
-    const handleAnswerTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAnswerTextFieldValue(event.target.value);
-    };
+    // const handleAnswerTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setAnswerTextFieldValue(event.target.value);
+    // };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
@@ -253,6 +237,7 @@ const StepDetailPage = () => {
                                 </div>
                             )}
                             onSelect={handleDropdownStateSelect}
+                            sx={{bgcolor:`${colors.primary[10]}`, color: `${colors.primary.normal}`}}
                         />
                     </Box>
                 </Box>
@@ -315,21 +300,28 @@ const StepDetailPage = () => {
                                     },
                                 }}
                                 endIcon={<AddIcon />}
-                                onClick={() => alert('문항 추가하기 버튼 클릭됨')}
-                            >
+                                onClick={handleAddIntroduceBox}
+                                
+                                >
                                 문항 추가하기
                             </Button>
                         </Box>
-                        <Box gap="8px" display="flex" flexDirection="column">
-                            <IntroduceBox
-                                questionTextFieldValue={questionTextFieldValue}
-                                handleQuestionTextFieldChange={handleQuestionTextFieldChange}
-                                answerTextFieldValue={answerTextFieldValue}
-                                handleAnswerTextFieldChange={handleAnswerTextFieldChange}
-                            />
-                        </Box>
-                    </Box>
+          <Box gap="8px" display="flex" flexDirection="column">
+          {introduceBoxes.map((box, index) => (
+              <IntroduceBox
+                key={index}
+                boxNumber={index + 1}
+                questionTextFieldValue={box.question}
+                handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
+                answerTextFieldValue={box.answer}
+                handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
+                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)} // 삭제 핸들러 전달
+                />
+            ))}
+          </Box>
+          </Box>
 
+                    {/*핵심경험*/}
                     <Box
                         sx={{
                             display: 'flex',

@@ -74,27 +74,28 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, renderItem, onSe
 
   return (
     <div>
-      <StyledButton onClick={handleClick} open={open} sx={sx}>
-        {selectedItem ? (
-          <Chip 
-            text={selectedItem.text}
-            backgroundColor={selectedItem.color}
-            image={selectedItem.image}
-          />
-        ) : (
-          <Box display="flex" alignItems="center" gap='8px'>
-            {buttonText}
-            <img 
-              src={Arrow} 
-              alt="icon" 
-              style={{ 
-                transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
-                transition: 'transform 0.3s',
-              }} 
-            />
-          </Box>
-        )}
-      </StyledButton>
+<StyledButton onClick={handleClick} open={open} sx={sx}>
+  <Box display="flex" alignItems="center" gap='8px'>
+    {selectedItem ? (
+      <Chip 
+        text={selectedItem.text}
+        backgroundColor={selectedItem.color}
+        image={selectedItem.image}
+      />
+    ) : (
+      buttonText
+    )}
+    <img 
+      src={Arrow} 
+      alt="icon" 
+      style={{ 
+        transform: open ? 'rotate(180deg)' : 'rotate(0deg)', 
+        transition: 'transform 0.3s',
+      }} 
+    />
+  </Box>
+</StyledButton>
+
       <StyledMenu
         anchorEl={anchorEl}
         open={open}
