@@ -9,6 +9,7 @@ import File from '../../../assets/blueFile.svg';
 import Edit from '../../../assets/edit.svg';
 import Communication from '../../../assets/communication.png';
 import Interface from '../../../assets/interface.svg';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 
 interface Schedule {
   scheduleId: number;
@@ -123,11 +124,24 @@ const DetailList: React.FC = () => {
       case '서류':
         return File; 
       case '중간':
-        return Interface; // Replace with your actual image path
+        return Interface; 
       case '면접':
-        return Communication; // Replace with your actual image path
+        return Communication; 
       default:
-        return '/images/chip-default.png'; // Replace with your actual image path
+        return File; 
+    }
+  };
+
+  const getProgressTextColor = (type: string) => {
+    switch (type) {
+      case '서류':
+        return colors.system.PositiveBlue;
+      case '중간':
+        return colors.neutral[20];
+      case '면접':
+        return colors.secondary.normal;
+      default:
+        return colors.neutral[20];
     }
   };
 
@@ -182,12 +196,25 @@ const DetailList: React.FC = () => {
                   <Typography mb='8px' style={typography.xSmall2Bold}>
                     {item.company} | {item.department}
                   </Typography>
-                  <Chip 
+                  <Box display='flex' alignItems='center' gap='8px'>
+                   <Chip 
                     text={getDdayText(item.dday, item.type)} 
                     backgroundColor={chipColor.backgroundColor} 
                     textColor={chipColor.textColor} 
-                    image={chipImage} // Pass the image source
-                  />
+                    image={chipImage}
+                  /> 
+                  <Box display='flex' alignItems='center' gap='8px'>
+                  <CreateOutlinedIcon sx={{ width: '16px', color: getProgressTextColor(item.type) }} />
+                  <Typography
+                    style={{
+                      ...typography.xSmall2Med,
+                      color: getProgressTextColor(item.type)
+                    }}
+                  >
+                      {item.progress}</Typography>
+                  </Box>
+                  </Box>
+                  
                 </Box>
               );
             })
