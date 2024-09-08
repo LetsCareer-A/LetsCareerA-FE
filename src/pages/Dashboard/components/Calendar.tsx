@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
+import React from 'react';
+import FullCalendar, { EventInput } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Box, Typography, useTheme } from '@mui/material';
 import '../../../styles/calendar.css';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
-import { getCalendar } from '../../../api/Dashboard/getCalendar';
 
 interface Event {
   title: string;
@@ -15,46 +14,22 @@ interface Event {
   department: string;
 }
 
-const Calendar: React.FC = () => {
+interface CalendarProps {
+  events: Event[];
+  docCount: number;
+  midCount: number;
+  interviewCount: number;
+  setCurrentMonth: (month: number) => void;
+}
+
+const Calendar: React.FC<CalendarProps> = ({ events, docCount, midCount, interviewCount, setCurrentMonth }) => {
   const theme = useTheme();
-  const [events, setEvents] = useState<Event[]>([]);
-  const [docCount, setDocCount] = useState<number>(0); 
-  const [midCount, setMidCount] = useState<number>(0);
-  const [interviewCount, setInterviewCount] = useState<number>(0);
-  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
-
-  useEffect(() => {
-    const fetchData = async (month: number) => {
-      try {
-        const response = await getCalendar(month);
-        if (response.code === 200) {
-          const fetchedEvents = response.data.schedules.map((item: any) => ({
-            title: `${item.company} - ${item.department}`,
-            date: item.deadline,
-            company: item.company,
-            department: item.department,
-          }));
-          setEvents(fetchedEvents);
-          setDocCount(response.data.docCount); 
-          setMidCount(response.data.midCount); 
-          setInterviewCount(response.data.interviewCount); 
-        }
-      } catch (error) {
-        console.error('Failed to fetch schedules:', error);
-      }
-    };
-
-    fetchData(currentMonth); 
-  }, [currentMonth]); 
-
-  useEffect(() => {
-
-  }, [events]);
 
   const handleDateClick = (arg: any) => {
     const newEventTitle = prompt('Enter event title');
     if (newEventTitle) {
-      setEvents([...events, { title: newEventTitle, date: arg.dateStr, company: '', department: '' }]);
+      // 여기서 이벤트를 추가하려면 상위 컴포넌트에 함수를 전달해야 합니다.
+      // 현재 구조에서는 바로 추가할 수 없으므로 추후 구현 필요
     }
   };
 
@@ -134,7 +109,7 @@ const Calendar: React.FC = () => {
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        events={events} 
+        events={events as EventInput[]} 
         dateClick={handleDateClick}
         eventClick={handleEventClick}
         editable
