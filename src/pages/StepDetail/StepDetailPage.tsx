@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import fileImage from '../../assets/ill_file.png';
 import Toast from '../../components/Toast';
+import hat from '../../assets/hat.png';
 
 const items = [
     { 
@@ -77,7 +78,6 @@ const StepDetailPage = () => {
     const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState(''); // Toast 메시지 상태 추가
-    const [toastDescription, setToastDescription] = useState(''); // 추가된 상태
 
 
     const handleExperienceBoxClick = () => {
@@ -154,47 +154,92 @@ const StepDetailPage = () => {
 
             <Stack spacing={'16px'} mt={3}>
                 {/* 서류 전형 단계 박스 */}
-                <Box sx={{ display: 'flex', width: '1043px', height: '273px', flexDirection: 'column', padding: '25px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                    <Box sx={{display: 'flex', width: '100px', paddingBottom: '4px', flexDirection: 'column', alignItems: 'center', gap: '4px', marginLeft: '23px', marginTop: '28px'}} >
-                        <Box sx={{ display: 'flex', width: 100, height: 100, padding: '3px 3px', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', bgcolor: `${colors.primary[80]}`}}>
-                            <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
-                        </Box>
-                        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-                            서류전형
-                        </Typography>
-                        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-                            24.08.30
-                        </Typography>
-                        <Dropdown
-                            buttonText={
-                                <div className="inline-flex h-7 py-[3px] pl-3 pr-2 justify-center items-center gap-2 flex-shrink-0">
-                                    <Typography className="text-sm text-primary-normal">
-                                        진행중
-                                    </Typography>
-                                </div>
-                            }
-                            items={items}
-                            renderItem={(item) => (
-                                <div
-                                    className={`flex items-center rounded-md px-3 py-1 bg-${item.color} text-primary-normal`}
-                                >
-                                    {item.text}
-                                </div>
-                            )}
-                            onSelect={handleDropdownSelect}
-                        />
-                    </Box>
-                </Box>
-                <Box
-                    sx={{
-                        width: '1043px',
-                        height: '55px',
-                        backgroundImage: `url(${banner})`,
-                        border: `1px solid ${colors.neutral[95]}`,
-                        cursor: 'pointer'
-                    }}
-                    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
-                />
+                <Box sx={{ 
+    display: 'flex', 
+    width: '1043px', 
+    height: '273px', 
+    flexDirection: 'column', 
+    padding: '25px', 
+    borderRadius: '12px', 
+    border: `1px solid ${colors.neutral[85]}`, 
+    backgroundColor: colors.neutral[100],
+    position: 'relative' // 부모 컨테이너에 상대적 위치 설정 추가
+}}>
+    {/* ::before 가상 요소를 통해 파란색 선 추가 */}
+    <Box
+        sx={{
+            content: '""', // 빈 문자열로 설정
+            position: 'absolute',
+            top: '0px', // 상단에 배치
+            left: '50px',
+            width: '96px', // 부모 요소의 전체 너비로 설정
+            height: '3px', // 파란 선 높이
+            backgroundColor: `${colors.primary[80]}`, // 파란색 선 색상
+            bordertRadius: '12px', // 박스의 border-radius와 맞추기
+        }}
+    />
+    
+    <Box 
+        sx={{ 
+            display: 'flex', 
+            width: '100px', 
+            paddingBottom: '4px', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            gap: '4px', 
+            marginLeft: '23px', 
+            marginTop: '10px',
+            position: 'relative' 
+        }} 
+    >
+        <Box 
+            sx={{ 
+                display: 'flex', 
+                width: 100, 
+                height: 100, 
+                padding: '3px 3px', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                borderRadius: '8px', 
+                bgcolor: `${colors.primary[80]}` 
+            }}
+        >
+            <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
+        </Box>
+        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
+            서류전형
+        </Typography>
+        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
+            24.08.30
+        </Typography>
+        <Dropdown
+            buttonText={'진행중'}
+            items={dropdownItems}
+            renderItem={(item) => (
+                <div
+                    className={`flex items-center rounded-md px-3 py-1 bg-${item.color} text-primary-normal`}
+                >
+                    {item.text}
+                </div>
+            )}
+            onSelect={handleDropdownSelect}
+        />
+    </Box>
+</Box>
+
+
+{/* 하단 박스 */}
+<Box
+    sx={{
+        width: '1043px',
+        height: '55px',
+        backgroundImage: `url(${banner})`,
+        border: `1px solid ${colors.neutral[95]}`,
+        cursor: 'pointer'
+    }}
+    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
+/>
+
 
                 {/* 배너 및 컨텐츠 */}
                 <Stack spacing={'16px'} direction={'row'}>
