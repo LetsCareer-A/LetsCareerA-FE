@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Pagination } from '@mui/material';
 import typography from '../../../styles/typography';
-import Chip from '../../../components/Chips';
+import Chip from '../../../components/Chips'; // Import the Chip component
 import colors from '../../../styles/colors';
 import { getDetailSchedule } from '../../../api/Dashboard/getDetailSchedule';
 import useCalendarStore from '../../../store/calendarStore'; 
@@ -37,7 +37,6 @@ const DetailList: React.FC = () => {
           setAllSchedules(fetchedSchedules);
           setTotalCount(response.data.totalCount);
 
-          // 현재 페이지의 데이터를 설정
           const startIndex = (page - 1) * ITEMS_PER_PAGE;
           const endIndex = startIndex + ITEMS_PER_PAGE;
           setSchedules(fetchedSchedules.slice(startIndex, endIndex));
@@ -75,6 +74,16 @@ const DetailList: React.FC = () => {
   };
 
   const { date, dayOfWeek } = getCurrentDateWithDay();
+
+  const getDdayText = (dday: number) => {
+    if (dday > 0) {
+      return `D+${dday}`;
+    } else if (dday === 0) {
+      return `D-DAY`;
+    } else {
+      return `D${dday}`;
+    }
+  };
 
   return (
     <Box
@@ -124,7 +133,7 @@ const DetailList: React.FC = () => {
                 <Typography mb='8px' style={typography.xSmall2Bold}>
                   {item.company} | {item.department}
                 </Typography>
-                <Chip text={`서류 마감까지 D${item.dday}`} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
+                <Chip text={getDdayText(item.dday)} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
               </Box>
             ))
           )}
