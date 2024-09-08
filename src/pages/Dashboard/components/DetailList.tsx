@@ -5,6 +5,10 @@ import Chip from '../../../components/Chips'; // Import the Chip component
 import colors from '../../../styles/colors';
 import { getDetailSchedule } from '../../../api/Dashboard/getDetailSchedule';
 import useCalendarStore from '../../../store/calendarStore'; 
+import File from '../../../assets/blueFile.svg';
+import Edit from '../../../assets/edit.svg';
+import Communication from '../../../assets/communication.png';
+import Interface from '../../../assets/interface.svg';
 
 interface Schedule {
   scheduleId: number;
@@ -75,13 +79,55 @@ const DetailList: React.FC = () => {
 
   const { date, dayOfWeek } = getCurrentDateWithDay();
 
-  const getDdayText = (dday: number) => {
+  const getDdayText = (dday: number, type: string) => {
+    let typeText = '';
+  
+    switch (type) {
+      case '면접':
+        typeText = '면접일까지';
+        break;
+      case '중간':
+        typeText = '중간 전형일까지';
+        break;
+      case '서류':
+        typeText = '서류 마감까지';
+        break;
+      default:
+        typeText = '';
+    }
+  
     if (dday > 0) {
-      return `D+${dday}`;
+      return `${typeText} D+${dday}`;
     } else if (dday === 0) {
-      return `D-DAY`;
+      return `${typeText} D-DAY`;
     } else {
-      return `D${dday}`;
+      return `${typeText} D${dday}`;
+    }
+  };
+
+  const getChipColor = (type: string) => {
+    switch (type) {
+      case '서류':
+        return { backgroundColor: 'rgba(81, 119, 255, 0.10)', textColor: colors.system.PositiveBlue };
+      case '중간':
+        return { backgroundColor: colors.neutral[90], textColor: colors.neutral[20] };
+      case '면접':
+        return { backgroundColor: colors.secondary[10], textColor: colors.secondary.normal };
+      default:
+        return { backgroundColor: 'rgba(0, 0, 0, 0.10)', textColor: colors.neutral[60] };
+    }
+  };
+
+  const getChipImage = (type: string) => {
+    switch (type) {
+      case '서류':
+        return File; 
+      case '중간':
+        return Interface; // Replace with your actual image path
+      case '면접':
+        return Communication; // Replace with your actual image path
+      default:
+        return '/images/chip-default.png'; // Replace with your actual image path
     }
   };
 
@@ -120,22 +166,31 @@ const DetailList: React.FC = () => {
               </Typography>
             </Box>
           ) : (
-            schedules.map(item => (
-              <Box
-                key={item.scheduleId}
-                sx={{
-                  border: '1px solid #ddd',
-                  borderRadius: 1,
-                  mb: '8px',
-                  p: '12px',
-                }}
-              >
-                <Typography mb='8px' style={typography.xSmall2Bold}>
-                  {item.company} | {item.department}
-                </Typography>
-                <Chip text={getDdayText(item.dday)} backgroundColor='rgba(81, 119, 255, 0.10)' textColor={colors.system.PositiveBlue} />
-              </Box>
-            ))
+            schedules.map(item => {
+              const chipColor = getChipColor(item.type);
+              const chipImage = getChipImage(item.type);
+              return (
+                <Box
+                  key={item.scheduleId}
+                  sx={{
+                    border: '1px solid #ddd',
+                    borderRadius: 1,
+                    mb: '8px',
+                    p: '12px',
+                  }}
+                >
+                  <Typography mb='8px' style={typography.xSmall2Bold}>
+                    {item.company} | {item.department}
+                  </Typography>
+                  <Chip 
+                    text={getDdayText(item.dday, item.type)} 
+                    backgroundColor={chipColor.backgroundColor} 
+                    textColor={chipColor.textColor} 
+                    image={chipImage} // Pass the image source
+                  />
+                </Box>
+              );
+            })
           )}
         </Box>
       </Box>
