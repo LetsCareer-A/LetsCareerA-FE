@@ -22,6 +22,14 @@ import File from '../../assets/file.svg';
 import Communication from '../../assets/communication.svg';
 import Edit from '../../assets/edit.svg';
 import { postScheduleData } from '../../api/Dashboard/postSchedules';
+import { getCalendar } from '../../api/Dashboard/getCalendar'; 
+
+interface Event {
+  title: string;
+  date: string;
+  company: string;
+  department: string;
+}
 
 const DashboardPage = () => {
   const [open, setOpen] = useState(false);
@@ -30,6 +38,13 @@ const DashboardPage = () => {
   const [showToast, setShowToast] = useState(false); 
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
+
+  
+  const [events, setEvents] = useState<Event[]>([]);
+  const [docCount, setDocCount] = useState<number>(0); 
+  const [midCount, setMidCount] = useState<number>(0);
+  const [interviewCount, setInterviewCount] = useState<number>(0);
+  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
 
   const {
     companyName,
@@ -57,6 +72,29 @@ const DashboardPage = () => {
     }
   }, [isCheckboxChecked, modalStep]);
 
+  useEffect(() => {
+    const fetchData = async (month: number) => {
+      try {
+        const response = await getCalendar(month);
+        if (response.code === 200) {
+          const fetchedEvents: Event[] = response.data.schedules.map((item: any) => ({
+            title: `${item.company} ${item.department}`,
+            date: item.deadline,
+            company: item.company,
+            department: item.department,
+          }));
+          setEvents(fetchedEvents);
+          setDocCount(response.data.docCount); 
+          setMidCount(response.data.midCount); 
+          setInterviewCount(response.data.interviewCount); 
+        }
+      } catch (error) {
+        console.error('Failed to fetch schedules:', error);
+      }
+    };
+
+    fetchData(currentMonth); 
+  }, [currentMonth]); 
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -80,25 +118,56 @@ const DashboardPage = () => {
         console.log('isCheckboxChecked:', isCheckboxChecked);
         console.log('date:', date);
         console.log('link:', link);
-    
+  
+        const convertToKoreanTime = (date: Date | null) => {
+          if (!date) return '';
+          const koreanTimeOffset = 9 * 60 * 60 * 1000; 
+          const localDate = new Date(date.getTime() + koreanTimeOffset);
+          return localDate.toISOString().split('T')[0]; 
+        };
+  
         const scheduleData = {
           company: companyName,
           department: jobTitle,
           type: dropdownItem === '서류 준비 중' ? 'DOC' : dropdownItem === '면접 준비 중' ? 'INT' : 'MID',
           mid_name: dropdownItem === '중간 전형(직접 입력)' ? stageDetailInput : '',
           always: isCheckboxChecked,
-          date: isCheckboxChecked ? '' : (date ? date.toISOString().split('T')[0] : ''),
+          date: isCheckboxChecked ? '' : convertToKoreanTime(date),
           url: link || '',
         };
-    
+  
         console.log('scheduleData:', scheduleData);
-    
-        await postScheduleData(scheduleData);
-    
-        setToastMessage(`‘${companyName} ${jobTitle}’ 중간 전형에 대한 회고를 완료했어요!`);
-        setToastDescription('렛츠커리어와 함께 합격까지 달려보아요!');
-        setShowToast(true);
-        handleClose();
+  
+        const response = await postScheduleData(scheduleData);
+  
+        if (response.code === 200) {
+          const newEvent: Event = {
+            title: `${companyName} ${jobTitle}`,
+            date: scheduleData.date,
+            company: companyName,
+            department: jobTitle,
+          };
+  
+          const eventMonth = new Date(newEvent.date).getMonth() + 1;
+          if (eventMonth === currentMonth) {
+            setEvents([...events, newEvent]);
+          }
+  
+          if (scheduleData.type === 'DOC') {
+            setDocCount(docCount + 1);
+          } else if (scheduleData.type === 'INT') {
+            setInterviewCount(interviewCount + 1);
+          } else if (scheduleData.type === 'MID') {
+            setMidCount(midCount + 1);
+          }
+  
+          setToastMessage(`‘${companyName} ${jobTitle}’ 중간 전형에 대한 회고를 완료했어요!`);
+          setToastDescription('렛츠커리어와 함께 합격까지 달려보아요!');
+          setShowToast(true);
+          handleClose();
+        } else {
+          throw new Error('Failed to post schedule data');
+        }
       } catch (error) {
         console.error('Error during confirm:', error);
         setToastMessage('오류가 발생했습니다. 다시 시도해주세요.');
@@ -110,11 +179,6 @@ const DashboardPage = () => {
       setButtonText('등록 완료하기'); 
     }
   };
-  
-  
-    
-  
-  
 
   const handleCloseToast = () => {
     setShowToast(false);
@@ -160,7 +224,13 @@ const DashboardPage = () => {
         borderRadius='12px'
         sx={{ overflow: 'hidden' }}
       >
-        <Calendar />
+        <Calendar 
+          events={events} 
+          docCount={docCount} 
+          midCount={midCount} 
+          interviewCount={interviewCount} 
+          setCurrentMonth={setCurrentMonth} 
+        />
         <DetailList />
       </Box>
       <Box display='flex' gap='4px' justifyContent='space-between' borderRadius='12px' sx={{ overflow: 'hidden' }}>

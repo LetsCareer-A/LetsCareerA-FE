@@ -10,4 +10,4 @@ export const postTodo = async (todo: string) => {
     console.error('Error posting todo:', error);
     throw error;
   }
-};
+};  

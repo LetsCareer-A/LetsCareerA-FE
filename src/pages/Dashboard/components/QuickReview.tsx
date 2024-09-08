@@ -1,37 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import ReactPaginate from 'react-paginate';
 import { useTheme } from '@mui/material';
 import '../../../styles/pagination.css';
-
-// 예시 아이템 데이터
-const items = Array.from({ length: 10 }, (_, index) => `아이템 ${index + 1}`);
+import { getFastReview } from '../../../api/Dashboard/getFastReview';
 
 const QuickReview: React.FC = () => {
     const theme = useTheme();
-
     const [page, setPage] = useState(0);
-    const itemsPerPage = 4;
-    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const [fastReviews, setFastReviews] = useState<any[]>([]); 
+    const itemsPerPage = 4; 
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await getFastReview(page + 1, itemsPerPage); 
+                if (response && response.data) {
+                    setFastReviews(response.data.fastReviews || []); 
+                    setTotalPages(Math.ceil(response.data.total / itemsPerPage)); 
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setFastReviews([]);
+            }
+        };
+        fetchData();
+    }, [page]);
 
     const handlePageClick = (event: { selected: number }) => {
-        setPage(event.selected);
+        setPage(event.selected); 
     };
-
-    // 현재 페이지에 맞는 아이템들만 필터링
-    const currentItems = items.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
 
     return (
         <Box 
             p='12px' 
             width='181px' 
+            height='432px'
             sx={{
                 background: colors.primary[10],
                 borderRadius: '12px',
                 border: `1px solid ${colors.primary[30]}`,
-                boxShadow: '0px 0px 25px 0px rgba(0, 0, 0, 0.02)'
+                boxShadow: '0px 0px 25px 0px rgba(0, 0, 0, 0.02)',
+                display: 'flex',
+                flexDirection: 'column',
             }}
         >
             <Box display='flex' gap='8px' alignItems='center'>
@@ -40,7 +54,7 @@ const QuickReview: React.FC = () => {
                     style={typography.xSmallBold}
                     sx={{ color: theme.palette.primary.main }}
                 >
-                    {items.length}건
+                    {fastReviews.length}건
                 </Typography>
             </Box>
             <Typography 
@@ -50,38 +64,44 @@ const QuickReview: React.FC = () => {
             >
                 면접 또는 중간 전형 당일부터 3일 후까지 보여드려요.
             </Typography>
-            {/* 아이템 목록 */}
-            <Box display='flex' flexDirection='column' gap= '8px'>
-                {currentItems.map((item, index) => (
-                    <Box
-                    key={index} 
-                    height='62px'
-                    sx={{
-                        background: 'white',
-                        display: 'flex',
-                        flexDirection: 'column',  
-                        borderRadius: '12px',
-                        p: '8px'
-                    }}
-                >
-                    <Typography 
-                        key={index} 
-                        style={typography.xSmallMed} 
-                        color='#2A2D34'
-                    >
-                        {item}
-                    </Typography>
-                    <Typography 
-                        key={index} 
-                        style={typography.xSmall2Reg} 
+            <Box display='flex' flexDirection='column' gap='8px' flexGrow={1}>
+                {fastReviews.length > 0 ? (
+                    fastReviews.map((review, index) => (
+                        <Box
+                            key={index} 
+                            height='62px'
+                            sx={{
+                                background: 'white',
+                                display: 'flex',
+                                flexDirection: 'column',  
+                                borderRadius: '12px',
+                                p: '8px'
+                            }}
+                        >
+                            <Typography 
+                                style={typography.xSmallMed} 
+                                color='#2A2D34'
+                            >
+                                {review.company}
+                            </Typography>
+                            <Typography 
+                                style={typography.xSmall2Reg} 
+                                color='#7A7D84' 
+                            >
+                                {review.department}
+                            </Typography>
+                        </Box>
+                    ))
+                ) : (
+                    <Typography
+                        style={typography.xSmallBold} 
                         color='#7A7D84' 
+                        textAlign='center'
                     >
-                        인터렉션 디자이너
+                        데이터가 없습니다.
                     </Typography>
-                    </Box>
-                ))}
+                )}
             </Box>
-            {/* 페이지네이션 */}
             <Box display='flex' justifyContent='center' mt='16px' width='100%'>
                 <ReactPaginate
                     pageCount={totalPages}
@@ -99,8 +119,8 @@ const QuickReview: React.FC = () => {
                     breakLinkClassName={'page-link'}
                     activeClassName={'active'}
                     disabledClassName={'disabled'}
-                    previousLabel={<span>&lt;</span>} // 이전 페이지 텍스트
-                    nextLabel={<span>&gt;</span>}     // 다음 페이지 텍스트
+                    previousLabel={<span>&lt;</span>} 
+                    nextLabel={<span>&gt;</span>}    
                 />
             </Box>
         </Box>
