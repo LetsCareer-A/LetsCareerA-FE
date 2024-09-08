@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Box, Typography } from "@mui/material";
-import Delete from '../assets/delete.svg';
-import typography from "../styles/typography";
+import ClearIcon from '@mui/icons-material/Clear';import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 import CareerCard from './CareerCard';
+import Clear from '@mui/icons-material/Clear';
 
 type CareerMenuProps = {
   onClose: () => void;
@@ -71,9 +71,7 @@ const handleCompleteClose = () => {
         <Typography style={typography.smallBold}>
           어필할 경험
         </Typography>
-        <img 
-          src={Delete} 
-          alt="Delete" 
+        <ClearIcon
           style={{ cursor: 'pointer' }} 
           onClick={handleClose} 
         />

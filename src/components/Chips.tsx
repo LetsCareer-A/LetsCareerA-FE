@@ -14,7 +14,7 @@ const StyledChip = styled('div')<{ backgroundColor?: string }>(({ backgroundColo
   borderRadius: '6px',
   backgroundColor: backgroundColor || '#1BC47D', 
   color: '#FFF',
-  sx: {},
+  sx: {}
 }));
 
 interface ChipProps {

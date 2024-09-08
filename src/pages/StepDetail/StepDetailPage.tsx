@@ -14,6 +14,7 @@ import banner from '../../assets/banner.png';
 import fileImage from '../../assets/ill_file.png';
 import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; // IntroduceBox 컴포넌트 불러오기
+import SupportState from './components/SupportState';
 
 
 const items: DropdownItem[] = [
@@ -23,10 +24,10 @@ const items: DropdownItem[] = [
 ];
 
 const Stateitems: DropdownItem[] = [
-    { text: '진행중'},
-    { text: '진행완료'},
-    { text: '합격'},
-    { text: '불합격'},
+    { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+    { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+    { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+    { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
 ];
 
 
@@ -158,10 +159,12 @@ const StepDetailPage = () => {
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText="준비 단계를 선택해주세요."
+                        buttonText="준비 단계"
                         items={items}
-                        renderItem={(item) => <Chip text={item.text} backgroundColor={item.color} />}
+                        renderItem={(item) => 
+                        <Chip text={item.text} backgroundColor={item.color} />}
                         onSelect={handleDropdownSelect}
+                        sx={{width:142, height:44}}
                     />
                 </Box>
             </Stack>
@@ -172,7 +175,7 @@ const StepDetailPage = () => {
                         display: 'flex',
                         width: '1043px',
                         height: '273px',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         padding: '25px',
                         borderRadius: '12px',
                         border: `1px solid ${colors.neutral[85]}`,
@@ -182,7 +185,6 @@ const StepDetailPage = () => {
                 >
                     <Box
                         sx={{
-                            content: '""',
                             position: 'absolute',
                             top: '0px',
                             left: '50px',
@@ -192,7 +194,11 @@ const StepDetailPage = () => {
                             borderRadius: '12px',
                         }}
                     />
-                    <Box
+                    <SupportState dropdownItems={Stateitems} selectedChip={null} onDropdownSelect={function (Stateitems: DropdownItem): void {
+                        throw new Error('Function not implemented.');
+                    } }/>
+                    {/* 전형 추가 */}
+                     <Box
                         sx={{
                             display: 'flex',
                             width: '100px',
@@ -201,7 +207,7 @@ const StepDetailPage = () => {
                             alignItems: 'center',
                             gap: '4px',
                             marginLeft: '23px',
-                            marginTop: '15px',
+                            marginTop: '25px',
                             position: 'relative',
                         }}
                     >
@@ -214,31 +220,12 @@ const StepDetailPage = () => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: '8px',
-                                bgcolor: colors.primary[80],
+                                bgcolor: colors.primary[10],
                             }}
                         >
-                            <img src={fileImage} alt="file" style={{ width: '100%', height: '100%' }} />
+                            <AddIcon width={'12px'}/>
                         </Box>
-                        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-                            서류전형
-                        </Typography>
-                        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-                            24.08.30
-                        </Typography>
-                        <Dropdown
-                            buttonText="진행중"
-                            items={Stateitems}
-                            renderItem={(Stateitems) => (
-                                <div
-                                    className={`flex items-center rounded-md px-3 py-1`}
-                                    style={{color: colors.primary.normal }}
-                                >
-                                    {Stateitems.text}
-                                </div>
-                            )}
-                            onSelect={handleDropdownStateSelect}
-                            sx={{bgcolor:`${colors.primary[10]}`, color: `${colors.primary.normal}`}}
-                        />
+                        
                     </Box>
                 </Box>
 
