@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
 import { useParams } from 'react-router-dom';
+import CareerMenu from '../../components/CareerMenu'; // CareerMenu import 추가
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -56,7 +57,6 @@ const IntroduceBox: React.FC<{
             maxLength={1500}
             multiline
             rows={10}
-            maxRows={10}
             sx={{ height: '270px' }}
         />
     </Box>
@@ -74,7 +74,12 @@ const StepDetailPage = () => {
     const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
     const [questionTextFieldValue, setQuestionTextFieldValue] = useState('');
     const [answerTextFieldValue, setAnswerTextFieldValue] = useState('');
-    const [summary, setSummary] = useState(''); // summary 상태 추가
+    const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false); // CareerMenu 상태 추가
+
+    const handleExperienceBoxClick = () => {
+        console.log('핵심경험 사이드바 열기')
+        setIsCareerMenuVisible(!isCareerMenuVisible);
+    };
 
     const dropdownItems: DropdownItem[] = [
         { text: '공고진행중', color: colors.primary.normal },
@@ -90,7 +95,6 @@ const StepDetailPage = () => {
                 // 예: API 응답에서 데이터를 상태로 설정
                 setQuestionTextFieldValue(data.question || '');
                 setAnswerTextFieldValue(data.answer || '');
-                setSummary(data.summary || '');
             })
             .catch(error => console.error('데이터 로드 오류:', error));
     }, [scheduleId]);
@@ -238,22 +242,94 @@ const StepDetailPage = () => {
                     </Box>
 
                     {/* 핵심경험 */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: `1px solid ${colors.neutral[85]}`, backgroundColor: colors.neutral[100] }}>
-                        <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
-                            <Typography color={colors.neutral[10]} style={typography.smallBold}>
-                                핵심경험
-                            </Typography>
-                            <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-                                어필할 핵심 경험을 추가해보세요.
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <ExperinceBox />
-                            <ExperinceBox />
-                            <ExperinceBox />
-                            <ExperinceBox />
-                        </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '290px', height: '317px', padding: '16px', gap: '15px', borderRadius: '12px', border: isCareerMenuVisible? `1px solid ${colors.primary[30]}`: `1px solid ${colors.neutral[85]}`, backgroundColor: isCareerMenuVisible? ` ${colors.primary[10]}`: colors.neutral[100] }}>
+                <Box display={'flex'} flexDirection={'row'} gap={'8px'} alignItems={'center'}>
+                    <Typography color={colors.neutral[10]} style={typography.smallBold}>
+                        핵심경험
+                    </Typography>
+                    <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
+                        어필할 핵심 경험을 추가해보세요.
+                    </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: '260px',
+                            height: '55px',
+                            padding: '16px 8px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.neutral[85]}`,
+                            bgcolor: `${colors.neutral[100]}`,
+                            cursor: 'pointer',
+                        }}
+                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
+                    >
+                        <AddIcon sx={{ width: '24px', height: '24px' }} />
                     </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: '260px',
+                            height: '55px',
+                            padding: '16px 8px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.neutral[85]}`,
+                            bgcolor: `${colors.neutral[100]}`,
+                            cursor: 'pointer',
+                        }}
+                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
+                    >
+                        <AddIcon sx={{ width: '24px', height: '24px' }} />
+                    </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: '260px',
+                            height: '55px',
+                            padding: '16px 8px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.neutral[85]}`,
+                            bgcolor: `${colors.neutral[100]}`,
+                            cursor: 'pointer',
+                        }}
+                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
+                    >
+                        <AddIcon sx={{ width: '24px', height: '24px' }} />
+                    </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: '260px',
+                            height: '55px',
+                            padding: '16px 8px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.neutral[85]}`,
+                            bgcolor: `${colors.neutral[100]}`,
+                            cursor: 'pointer',
+                        }}
+                        onClick={handleExperienceBoxClick} // 클릭 이벤트 추가
+                    >
+                        <AddIcon sx={{ width: '24px', height: '24px' }} />
+                    </Box>
+                    
+                </Box>
+            </Box>
+
+            {/* CareerMenu 오버레이 */}
+            {isCareerMenuVisible && (
+        <CareerMenu
+        onClose={() => setIsCareerMenuVisible(false)}
+      />            )}
+
                 </Stack>
             </Stack>
         </Box>

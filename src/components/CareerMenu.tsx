@@ -5,7 +5,12 @@ import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 import CareerCard from './CareerCard';
 
-const CareerMenu = () => {
+type CareerMenuProps = {
+  onClose: () => void;
+};
+
+
+const CareerMenu =  ({ onClose }: CareerMenuProps) => {
   const [isVisible, setIsVisible] = useState(true); 
   const [isSliding, setIsSliding] = useState(false); 
 
@@ -13,6 +18,7 @@ const CareerMenu = () => {
     setIsSliding(true); 
     setTimeout(() => {
       setIsVisible(false); 
+      onClose(); // 부모 컴포넌트의 상태를 변경
     }, 300); 
   };
 
@@ -39,7 +45,7 @@ const CareerMenu = () => {
         width: '381px',
         height: '100%',
         backgroundColor: 'white',
-        zIndex: 1000, 
+        zIndex: 9999, 
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
         transform: isSliding ? 'translateX(-100%)' : 'translateX(0)', 
         transition: 'transform 0.3s ease-in-out',
@@ -94,50 +100,8 @@ const CareerMenu = () => {
           flexShrink: 0
         }}
       >
-        <PrimaryButton sx={{ width: '100%' }}>
+        <PrimaryButton sx={{ width: '100%' }} onClick={handleClose} >
           어필할 경험 추가 완료하기
-        </PrimaryButton>
-      </Box>
-
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: '60px',
-          left: 0,
-          width: '381px',
-          height: '124px',
-          padding: '20px 40px 68px 40px',
-          backgroundColor: '#FFF',
-          boxShadow: '0px 16px 20px rgba(0, 0, 0, 0.12), 0px 8px 16px rgba(0, 0, 0, 0.08), 0px 0px 8px rgba(0, 0, 0, 0.08)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexShrink: 0
-        }}
-      >
-        <PrimaryButton sx={{ width: '100%' }}>
-          어필할 경험 추가 완료하기
-        </PrimaryButton>
-      </Box>
-
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: '60px',
-          left: 0,
-          width: '381px',
-          height: '124px',
-          padding: '20px 40px 68px 40px',
-          backgroundColor: '#FFF',
-          boxShadow: '0px 16px 20px rgba(0, 0, 0, 0.12), 0px 8px 16px rgba(0, 0, 0, 0.08), 0px 0px 8px rgba(0, 0, 0, 0.08)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexShrink: 0
-        }}
-      >
-        <PrimaryButton sx={{ width: '100%' }}>
-          어필할 커리어 추가 완료하기
         </PrimaryButton>
       </Box>
     </Box>
