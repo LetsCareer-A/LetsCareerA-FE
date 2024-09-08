@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
-import { useParams } from 'react-router-dom';
-import CareerMenu from '../../components/CareerMenu';
+// import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -11,25 +10,24 @@ import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
-import fileImage from '../../assets/ill_file.png';
 import Toast from '../../components/Toast';
-import IntroduceBox from './components/IntroduceBox'; // IntroduceBox 컴포넌트 불러오기
+import IntroduceBox from './components/IntroduceBox'; 
 import SupportState from './components/SupportState';
 
-
+// Dropdown 메뉴 아이템
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
     { text: '최종 합격', color: '#4D55F5' },
     { text: '최종 불합격', color: '#FF566A' },
 ];
 
+// 상태 아이템
 const Stateitems: DropdownItem[] = [
     { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
     { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
     { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
     { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
 ];
-
 
 interface ExperienceBoxProps {
     card?: { chipText: string; title: string };
@@ -68,13 +66,12 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
 );
 
 const StepDetailPage = () => {
-    const { scheduleId } = useParams<{ scheduleId: string }>();
-
-    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
-    const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[] >([{ question: '', answer: '' }]);
+    // 상태 변수들 선언
+    const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
+    // const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]); // 추가
+    // const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null); //페이지 연결할때
 
     const handleQuestionTextFieldChange = (index: number) => (
         event: React.ChangeEvent<HTMLInputElement>
@@ -95,6 +92,7 @@ const StepDetailPage = () => {
     const handleAddIntroduceBox = () => {
         setIntroduceBoxes([...introduceBoxes, { question: '', answer: '' }]);
       };
+
     const handleDeleteIntroduceBox = (index: number) => {
     setIntroduceBoxes((prevBoxes) => prevBoxes.filter((_, i) => i !== index));
     };
@@ -103,37 +101,15 @@ const StepDetailPage = () => {
         setIsCareerMenuVisible((prev) => !prev);
     };
 
-    const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
-        setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]);
-        setToastMessage('핵심경험이 추가되었습니다!');
-        setTimeout(() => setToastMessage(''), 3000);
-        setIsCareerMenuVisible(false);
-    };
-
-    useEffect(() => {
-        fetch(`/api/schedules/${scheduleId}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setQuestionTextFieldValue(data.question || '');
-                setAnswerTextFieldValue(data.answer || '');
-            })
-            .catch((error) => console.error('데이터 로드 오류:', error));
-    }, [scheduleId]);
-
-    const handleDropdownSelect = (item: DropdownItem) => {
-        setSelectedChip(item);
-    };
-
-    const handleDropdownStateSelect = (Stateitems: DropdownItem) => {
-        setSelectedChip(Stateitems);
-    };
-
-    // const handleQuestionTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setQuestionTextFieldValue(event.target.value);
+    // const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
+        // setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
+    //     setToastMessage('핵심경험이 추가되었습니다!');
+    //     setTimeout(() => setToastMessage(''), 3000);
+    //     setIsCareerMenuVisible(false);
     // };
 
-    // const handleAnswerTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setAnswerTextFieldValue(event.target.value);
+    // const handleDropdownSelect = (item: DropdownItem) => {
+    //     // setSelectedChip(item); // 상태 업데이트
     // };
 
     return (
@@ -163,7 +139,7 @@ const StepDetailPage = () => {
                         items={items}
                         renderItem={(item) => 
                         <Chip text={item.text} backgroundColor={item.color} />}
-                        onSelect={handleDropdownSelect}
+                        // onSelect={handleDropdownSelect}
                         sx={{width:142, height:44}}
                     />
                 </Box>
@@ -194,9 +170,8 @@ const StepDetailPage = () => {
                             borderRadius: '12px',
                         }}
                     />
-                    <SupportState dropdownItems={Stateitems} selectedChip={null} onDropdownSelect={function (Stateitems: DropdownItem): void {
-                        throw new Error('Function not implemented.');
-                    } }/>
+<SupportState dropdownItems={Stateitems} selectedChip={null} onDropdownSelect={() => {}} />
+
                     {/* 전형 추가 */}
                      <Box
                         sx={{
@@ -338,12 +313,12 @@ const StepDetailPage = () => {
                         </Box>
                     </Box>
 
-                    {isCareerMenuVisible && (
+                    {/* {isCareerMenuVisible && (
                         <CareerMenu
                             onClose={() => setIsCareerMenuVisible(false)}
                             onComplete={handleCompleteButtonClick}
                         />
-                    )}
+                    )} */}
                 </Stack>
             </Stack>
 

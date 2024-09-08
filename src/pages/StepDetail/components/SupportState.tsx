@@ -12,7 +12,7 @@ interface SupportStateProps {
   onDropdownSelect: (item: DropdownItem) => void;
 }
 
-const SupportState: React.FC<SupportStateProps> = ({ dropdownItems, selectedChip, onDropdownSelect }) => {
+const SupportState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSelect }) => {
   return (
     <Box
         sx={{

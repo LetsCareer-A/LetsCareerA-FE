@@ -3,7 +3,6 @@ import { Box, Typography } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 import CareerCard from './CareerCard';
-import Clear from '@mui/icons-material/Clear';
 
 type CareerMenuProps = {
   onClose: () => void;
