@@ -12,8 +12,7 @@ import useCalendarStore from '../../../store/calendarStore';
 interface Event {
   title: string;
   date: string;
-  color: string;
-  backgroundColor: string; 
+  backgroundColor: string;
   textColor: string;
 }
 
@@ -31,56 +30,80 @@ const Calendar: React.FC = () => {
       try {
         const response = await getCalendar(month);
         if (response.code === 200) {
-          const fetchedEvents = response.data.schedules.map((item: any) => {
+          const groupedEvents: { [key: string]: Event[] } = response.data.schedules.reduce((acc: any, item: any) => {
+            const key = item.deadline;
             let backgroundColor;
             let textColor;
+
             switch (item.type) {
               case '서류':
                 backgroundColor = 'rgba(81, 119, 255, 0.20)';
-                textColor = colors.system.PositiveBlue
+                textColor = colors.system.PositiveBlue;
                 break;
               case '중간':
                 backgroundColor = colors.neutral[90];
-                textColor = colors.neutral[20]; 
+                textColor = colors.neutral[20];
                 break;
               case '면접':
-                backgroundColor = colors.secondary[10]
-                textColor = colors.secondary.normal
+                backgroundColor = colors.secondary[10];
+                textColor = colors.secondary.normal;
                 break;
               default:
-                backgroundColor = '#000000'; 
-                textColor = '#FFFFFF'; 
+                backgroundColor = '#000000';
+                textColor = '#FFFFFF';
             }
-            return {
-              title: `${item.company} - ${item.department}`,
+
+            if (!acc[key]) {
+              acc[key] = [];
+            }
+            acc[key].push({
+              title: `${item.company} ${item.department}`,
               date: item.deadline,
-              backgroundColor, 
-              textColor, 
-            };
+              backgroundColor,
+              textColor,
+            });
+            return acc;
+          }, {});
+
+          const mainEvents: Event[] = [];
+          const moreEvents: Event[] = [];
+
+          Object.values(groupedEvents).forEach((events: Event[]) => {
+            if (events.length > 2) {
+              mainEvents.push(...events.slice(0, 2));
+              moreEvents.push({
+                title: `+${events.length - 2}건`,
+                date: events[0].date, 
+                backgroundColor: '#CCCCCC', 
+                textColor: '#000000' 
+              });
+            } else {
+              mainEvents.push(...events);
+            }
           });
-          setEvents(fetchedEvents);
-          setDocCount(response.data.docCount); 
-          setMidCount(response.data.midCount); 
-          setInterviewCount(response.data.interviewCount); 
+
+
+          const transformedEvents = [...mainEvents, ...moreEvents];
+
+          setEvents(transformedEvents);
+          setDocCount(response.data.docCount);
+          setMidCount(response.data.midCount);
+          setInterviewCount(response.data.interviewCount);
         }
       } catch (error) {
         console.error('Failed to fetch schedules:', error);
       }
     };
 
-    fetchData(currentMonth); 
-  }, [currentMonth]); 
+    fetchData(currentMonth);
+  }, [currentMonth]);
 
   const handleDateClick = (arg: any) => {
-    setSelectedDate(arg.dateStr); 
-  };
-
-  const handleEventClick = (arg: any) => {
-    alert(`Event: ${arg.event.title}`);
+    setSelectedDate(arg.dateStr);
   };
 
   const handleDatesSet = (info: any) => {
-    const month = info.view.currentStart.getMonth() + 1; 
+    const month = info.view.currentStart.getMonth() + 1;
     setCurrentMonth(month);
   };
 
@@ -151,9 +174,8 @@ const Calendar: React.FC = () => {
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        events={events} 
+        events={events}
         dateClick={handleDateClick}
-        eventClick={handleEventClick}
         editable
         selectable
         locale="ko"
