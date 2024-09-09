@@ -79,7 +79,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
         <Box display="flex" alignItems="center" gap='8px'>
           {selectedItem ? (
             <Chip 
-              text={selectedItem.text as string}
+              text={selectedItem.text}
               backgroundColor={selectedItem.color}
               image={selectedItem.image}
               textColor={selectedItem.textColor}

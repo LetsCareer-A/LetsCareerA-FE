@@ -3,7 +3,9 @@ import { Box, Typography, Select, MenuItem } from '@mui/material';
 import Dropdown from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
-import fileImage from '../../../assets/ill_file.png'; // 파일 이미지 가져오기
+import fileImage from '../../../assets/ill_file.png';
+import interview from '../../../assets/intervew.png';
+import workcheck from '../../../assets/workcheck.png';
 import { DropdownItem } from '../../../components/Dropdown';
 
 interface SupportStateProps {
@@ -12,7 +14,7 @@ interface SupportStateProps {
   onDropdownSelect: (item: DropdownItem) => void;
 }
 
-const SupportState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSelect }) => {
+const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSelect }) => {
   return (
     <Box
         sx={{
@@ -95,4 +97,4 @@ const SupportState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSe
   );
 };
 
-export default SupportState;
+export default ReadyState;

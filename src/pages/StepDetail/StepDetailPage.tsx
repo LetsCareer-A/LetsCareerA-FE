@@ -12,8 +12,8 @@ import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
-import SupportState from './components/SupportState';
-import AddStateModal from './components/AddStateModal'; // AddStateModal 추가
+import ReadyState from './components/ReadyState';
+import AddStateModal from './components/AddStateModal';
 
 
 const items: DropdownItem[] = [
@@ -70,19 +70,35 @@ const StepDetailPage = () => {
     const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]); // 추가
-    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null); //페이지 연결할때
-    const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false); // AddStateModal 상태 추가
+    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
+    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
+    const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
+    const [readyStates, setReadyStates] = useState<DropdownItem[]>([]); //전형 상태 저장주
 
     // 면접 전형 추가 모달 관리
     const handleOpenAddStateModal = () => {
         setIsAddStateModalOpen(true);
     };
 
-    const handleCloseAddStateModal = () => {
+    const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
         setIsAddStateModalOpen(false);
+
+        if (selectedStep) {
+            setReadyStates((prevStates) => [...prevStates, selectedStep]);
+        }
     };
 
+     // ReadyState 렌더링
+     const renderReadyStates = () => {
+        return readyStates.map((state, index) => (
+            <ReadyState
+                key={index}
+                dropdownItems={Stateitems}
+                selectedChip={state}
+                onDropdownSelect={() => {}} // 선택한 상태 업데이트 기능 (추후 필요하면 추가)
+            />
+        ));
+    };
 
     // 자기소개서 관련 이벤트
     const handleQuestionTextFieldChange = (index: number) => (
@@ -122,7 +138,7 @@ const StepDetailPage = () => {
     };
 
     const handleDropdownSelect = (item: DropdownItem) => {
-        setSelectedChip(item); // 상태 업데이트
+        setSelectedChip(item);
     };
 
     return (
@@ -185,7 +201,8 @@ const StepDetailPage = () => {
                             borderRadius: '12px',
                         }}
                     />
-<SupportState dropdownItems={Stateitems} selectedChip={null} onDropdownSelect={() => {}} />
+                {/* 기존 준비 상태 렌더링 */}
+                {renderReadyStates()}
 
                     {/* 전형 추가 */}
                      <Box
@@ -340,10 +357,12 @@ const StepDetailPage = () => {
             </Stack>
 
             {/* AddStateModal 컴포넌트 */}
-            <AddStateModal
-                open={isAddStateModalOpen}
-                onClose={handleCloseAddStateModal}
-            />
+
+      <AddStateModal
+        open={isAddStateModalOpen}
+        onClose={handleCloseAddStateModal} // 전형 추가 시 handleCloseAddStateModal 호출
+        onAddState={(newState) => setReadyStates((prev) => [...prev, newState])} // 전형이 추가될 때 실행될 함수 전달
+      />
 
             {/* 토스트 */}
             {toastMessage && (
