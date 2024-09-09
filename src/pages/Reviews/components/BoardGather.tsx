@@ -38,8 +38,10 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
   };
 
   const handleReviewClick = (review: Review) => {
-    setSelectedReview(review);
-    setModalOpen(true);
+    if (review.isReviewed) {
+      setSelectedReview(review);
+      setModalOpen(true);
+    }
   };
 
   return (
@@ -74,7 +76,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
               borderRadius: '8px',
               backgroundColor: review.type === '면접 회고' ? 'rgba(27, 196, 125, 0.05)' : colors.neutral[95],
               padding: '12px 12px',
-              cursor: 'pointer'
+              cursor: review.isReviewed ? 'pointer' : 'default' 
             }}
             onClick={() => handleReviewClick(review)}
           >
