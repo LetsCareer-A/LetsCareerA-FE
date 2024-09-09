@@ -22,7 +22,7 @@ interface ReviewModalProps {
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedReview }) => {
-  const [reviewDetails, setReviewDetails] = useState<any>(null);
+  const [reviewData, setReviewData] = useState<any>(null);
   const [reviewInt, setReviewInt] = useState<any>(null);
 
   useEffect(() => {
@@ -31,10 +31,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
         try {
           const { scheduleId, stageId, reviewId, type } = selectedReview;
 
+          console.log(scheduleId, stageId, reviewId, type);
+
           let response;
           if (type === '중간 전형 회고') {
             response = await getReviewMid(scheduleId, stageId, reviewId);
-            setReviewDetails(response.data);
+            setReviewData(response.data);
           } else if (type === '면접 회고') {
             response = await getReviewInt(scheduleId, stageId, reviewId);
             setReviewInt(response.data);
@@ -42,7 +44,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
             console.warn('Unknown review type:', type);
             return;
           }
-
         } catch (error) {
           console.error('Error fetching review details:', error);
         }
@@ -53,9 +54,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
   }, [selectedReview]);
 
   if (!open) return null;
-
-  // Choose which data to display based on availability
-  const reviewData = reviewDetails || reviewInt;
 
   return (
     <>
@@ -101,29 +99,62 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
             color={colors.neutral[40]}
             sx={{ mt: 1 }}
           >
-            {reviewData ? 
-              `${reviewData.deadline ? `${reviewData.deadline}에 진행된` : '날짜가 설정되지 않은 일자의'} ${reviewData.type}입니다.` 
-              : '회고 데이터가 없습니다.'
+            {reviewData?.deadline ? 
+              `${reviewData.deadline}에 진행된 ${reviewData.type}` 
+              : '날짜가 설정되지 않은 일자의 회고입니다.'
             }
           </Typography>
 
-          <Box display='flex' flexDirection='column' gap='8px'>
+          {selectedReview?.type === '중간 전형 회고' && (
+            <>
+              <Box display='flex' flexDirection='column' gap='8px'>
+                <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+                  자유롭게 회고를 진행해주세요.
+                </Typography>
+                <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+                  {reviewData?.freeReview}
+                </Typography>
+              </Box>
+
+              <Box display='flex' flexDirection='column' gap='8px'>
+                <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+                  앞으로의 목표를 작성해주세요.
+                </Typography>
+                <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+                  {reviewData?.goal}
+                </Typography>
+              </Box>
+            </>
+          )}
+
+          {selectedReview?.type === '면접 회고' && (
+            <>
+            <Box>
+              <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+                면접 방법이 어땠나요?
+              </Typography>
+              <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+                {reviewInt?.details}
+              </Typography>
+            </Box>
+            <Box>
             <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
-              자유롭게 회고를 진행해주세요.
+              면접 질문과 답변을 기억 나는대로 작성해주세요.
             </Typography>
             <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-              {reviewData?.freeReview}
+              {reviewInt?.qa}
             </Typography>
           </Box>
-          
-          <Box display='flex' flexDirection='column' gap='8px'>
-            <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
-              앞으로의 목표를 작성해주세요.
-            </Typography>
-            <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-              {reviewData?.goal}
-            </Typography>
-          </Box>
+          <Box>
+          <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+          이번 면접으로 느낀 점을 자유롭게 작성해보세요.
+          </Typography>
+          <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+            {reviewInt?.feelings}
+          </Typography>
+        </Box>
+        </>
+          )}
         </Box>
       </Box>
     </>

@@ -1,9 +1,9 @@
 import axiosInstance from '..';
 
-export const getReviewInt = async (scheduleId: number, stageId: number, midReviewId: number) => {
+export const getReviewInt = async (scheduleId: number, stageId: number, intReviewId: number) => {
   try {
-    const response = await axiosInstance.get('/review/mid', {
-      params: { scheduleId, stageId, midReviewId }
+    const response = await axiosInstance.get('/review/int', {
+      params: { scheduleId, stageId, intReviewId }
     });
     console.log('API Response:', response.data); 
     return response.data;
