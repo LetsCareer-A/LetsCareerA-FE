@@ -8,7 +8,8 @@ import { getReviewInt } from '../../../api/Reviews/getReviewInt';
 
 interface Review {
   type: string;
-  freeReview: string;
+  freeReview?: string;
+  goal?: string;
   scheduleId: number;
   stageId: number;
   reviewId: number;
@@ -55,6 +56,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
 
   if (!open) return null;
 
+  const reviewInfo = selectedReview?.type === '중간 전형 회고' ? reviewData : reviewInt;
+
   return (
     <>
       <Backdrop
@@ -87,7 +90,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
               component="h2"
               color={colors.neutral[10]}
             >
-              {reviewData?.company} {reviewData?.department}
+              {reviewInfo?.company} {reviewInfo?.department}
             </Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon sx={{ width: 24, height: 24, color: colors.neutral[40] }} />
@@ -99,8 +102,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
             color={colors.neutral[40]}
             sx={{ mt: 1 }}
           >
-            {reviewData?.deadline ? 
-              `${reviewData.deadline}에 진행된 ${reviewData.type}` 
+            {reviewInfo?.deadline ? 
+              `${reviewInfo.deadline}에 진행된 ${reviewInfo.type}` 
               : '날짜가 설정되지 않은 일자의 회고입니다.'
             }
           </Typography>
@@ -129,31 +132,31 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
 
           {selectedReview?.type === '면접 회고' && (
             <>
-            <Box>
-              <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
-                면접 방법이 어땠나요?
-              </Typography>
-              <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-                {reviewInt?.details}
-              </Typography>
-            </Box>
-            <Box>
-            <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
-              면접 질문과 답변을 기억 나는대로 작성해주세요.
-            </Typography>
-            <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-              {reviewInt?.qa}
-            </Typography>
-          </Box>
-          <Box>
-          <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
-          이번 면접으로 느낀 점을 자유롭게 작성해보세요.
-          </Typography>
-          <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-            {reviewInt?.feelings}
-          </Typography>
-        </Box>
-        </>
+              <Box>
+                <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+                  면접 방법이 어땠나요?
+                </Typography>
+                <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+                  {reviewInt?.details}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+                  면접 질문과 답변을 기억 나는대로 작성해주세요.
+                </Typography>
+                <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+                  {reviewInt?.qa}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+                  이번 면접으로 느낀 점을 자유롭게 작성해보세요.
+                </Typography>
+                <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+                  {reviewInt?.feelings}
+                </Typography>
+              </Box>
+            </>
           )}
         </Box>
       </Box>
