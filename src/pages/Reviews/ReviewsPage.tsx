@@ -16,7 +16,6 @@ interface Company {
   company: string;
   department: string;
   reviews: Review[];
-  hasReviewed: boolean;
 }
 
 const ReviewPage = () => {
@@ -42,7 +41,7 @@ const ReviewPage = () => {
       const response = await getReviews(pageNumber, 3);
       const { total, companies } = response.data;
 
-      const totalPageCount = Math.ceil(total / 3); 
+      const totalPageCount = Math.ceil(total / 3);
 
       const transformedData: Company[] = companies.map((company: any) => {
         const reviews: Review[] = [
@@ -57,7 +56,7 @@ const ReviewPage = () => {
                 아직 진행되지 않은 회고입니다.
               </>
             ),
-            department: review.department
+            isReviewed: review.isReviewed
           })),
           ...company.midtermReviews.map((review: any) => ({
             type: '중간 전형 회고',
@@ -70,10 +69,10 @@ const ReviewPage = () => {
                 아직 진행되지 않은 회고입니다.
               </>
             ),
-            department: review.department
+            isReviewed: review.isReviewed
           }))
         ];
-      
+
         return {
           ...company,
           reviews
@@ -81,7 +80,7 @@ const ReviewPage = () => {
       });
 
       setCompanyData(transformedData);
-      setTotalPages(totalPageCount); 
+      setTotalPages(totalPageCount);
     } catch (error) {
       console.error('Error fetching company data:', error);
     } finally {
@@ -94,7 +93,7 @@ const ReviewPage = () => {
   }, [page]);
 
   if (loading) {
-    return <p>Loading...</p>; 
+    return <p>Loading...</p>;
   }
 
   return (
@@ -122,18 +121,16 @@ const ReviewPage = () => {
         mt='32px'
         height='auto' 
       >
-        {companyData.map((item, index) => {
-          return (
-            <Box key={index} onClick={() => handleOpen(item)}>
-              <BoardGather
-                company={item.company}
-                department={item.department}
-                reviews={item.reviews}
-                onClick={() => handleOpen(item)}
-              />
-            </Box>
-          );
-        })}
+        {companyData.map((item, index) => (
+          <Box key={index} onClick={() => handleOpen(item)}>
+            <BoardGather
+              company={item.company}
+              department={item.department}
+              reviews={item.reviews}
+              onClick={() => handleOpen(item)}
+            />
+          </Box>
+        ))}
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>

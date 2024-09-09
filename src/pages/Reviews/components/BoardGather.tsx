@@ -17,7 +17,7 @@ interface BoardGatherProps {
   company: string;
   department: string;
   reviews: Review[];
-  onClick: () => void; // 클릭 핸들러 추가
+  onClick: () => void;
 }
 
 const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews, onClick }) => {
@@ -30,14 +30,13 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews,
   };
 
   const handleButtonClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // 클릭 이벤트 전파 방지
-    // 버튼 클릭 시 동작을 정의합니다.
+    event.stopPropagation(); 
     alert('리뷰를 작성하려면 이 버튼을 클릭하세요!');
   };
 
   return (
     <Box 
-      onClick={onClick} // 클릭 핸들러 연결
+      onClick={onClick} 
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -47,23 +46,21 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews,
         border: '1px solid #EFEFEF',
         borderRadius: '12px',
         background: 'white',
-        cursor: 'pointer' // 클릭 가능한 느낌을 주기 위해
+        cursor: 'pointer'
       }}
     >
-      {/* 회사 이름 및 부서 */}
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
         <Typography sx={typography.small2Bold}>{company}</Typography>
         <Typography sx={typography.small2Bold}> | </Typography> 
         <Typography sx={typography.small2Bold}>{department}</Typography>
       </Box>
 
-      {/* 회고 상태 리스트 */}
       <Stack spacing={2}>
         {reviews.map((review, index) => (
           <Box 
             key={index} 
             sx={{
-              display: 'flex', // Flexbox 레이아웃 설정
+              display: 'flex',
               flexDirection: 'column',
               gap: '12px',
               border: `1px solid ${review.type === '면접 회고' ? colors.secondary[20] : colors.neutral[85]}`,
