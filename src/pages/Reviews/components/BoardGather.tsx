@@ -2,6 +2,8 @@ import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import Chip from '../../../components/Chips'; 
+import Chart from '../../../assets/chart.svg';
+import Commuincation from '../../../assets/communication.svg';
 
 interface Review {
   type: string;
@@ -14,8 +16,16 @@ interface BoardGatherProps {
   reviews: Review[];
 }
 
-
 const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews }) => {
+  const getChipIcon = (type: string) => {
+    if (type === '면접 회고') {
+      return Commuincation; 
+    } else if (type === '중간 전형 회고') {
+      return Chart; 
+    }
+  };
+  
+
   return (
     <Box 
       sx={{
@@ -26,7 +36,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
         padding: '16px',
         border: '1px solid #EFEFEF',
         borderRadius: '12px',
-        background: colors.neutral[100]
+        background: 'white'
       }}
     >
       {/* 회사 이름 및 부서 */}
@@ -44,18 +54,24 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
             sx={{
               border: `1px solid ${review.type === '면접 회고' ? colors.secondary[20] : colors.neutral[85]}`,
               borderRadius: '8px',                             
-              backgroundColor: review.type === '면접 회고' ? 'rgba(27, 196, 125, 0.05)' : colors.neutral[95],  // 조건부 배경색 설정              
+              backgroundColor: review.type === '면접 회고' ? 'rgba(27, 196, 125, 0.05)' : colors.neutral[95],           
               padding: '12px 12px',                            
             }}
           >
-            <Chip 
+            <Box >
+              <Chip 
               text={review.type}
-              backgroundColor={review.type === '면접 회고' ? '#1bC47d' : colors.neutral[20]} // 조건부 배경색 설정
-              textColor="#FFFFFF"                               
-            />
-            <Typography sx={{ typography: typography.xxSmall2, color: colors.neutral[35], marginTop: '12px'}}>
+              backgroundColor={review.type === '면접 회고' ? '#1bC47d' : colors.neutral[20]} 
+              textColor="#FFFFFF"
+              image={getChipIcon(review.type)} 
+              imageWidth='16px'
+            />            
+            </Box>
+            <Typography display='flex' alignItems='center' sx={{ typography: typography.xxSmall2, color: colors.neutral[35], marginTop: '12px'}}>
               {review.freeReview}
-            </Typography>
+            </Typography>  
+
+
           </Box>
         ))}
       </Stack>
