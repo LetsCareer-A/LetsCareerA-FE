@@ -1,25 +1,13 @@
-import { Box, Typography, Pagination, Modal } from '@mui/material';
+import { Box, Typography, Pagination } from '@mui/material';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import BoardGather from './components/BoardGather';
-import ReviewModal from './components/ReviewModal';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useReviewStore from '../../store/useReviewStore';
 
 const ReviewPage = () => {
   const { companyData, totalPages, page, fetchCompanyData, setPage } = useReviewStore();
-  const [open, setOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
-  const handleOpen = (company: Company) => {
-    setSelectedCompany(company);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedCompany(null);
-  };
 
   useEffect(() => {
     fetchCompanyData(page);
@@ -32,7 +20,7 @@ const ReviewPage = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          width: '100%',
+          width: '1048px',
           height: '32px',
           gap: '16px',
           alignItems: 'center'
@@ -52,12 +40,11 @@ const ReviewPage = () => {
         height="auto"
       >
         {companyData.map((item, index) => (
-          <Box key={index} onClick={() => handleOpen(item)}>
+          <Box key={index}>
             <BoardGather
               company={item.company}
               department={item.department}
               reviews={item.reviews}
-              onClick={() => handleOpen(item)}
             />
           </Box>
         ))}
@@ -78,9 +65,6 @@ const ReviewPage = () => {
         />
       </Box>
 
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title" aria-describedby="modal-description">
-        <ReviewModal companyData={selectedCompany} handleClose={handleClose} />
-      </Modal>
     </Box>
   );
 };

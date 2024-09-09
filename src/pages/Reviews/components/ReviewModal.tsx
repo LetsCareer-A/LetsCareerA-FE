@@ -1,11 +1,17 @@
-import { Box, Typography, Stack, IconButton } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Stack, IconButton, CircularProgress } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
-import CloseIcon from '@mui/icons-material/Close';
+import { getReviewMid } from '../../../api/Reviews/getReviewMid';
 
 interface Review {
   type: string;
   freeReview: string;
+  scheduleId: number; 
+  stageId: number;  
+  reviewId: number; 
+  isReviewed: boolean;
 }
 
 interface CompanyData {
@@ -15,32 +21,48 @@ interface CompanyData {
 }
 
 interface ReviewModalProps {
-  companyData: CompanyData | null;
+  open: boolean;
   handleClose: () => void;
+  companyData: CompanyData | null;
 }
 
-const ModalStyle = ({ question, answer }: { question: string; answer: string }) => {
-  return (
-    <Box 
-      sx={{
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'start', 
-        gap: '6px', 
-        alignSelf: 'stretch'
-      }}
-    >
-      <Typography color={colors.neutral[20]} style={typography.xSmallSemiBold}>
-        {question}
-      </Typography>
-      <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-        {answer}
-      </Typography>
-    </Box>
-  );
-};
+const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, companyData }) => {
+  const [reviewDetails, setReviewDetails] = useState<any>(null);  // 실제 데이터 형태에 맞게 설정
+  const [loading, setLoading] = useState<boolean>(true);
 
-const ReviewModal: React.FC<ReviewModalProps> = ({ companyData, handleClose }) => {
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (companyData && companyData.reviews.length > 0) {
+        try {
+          // isReviewed가 false인 리뷰에 대해서만 데이터 가져오기
+          const reviewsToFetch = companyData.reviews.filter(review => !review.isReviewed);
+          if (reviewsToFetch.length > 0) {
+            // 첫 번째 리뷰를 예로 사용
+            const review = reviewsToFetch[0];
+            const response = await getReviewMid(review.scheduleId, review.stageId, review.reviewId);
+            setReviewDetails(response.data);
+          }
+        } catch (error) {
+          console.error('Error fetching review details:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchDetails();
+  }, [companyData]);
+
+  if (!open) return null;
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (!companyData) return null;
 
   return (
@@ -79,7 +101,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ companyData, handleClose }) =
           color={colors.neutral[40]} 
           sx={{ mt: 1 }}
         >
-          2024년 08월 21일에 진행된 중간 전형에 대한 회고입니다.
+          {reviewDetails ? `${reviewDetails.deadline}에 진행된 중간 전형 회고입니다.` : '중간 전형 회고 데이터가 없습니다.'}
         </Typography>
       </Box>
   
@@ -94,13 +116,20 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ companyData, handleClose }) =
           marginTop: '32px',
         }}
       >
-        {companyData.reviews.map((review, index) => (
-          <ModalStyle 
-            key={index} 
-            question={review.type} 
-            answer={review.freeReview} 
-          />
-        ))}
+        <Typography 
+          id="modal-summary" 
+          style={typography.small2Bold} 
+          color={colors.neutral[90]}
+        >
+          회고 내용
+        </Typography>
+        <Typography 
+          id="modal-summary" 
+          style={typography.small2Reg} 
+          color={colors.neutral[50]}
+        >
+          {companyData.reviews[0]?.freeReview || '회고 내용이 없습니다.'}
+        </Typography>
       </Stack>
     </Box>
   );

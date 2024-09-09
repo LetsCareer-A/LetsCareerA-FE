@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
@@ -6,21 +7,28 @@ import Chart from '../../../assets/chart.svg';
 import Commuincation from '../../../assets/communication.svg';
 import { NormalButton } from '../../../components/CustomButton';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import ReviewModal from './ReviewModal'; 
 
 interface Review {
   type: string;
   freeReview: string;
   isReviewed: boolean;
+  scheduleId: number;
+  stageId: number;
+  reviewId: number | null;
 }
 
 interface BoardGatherProps {
   company: string;
   department: string;
   reviews: Review[];
-  onClick: () => void;
+  onClick: (scheduleId: number) => void;
 }
 
-const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews, onClick }) => {
+const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+
   const getChipIcon = (type: string) => {
     if (type === '면접 회고') {
       return Commuincation; 
@@ -29,19 +37,18 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews,
     }
   };
 
-  const handleButtonClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); 
-    alert('리뷰를 작성하려면 이 버튼을 클릭하세요!');
+  const handleReviewClick = (review: Review) => {
+    setSelectedReview(review);
+    setModalOpen(true);
   };
 
   return (
     <Box 
-      onClick={onClick} 
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        width: '337px',          
-        height: '670px',         
+        width: '337px',
+        height: '670px',
         padding: '16px',
         border: '1px solid #EFEFEF',
         borderRadius: '12px',
@@ -64,10 +71,12 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews,
               flexDirection: 'column',
               gap: '12px',
               border: `1px solid ${review.type === '면접 회고' ? colors.secondary[20] : colors.neutral[85]}`,
-              borderRadius: '8px',                             
-              backgroundColor: review.type === '면접 회고' ? 'rgba(27, 196, 125, 0.05)' : colors.neutral[95],           
-              padding: '12px 12px',                            
+              borderRadius: '8px',
+              backgroundColor: review.type === '면접 회고' ? 'rgba(27, 196, 125, 0.05)' : colors.neutral[95],
+              padding: '12px 12px',
+              cursor: 'pointer'
             }}
+            onClick={() => handleReviewClick(review)}
           >
             <Box sx={{ flexDirection:'column'}}>
               <Chip 
@@ -84,8 +93,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews,
 
             {!review.isReviewed && (
               <NormalButton
-                onClick={handleButtonClick} 
-                width="100%" 
+                width="100%"
                 padding="4px"
               >
                 회고 작성하기
@@ -95,6 +103,16 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews,
           </Box>
         ))}
       </Stack>
+
+      <ReviewModal 
+        open={modalOpen}
+        handleClose={() => setModalOpen(false)}
+        companyData={{
+          company,
+          department,
+          reviews: reviews.filter(review => review.scheduleId === selectedReview?.scheduleId)
+        }}
+      />
     </Box>
   );
 };
