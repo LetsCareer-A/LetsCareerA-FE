@@ -29,8 +29,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
         try {
           const { scheduleId, stageId, reviewId } = selectedReview;
           const response = await getReviewMid(scheduleId, stageId, reviewId);
-          console.log(scheduleId, stageId, reviewId )
-            setReviewDetails(response.data);
+          setReviewDetails(response.data);
         } catch (error) {
           console.error('Error fetching review details:', error);
         }
@@ -61,11 +60,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
           boxShadow: 24,
           p: 4,
           borderRadius: '16px',
-          gap: '32px',
           zIndex: 1300,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <Box sx={{ gap: '2px', position: 'relative' }}>
+        <Box sx={{ gap: '2px', position: 'relative', flex: '1', overflowY: 'auto' }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography
               id="modal-title"
@@ -73,7 +73,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
               component="h2"
               color={colors.neutral[10]}
             >
-              {reviewDetails?.company} {reviewDetails?.department} {selectedReview?.type}
+              {reviewDetails?.company} {reviewDetails?.department}
             </Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon sx={{ width: 24, height: 24, color: colors.neutral[40] }} />
@@ -85,36 +85,30 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
             color={colors.neutral[40]}
             sx={{ mt: 1 }}
           >
-            {reviewDetails ? `${reviewDetails.deadline}에 진행된 ${selectedReview?.type}입니다.` : '회고 데이터가 없습니다.'}
+            {reviewDetails ? 
+              `${reviewDetails.deadline ? `${reviewDetails.deadline}에 진행된` : '날짜가 설정되지 않은 일자의'} ${reviewDetails.type}입니다.` 
+              : '회고 데이터가 없습니다.'
+            }
           </Typography>
-        </Box>
 
-        <Stack
-          spacing={2}
-          sx={{
-            gap: '32px',
-            display: 'flex',
-            width: 592,
-            flexDirection: 'column',
-            alignItems: 'start',
-            marginTop: '32px',
-          }}
-        >
-          <Typography
-            id="modal-summary"
-            style={typography.small2Bold}
-            color={colors.neutral[90]}
-          >
-            회고 내용
-          </Typography>
-          <Typography
-            id="modal-summary"
-            style={typography.small2Reg}
-            color={colors.neutral[50]}
-          >
-            {reviewDetails?.freeReview || '회고 내용이 없습니다.'}
-          </Typography>
-        </Stack>
+          <Box display='flex' flexDirection='column' gap='8px'>
+            <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+              자유롭게 회고를 진행해주세요.
+            </Typography>
+            <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+              {reviewDetails?.freeReview}
+            </Typography>
+          </Box>
+          
+          <Box display='flex' flexDirection='column' gap='8px'>
+            <Typography mt='32px' color={colors.neutral[20]} style={typography.xSmallSemiold}>
+              앞으로의 목표를 작성해주세요.
+            </Typography>
+            <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
+              {reviewDetails?.goal}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     </>
   );
