@@ -95,10 +95,6 @@ const ReviewPage = () => {
     return <p>Loading...</p>; 
   }
 
-  const totalItems = companyData.length;
-  const rows = Math.ceil(totalItems / 3);
-  const totalCells = rows * 3;
-  const emptyCells = totalCells - totalItems;
 
   return (
     <Box>
@@ -109,13 +105,11 @@ const ReviewPage = () => {
           flexDirection: 'row',
           width: '100%',
           height: '32px',
-          marginTop: '40px',
-          marginLeft: '40px',
           gap: '16px',
           alignItems: 'center'
         }}
       >
-        <Typography sx={{ typography: typography.mediumBold, marginLeft: '12px' }}>회고 관리</Typography>
+        <Typography sx={{ typography: typography.mediumBold}}>회고 관리</Typography>
         <Typography sx={{ typography: typography.small2Reg, color: colors.neutral[40] }}>
           기업별로 진행한 회고를 볼 수 있어요
         </Typography>
@@ -137,10 +131,6 @@ const ReviewPage = () => {
               reviews={item.reviews}
             />
           </Box>
-        ))}
-
-        {Array.from(Array(emptyCells)).map((_, index) => (
-          <Box key={`empty-${index}`} sx={{ height: '100px' }} />
         ))}
       </Box>
 
