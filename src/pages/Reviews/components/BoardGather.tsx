@@ -107,11 +107,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
       <ReviewModal 
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
-        companyData={{
-          company,
-          department,
-          reviews: reviews.filter(review => review.scheduleId === selectedReview?.scheduleId)
-        }}
+        selectedReview={selectedReview}
       />
     </Box>
   );
