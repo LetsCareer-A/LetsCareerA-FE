@@ -14,7 +14,7 @@ import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
 import ReadyState from './components/ReadyState';
 import AddStateModal from './components/AddStateModal';
-
+import MidReview from './components/MidReview';
 
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
@@ -260,8 +260,10 @@ const StepDetailPage = () => {
                             gap: '10px',
                             border: `1px solid ${colors.neutral[85]}`,
                             backgroundColor: colors.neutral[100],
+                            justifyContent: 'center'
                         }}
                     >
+                        {/* 서류전형 - 자기소개서 */}
                         <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
                             <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
                                 <Typography color={colors.neutral[10]} style={typography.smallBold}>
@@ -302,19 +304,24 @@ const StepDetailPage = () => {
                                 문항 추가하기
                             </Button>
                         </Box>
-          <Box gap="8px" display="flex" flexDirection="column">
-          {introduceBoxes.map((box, index) => (
-              <IntroduceBox
-                key={index}
-                boxNumber={index + 1}
-                questionTextFieldValue={box.question}
-                handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
-                answerTextFieldValue={box.answer}
-                handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
-                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)}
-                />
-            ))}
-          </Box>
+                        <Box gap="8px" display="flex" flexDirection="column">
+                        {introduceBoxes.map((box, index) => (
+                            <IntroduceBox
+                                key={index}
+                                boxNumber={index + 1}
+                                questionTextFieldValue={box.question}
+                                handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
+                                answerTextFieldValue={box.answer}
+                                handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
+                                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)}
+                                />
+                            ))}
+                        </Box>
+
+                        {/* 중간전형 - 회고보드 */}
+
+          {/* <MidReview/> */}
+
           </Box>
 
                     {/*핵심경험*/}

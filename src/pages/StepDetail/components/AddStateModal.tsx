@@ -22,63 +22,60 @@ const items: DropdownItem[] = [
 ];
 
 interface AddStateModalProps {
-    open: boolean;
-    onClose: (selectedStep?: DropdownItem) => void;
-    onAddState: (newState: DropdownItem) => void; // 추가
+  open: boolean;
+  onClose: (selectedStep?: DropdownItem) => void;
+  onAddState: (newState: DropdownItem) => void; // 추가
 }
 
-  
 const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState }) => {
-    const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
-  
-    const [, setStartDate] = useState<Date | null>(null);
-    const { date, setDate } = useModalStore();
-  
-    const handleConfirm = () => {
-        // 전형 상태를 임의로 선택하거나 추가된 상태로 처리 (예시로 첫 번째 전형을 선택했다고 가정)
-        const selectedStep = items[0]; // 예시로 첫 번째 전형 단계를 선택
-    
-        onAddState(selectedStep); // 추가된 전형 상태 전달
-        onClose(); // 모달 닫기
-    };
-  
-    return (
-      <Modal
-        open={open}
-        onClose={onClose}
-        title="새로운 전형 추가"
-        confirmText="추가하기"
-        width="412px"
-        height="auto"
-        onConfirm={handleConfirm}  // 확인 버튼 클릭 시 handleConfirm 호출
+  const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
+  const [, setStartDate] = useState<Date | null>(null);
+  const { date, setDate } = useModalStore();
+
+  const handleConfirm = () => {
+    if (selectedState) {
+      onAddState(selectedState); // 사용자가 선택한 전형 상태 전달
+    }
+    onClose(); // 모달 닫기
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="새로운 전형 추가"
+      confirmText="추가하기"
+      width="412px"
+      height="auto"
+      onConfirm={handleConfirm}  // 확인 버튼 클릭 시 handleConfirm 호출
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          width: '372px',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          gap: '24px',
+          overflow: 'hidden',
+          marginTop: '20px',
+          marginBottom: '20px',
+        }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            width: '372px',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            gap: '24px',
-            overflow: 'hidden',
-            marginTop: '20px',
-            marginBottom: '20px',
-          }}
-        >
-          {/* 전형 단계 박스 */}
-          <Box display="flex" width={372} flexDirection="column" alignItems="flex-start" gap="8px">
-            <Label label="전형단계" required={true} />
-            {/* 전형 선택 드롭다운 */}
-            <Dropdown
-              buttonText="전형 단계를 선택해주세요."
-              items={items}
-              renderItem={(item) => (
-                <Chip text={item.text as string} backgroundColor={item.color} sx={{ height: '24px', padding: '4px 8px', gap: '4px' }} />
-              )}
-              sx={{ width: '195px', height: '44px' }}
-              onSelect={(item) => setSelectedState(item)} // 드롭다운 선택 시 선택된 전형 저장
-            />
-          </Box>
+        {/* 전형 단계 박스 */}
+        <Box display="flex" width={372} flexDirection="column" alignItems="flex-start" gap="8px">
+          <Label label="전형단계" required={true} />
+          {/* 전형 선택 드롭다운 */}
+          <Dropdown
+            buttonText="전형 단계를 선택해주세요."
+            items={items}
+            renderItem={(item) => (
+              <Chip text={item.text as string} backgroundColor={item.color} sx={{ height: '24px', padding: '4px 8px', gap: '4px' }} />
+            )}
+            sx={{ width: '195px', height: '44px' }}
+            onSelect={(item) => setSelectedState(item)} // 드롭다운 선택 시 선택된 전형 저장
+          />
+        </Box>
 
         {/* 전형 일자 설정 */}
         <Box display="flex" width={372} flexDirection="column" alignItems="flex-start" gap="8px">
