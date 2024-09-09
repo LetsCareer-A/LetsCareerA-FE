@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { Box, Typography, Pagination, Modal } from '@mui/material';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
-import { Box, Typography, Pagination, Modal } from '@mui/material';
 import BoardGather from './components/BoardGather';
 import ReviewModal from './components/ReviewModal';
 import { getReviews } from '../../api/Reviews/getReviews';
+import { useState, useEffect } from 'react';
 
 interface Review {
   type: string;
@@ -96,10 +96,9 @@ const ReviewPage = () => {
   if (loading) {
     return <p>Loading...</p>; 
   }
-  
+
   return (
     <Box>
-      {/* 페이지 상단의 제목 및 설명 */}
       <Box
         sx={{
           display: 'flex',
@@ -116,7 +115,6 @@ const ReviewPage = () => {
         </Typography>
       </Box>
 
-      {/* 회고록 그리드 */}
       <Box
         display='grid'
         gridTemplateColumns='repeat(3, 1fr)'
@@ -125,20 +123,19 @@ const ReviewPage = () => {
         height='auto' 
       >
         {companyData.map((item, index) => {
-          console.log(`Company: ${item.company}, Department: ${item.department}, Reviews:`, item.reviews); // 로그 추가
           return (
             <Box key={index} onClick={() => handleOpen(item)}>
               <BoardGather
                 company={item.company}
                 department={item.department}
                 reviews={item.reviews}
+                onClick={() => handleOpen(item)}
               />
             </Box>
           );
         })}
       </Box>
 
-      {/* 페이지 네이션 중앙 정렬 */}
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
         <Pagination
           count={totalPages}
@@ -154,7 +151,7 @@ const ReviewPage = () => {
         />
       </Box>
 
-      {/* 모달 창 */}
+      {/* Modal Component */}
       <Modal
         open={open}
         onClose={handleClose}

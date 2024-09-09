@@ -13,12 +13,11 @@ interface CompanyData {
   department: string;
   reviews: Review[];
 }
+
 interface ReviewModalProps {
   companyData: CompanyData | null;
   handleClose: () => void;
 }
-
-
 
 const ModalStyle = ({ question, answer }: { question: string; answer: string }) => {
   return (
@@ -31,7 +30,7 @@ const ModalStyle = ({ question, answer }: { question: string; answer: string }) 
         alignSelf: 'stretch'
       }}
     >
-      <Typography color={colors.neutral[20]} style={typography.xSmallSemiold}>
+      <Typography color={colors.neutral[20]} style={typography.xSmallSemiBold}>
         {question}
       </Typography>
       <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
