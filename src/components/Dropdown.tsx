@@ -6,7 +6,7 @@ import Arrow from '../assets/arrow.svg';
 
 export interface DropdownItem {
   color?: string | undefined;
-  text: string;
+  text?: string;
   backgroundColor?: string;
   textColor?: string; 
   image?: string;
@@ -38,8 +38,8 @@ const StyledMenu = styled(Menu)(() => ({
   '& .MuiList-root': {
     padding: 0,
     margin: 0,
-    maxHeight: '200px', // 메뉴의 최대 높이 설정
-    overflowY: 'auto', // 스크롤 가능하게 설정
+    maxHeight: '200px', 
+    overflowY: 'auto', 
   },
 }));
 
@@ -79,10 +79,11 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
         <Box display="flex" alignItems="center" gap='8px'>
           {selectedItem ? (
             <Chip 
-              text={selectedItem.text}
+              text={selectedItem.text as string}
               backgroundColor={selectedItem.color}
               image={selectedItem.image}
               textColor={selectedItem.textColor}
+              sx={{}}
             />
           ) : (
             buttonText
@@ -113,7 +114,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
               renderItem(item) // renderItem이 있는 경우 이를 사용
             ) : (
               <Chip 
-                text={item.text}
+                text={item.text as string}
                 backgroundColor={item.color}
                 image={item.image}
                 sx={{ width: '100%', display: 'flex', alignItems: 'center' }} // Chip 스타일 조정

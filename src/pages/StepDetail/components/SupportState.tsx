@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Select, MenuItem } from '@mui/material';
 import Dropdown from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
@@ -47,6 +47,30 @@ const SupportState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSe
         <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
             24.08.30
         </Typography>
+
+        {/* <Select
+          value={onDropdownSelect}
+          onChange={onDropdownSelect}
+          displayEmpty
+          fullWidth
+          sx={{
+            height: '56px',
+            borderRadius: '8px',
+            backgroundColor: `${colors.primary[10]}`,
+            border: `1px solid ${colors.neutral[85]}`,
+            style: `${typography.xSmall2Reg}`,
+            padding: '8px',
+          }}
+        >
+          <MenuItem value="" disabled>
+            상태를 선택하세요
+          </MenuItem>
+          <MenuItem value="진행중">진행중</MenuItem>
+          <MenuItem value="진행완료">진행완료</MenuItem>
+          <MenuItem value="합격">합격</MenuItem>
+          <MenuItem value="불합격">불합격</MenuItem>
+        </Select> */}
+
         <Dropdown
             buttonText="진행중"
             backgroundColor={colors.primary[10]}

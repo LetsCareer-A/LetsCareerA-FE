@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
-// import CareerMenu from '../../components/CareerMenu';
+import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -13,15 +13,15 @@ import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
 import SupportState from './components/SupportState';
+import AddStateModal from './components/AddStateModal'; // AddStateModal 추가
 
-// Dropdown 메뉴 아이템
+
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
     { text: '최종 합격', color: '#4D55F5' },
     { text: '최종 불합격', color: '#FF566A' },
 ];
 
-// 상태 아이템
 const Stateitems: DropdownItem[] = [
     { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
     { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
@@ -70,9 +70,21 @@ const StepDetailPage = () => {
     const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    // const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]); // 추가
-    // const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null); //페이지 연결할때
+    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]); // 추가
+    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null); //페이지 연결할때
+    const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false); // AddStateModal 상태 추가
 
+    // 면접 전형 추가 모달 관리
+    const handleOpenAddStateModal = () => {
+        setIsAddStateModalOpen(true);
+    };
+
+    const handleCloseAddStateModal = () => {
+        setIsAddStateModalOpen(false);
+    };
+
+
+    // 자기소개서 관련 이벤트
     const handleQuestionTextFieldChange = (index: number) => (
         event: React.ChangeEvent<HTMLInputElement>
         ) => {
@@ -97,24 +109,26 @@ const StepDetailPage = () => {
     setIntroduceBoxes((prevBoxes) => prevBoxes.filter((_, i) => i !== index));
     };
     
+    {/* 핵심경험 관련 이벤트*/}
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
     };
 
-    // const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
-        // setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
-    //     setToastMessage('핵심경험이 추가되었습니다!');
-    //     setTimeout(() => setToastMessage(''), 3000);
-    //     setIsCareerMenuVisible(false);
-    // };
+    const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
+     setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
+        setToastMessage('핵심경험이 추가되었습니다!');
+        setTimeout(() => setToastMessage(''), 3000);
+        setIsCareerMenuVisible(false);
+    };
 
-    // const handleDropdownSelect = (item: DropdownItem) => {
-    //     // setSelectedChip(item); // 상태 업데이트
-    // };
+    const handleDropdownSelect = (item: DropdownItem) => {
+        setSelectedChip(item); // 상태 업데이트
+    };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
             <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
+                {/* 헤더 */}
                 <ArrowBackIosNewIcon />
                 <Chip
                     text="D-4"
@@ -139,12 +153,13 @@ const StepDetailPage = () => {
                         items={items}
                         renderItem={(item) => 
                         <Chip text={item.text} backgroundColor={item.color} />}
-                        // onSelect={handleDropdownSelect}
+                        onSelect={handleDropdownSelect}
                         sx={{width:142, height:44}}
                     />
                 </Box>
             </Stack>
 
+            {/* 전형 준비 상태 */}
             <Stack spacing="16px" mt={3}>
                 <Box
                     sx={{
@@ -197,6 +212,7 @@ const StepDetailPage = () => {
                                 borderRadius: '8px',
                                 bgcolor: colors.primary[10],
                             }}
+                            onClick={handleOpenAddStateModal}
                         >
                             <AddIcon width={'12px'}/>
                         </Box>
@@ -204,6 +220,7 @@ const StepDetailPage = () => {
                     </Box>
                 </Box>
 
+                {/* 배너 */}
                 <Box
                     sx={{
                         width: '1043px',
@@ -215,6 +232,7 @@ const StepDetailPage = () => {
                     onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
                 />
 
+                {/* 자기소개서 */}
                 <Stack spacing="16px" direction="row">
                     <Box
                         sx={{
@@ -261,9 +279,8 @@ const StepDetailPage = () => {
                                         boxShadow: 'none',
                                     },
                                 }}
-                                endIcon={<AddIcon />}
-                                onClick={handleAddIntroduceBox}
-                                
+                                endIcon={<AddIcon />}   
+                                onClick={handleAddIntroduceBox}                             
                                 >
                                 문항 추가하기
                             </Button>
@@ -277,7 +294,7 @@ const StepDetailPage = () => {
                 handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
                 answerTextFieldValue={box.answer}
                 handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
-                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)} // 삭제 핸들러 전달
+                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)}
                 />
             ))}
           </Box>
@@ -313,15 +330,22 @@ const StepDetailPage = () => {
                         </Box>
                     </Box>
 
-                    {/* {isCareerMenuVisible && (
+                    {isCareerMenuVisible && (
                         <CareerMenu
                             onClose={() => setIsCareerMenuVisible(false)}
                             onComplete={handleCompleteButtonClick}
                         />
-                    )} */}
+                    )}
                 </Stack>
             </Stack>
 
+            {/* AddStateModal 컴포넌트 */}
+            <AddStateModal
+                open={isAddStateModalOpen}
+                onClose={handleCloseAddStateModal}
+            />
+
+            {/* 토스트 */}
             {toastMessage && (
                 <Toast
                     message="핵심 경험 등록을 완료했어요!"
