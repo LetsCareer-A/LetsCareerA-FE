@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import { Box, Typography, Stack, Pagination, Modal } from '@mui/material';
 import BoardGather from './components/BoardGather';
 import ReviewModal from './components/ReviewModal';
+import { getReviews } from '../../api/Reviews/getReviews';
 
 interface Review {
   type: string;
@@ -16,17 +17,13 @@ interface Company {
   reviews: Review[];
 }
 
-
-
 const ReviewPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
-
-  const companyData = [
-    { company: '네이버', department: 'UI 엔지니어', reviews: [{ type: '중간 전형 회고', freeReview: '이 회사의 UI 엔지니어는 매우 만족스럽습니다.' }] },
-    { company: '삼성', department: '프론트엔드', reviews: [{ type: '면접 회고', freeReview: '프론트엔드 개발 환경이 불편했습니다.' }] },
-    { company: '엘지', department: '백엔드', reviews: [{ type: '중간 전형 회고', freeReview: '백엔드 업무가 매우 힘들었습니다.' }] }
-  ];
+  const [companyData, setCompanyData] = useState<Company[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   const handleOpen = (company: Company) => {
     setSelectedCompany(company);
@@ -37,6 +34,53 @@ const ReviewPage = () => {
     setOpen(false);
     setSelectedCompany(null);
   };
+
+  const fetchCompanyData = async (pageNumber: number) => {
+    try {
+      const response = await getReviews(pageNumber, 3); // 페이지와 사이즈는 필요에 따라 조정
+      const { total, companies } = response.data;
+
+      // 페이지 수 계산
+      const totalPageCount = Math.ceil(total / 5); // size를 5로 설정
+
+      // 데이터 변환
+      const transformedData: Company[] = companies.map((company: any) => {
+        const reviews: Review[] = [
+          ...company.interviewReviews.map((review: any) => ({
+            type: '면접 회고',
+            freeReview: review.isReviewed ? `면접 회고가 있습니다. (기한: ${review.deadline})` : '면접 회고가 없습니다.',
+            department: review.department
+          })),
+          ...company.midtermReviews.map((review: any) => ({
+            type: '중간 전형 회고',
+            freeReview: review.isReviewed ? `중간 전형 회고가 있습니다. (기한: ${review.deadline})` : '중간 전형 회고가 없습니다.',
+            department: review.department
+          }))
+        ];
+
+        return {
+          company: company.company,
+          department: reviews.length > 0 ? reviews[0].department : '',
+          reviews
+        };
+      });
+
+      setCompanyData(transformedData);
+      setTotalPages(totalPageCount); // 페이지 수 업데이트
+    } catch (error) {
+      console.error('Error fetching company data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompanyData(page);
+  }, [page]);
+
+  if (loading) {
+    return <p>Loading...</p>; // 로딩 상태 처리
+  }
 
   return (
     <Box>
@@ -50,7 +94,8 @@ const ReviewPage = () => {
             height: '32px',
             marginTop: '40px',
             marginLeft: '40px',
-            gap: '16px'
+            gap: '16px',
+            alignItems:'center'
           }}
         >
           <Typography sx={{ typography: typography.mediumBold, marginLeft: '12px' }}>회고 관리</Typography>
@@ -76,7 +121,9 @@ const ReviewPage = () => {
       {/* 페이지 네이션 중앙 정렬 */}
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
         <Pagination
-          count={5}
+          count={totalPages}
+          page={page}
+          onChange={(event, value) => setPage(value)}
           color="primary"
           sx={{
             '& .MuiPaginationItem-root': {
