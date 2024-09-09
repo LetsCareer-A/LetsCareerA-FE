@@ -8,13 +8,13 @@ const StyledChip = styled('div')<{ backgroundColor?: string }>(({ backgroundColo
   height: '28px',
   padding: '4px 12px 3px 12px',
   justifyContent: 'center',
-  alignItems: 'center',
-  gap: '10px',
+  alignItems: 'center', 
+  gap: '8px', 
   flexShrink: 0,
   borderRadius: '6px',
   backgroundColor: backgroundColor || '#1BC47D', 
   color: '#FFF',
-  sx: {}
+  verticalAlign: 'middle', 
 }));
 
 interface ChipProps {
@@ -22,19 +22,32 @@ interface ChipProps {
   backgroundColor?: string;
   textColor?: string; 
   image?: string; 
-  imageWidth?: string; // Add imageWidth prop
-  imageHeight?: string; // Add imageHeight prop
+  imageWidth?: string; 
+  imageHeight?: string; 
   sx?: object;
 }
 
 const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor, image, imageWidth = '20px', imageHeight = '20px' }) => {
   return (
     <StyledChip backgroundColor={backgroundColor}>
-      {image && <img src={image} alt={text} style={{ width: imageWidth, height: imageHeight }} />} 
+      {image && (
+        <img
+          src={image}
+          alt={text}
+          style={{
+            width: imageWidth,
+            height: imageHeight,
+            display: 'inline-block',
+            verticalAlign: 'middle', 
+          }}
+        />
+      )}
       <Typography 
         sx={{ 
           color: textColor || 'white',
           ...typography.xxSmall2,
+          display: 'inline-block', 
+          verticalAlign: 'middle',
         }}
       >
         {text}
