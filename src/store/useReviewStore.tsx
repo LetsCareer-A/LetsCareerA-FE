@@ -1,15 +1,14 @@
 import create from 'zustand';
 import { getReviews } from '../api/Reviews/getReviews';
 
-interface Review {
+export interface Review {
   type: string;
   freeReview: string;
   isReviewed: boolean;
   scheduleId: number;
   stageId: number;
-  reviewId: number | null; 
+  reviewId: number | null;
 }
-
 interface Company {
   company: string;
   department: string;

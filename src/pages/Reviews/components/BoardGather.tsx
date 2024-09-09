@@ -8,21 +8,13 @@ import Commuincation from '../../../assets/communication.svg';
 import { NormalButton } from '../../../components/CustomButton';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import ReviewModal from './ReviewModal'; 
+import { Review } from '../../../store/useReviewStore';
 
-interface Review {
-  type: string;
-  freeReview: string;
-  isReviewed: boolean;
-  scheduleId: number;
-  stageId: number;
-  reviewId: number | null;
-}
 
 interface BoardGatherProps {
   company: string;
   department: string;
   reviews: Review[];
-  onClick: (scheduleId: number) => void;
 }
 
 const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews }) => {

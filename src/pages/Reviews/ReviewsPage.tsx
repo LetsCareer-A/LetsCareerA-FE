@@ -54,7 +54,7 @@ const ReviewPage = () => {
         <Pagination
           count={totalPages}
           page={page}
-          onChange={(event, value) => setPage(value)}
+          onChange={(_, value) => setPage(value)}
           color="primary"
           sx={{
             '& .MuiPaginationItem-root': {

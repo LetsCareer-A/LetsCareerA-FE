@@ -5,16 +5,7 @@ import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import { getReviewMid } from '../../../api/Reviews/getReviewMid';
 import { getReviewInt } from '../../../api/Reviews/getReviewInt';
-
-interface Review {
-  type: string;
-  freeReview?: string;
-  goal?: string;
-  scheduleId: number;
-  stageId: number;
-  reviewId: number;
-  isReviewed: boolean;
-}
+import { Review } from '../../../store/useReviewStore';
 
 interface ReviewModalProps {
   open: boolean;
@@ -36,11 +27,19 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
 
           let response;
           if (type === '중간 전형 회고') {
-            response = await getReviewMid(scheduleId, stageId, reviewId);
-            setReviewData(response.data);
+            if (reviewId !== null) {
+              response = await getReviewMid(scheduleId, stageId, reviewId);
+              setReviewData(response.data);
+            } else {
+              console.warn('Review ID is null for 중간 전형 회고');
+            }
           } else if (type === '면접 회고') {
-            response = await getReviewInt(scheduleId, stageId, reviewId);
-            setReviewInt(response.data);
+            if (reviewId !== null) { 
+              response = await getReviewInt(scheduleId, stageId, reviewId);
+              setReviewInt(response.data);
+            } else {
+              console.warn('Review ID is null for 면접 회고');
+            }
           } else {
             console.warn('Unknown review type:', type);
             return;
