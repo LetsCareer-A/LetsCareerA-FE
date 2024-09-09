@@ -55,14 +55,18 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const NormalButton = styled(Button)(({ theme }) => ({
+const NormalButton = styled(({ width, padding, ...otherProps }: CustomButtonProps) => (
+  <Button {...otherProps} />
+))(({ theme, width, padding }) => ({
   borderRadius: '12px',
-  padding: '8px 16px',
+  padding: padding || '8px 16px',
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
+  textAlign: 'center',
   gap: '8px',
   flexShrink: 0,
+  width: width || 'auto',
   backgroundColor: theme.palette.action.selected,
   color: theme.palette.primary.main,
   '&:disabled': {

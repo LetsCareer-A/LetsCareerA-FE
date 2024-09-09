@@ -9,12 +9,14 @@ import { getReviews } from '../../api/Reviews/getReviews';
 interface Review {
   type: string;
   freeReview: string;
+  isReviewed: boolean;
 }
 
 interface Company {
   company: string;
   department: string;
   reviews: Review[];
+  hasReviewed: boolean;
 }
 
 const ReviewPage = () => {
@@ -94,8 +96,7 @@ const ReviewPage = () => {
   if (loading) {
     return <p>Loading...</p>; 
   }
-
-
+  
   return (
     <Box>
       {/* 페이지 상단의 제목 및 설명 */}
@@ -123,15 +124,18 @@ const ReviewPage = () => {
         mt='32px'
         height='auto' 
       >
-        {companyData.map((item, index) => (
-          <Box key={index} onClick={() => handleOpen(item)}>
-            <BoardGather
-              company={item.company}
-              department={item.department}
-              reviews={item.reviews}
-            />
-          </Box>
-        ))}
+        {companyData.map((item, index) => {
+          console.log(`Company: ${item.company}, Department: ${item.department}, Reviews:`, item.reviews); // 로그 추가
+          return (
+            <Box key={index} onClick={() => handleOpen(item)}>
+              <BoardGather
+                company={item.company}
+                department={item.department}
+                reviews={item.reviews}
+              />
+            </Box>
+          );
+        })}
       </Box>
 
       {/* 페이지 네이션 중앙 정렬 */}
