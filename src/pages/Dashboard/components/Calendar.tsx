@@ -8,36 +8,32 @@ import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import { getCalendar } from '../../../api/Dashboard/getCalendar';
 import useCalendarStore from '../../../store/calendarStore';
-import { EventInput } from '@fullcalendar/core';
+
+interface Event {
+  title: string;
+  date: string;
+  backgroundColor: string;
+  textColor: string;
+}
 
 const Calendar: React.FC = () => {
   const theme = useTheme();
-  const { 
-    events, 
-    docCount, 
-    midCount, 
-    interviewCount, 
-    currentMonth, 
-    setEvents, 
-    setDocCount, 
-    setMidCount, 
-    setInterviewCount, 
-    setCurrentMonth, 
-    setSelectedDate 
-  } = useCalendarStore();
-  
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setSelectedDate } = useCalendarStore();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [docCount, setDocCount] = useState<number>(0); 
+  const [midCount, setMidCount] = useState<number>(0);
+  const [interviewCount, setInterviewCount] = useState<number>(0);
+  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
 
   useEffect(() => {
     const fetchData = async (month: number) => {
-      setLoading(true);
       try {
         const response = await getCalendar(month);
         if (response.code === 200) {
-          const groupedEvents: { [key: string]: EventInput[] } = response.data.schedules.reduce((acc: any, item: any) => {
+          const groupedEvents: { [key: string]: Event[] } = response.data.schedules.reduce((acc: any, item: any) => {
             const key = item.deadline;
-            let backgroundColor: string;
-            let textColor: string;
+            let backgroundColor;
+            let textColor;
 
             switch (item.type) {
               case '서류':
@@ -69,37 +65,38 @@ const Calendar: React.FC = () => {
             return acc;
           }, {});
 
-          const mainEvents: EventInput[] = [];
-          const moreEvents: EventInput[] = [];
+          const mainEvents: Event[] = [];
+          const moreEvents: Event[] = [];
 
-          Object.values(groupedEvents).forEach((events: EventInput[]) => {
+          Object.values(groupedEvents).forEach((events: Event[]) => {
             if (events.length > 2) {
               mainEvents.push(...events.slice(0, 2));
               moreEvents.push({
                 title: `+${events.length - 2}건`,
-                date: events[0].date,
-                backgroundColor: '#CCCCCC',
-                textColor: '#000000'
+                date: events[0].date, 
+                backgroundColor: '#CCCCCC', 
+                textColor: '#000000' 
               });
             } else {
               mainEvents.push(...events);
             }
           });
 
-          setEvents([...mainEvents, ...moreEvents]);
+
+          const transformedEvents = [...mainEvents, ...moreEvents];
+
+          setEvents(transformedEvents);
           setDocCount(response.data.docCount);
           setMidCount(response.data.midCount);
           setInterviewCount(response.data.interviewCount);
         }
       } catch (error) {
         console.error('Failed to fetch schedules:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchData(currentMonth);
-  }, [currentMonth, setEvents, setDocCount, setMidCount, setInterviewCount]);
+  }, [currentMonth]);
 
   const handleDateClick = (arg: any) => {
     setSelectedDate(arg.dateStr);
@@ -174,25 +171,21 @@ const Calendar: React.FC = () => {
         </Box>
       </Box>
 
-      {loading ? (
-        <Typography>Loading...</Typography>
-      ) : (
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          events={events}
-          dateClick={handleDateClick}
-          editable
-          selectable
-          locale="ko"
-          headerToolbar={{
-            left: 'prev title next',
-            center: '',
-            right: '',
-          }}
-          datesSet={handleDatesSet}
-        />
-      )}
+      <FullCalendar
+        plugins={[dayGridPlugin, interactionPlugin]}
+        initialView="dayGridMonth"
+        events={events}
+        dateClick={handleDateClick}
+        editable
+        selectable
+        locale="ko"
+        headerToolbar={{
+          left: 'prev title next',
+          center: '',
+          right: '',
+        }}
+        datesSet={handleDatesSet}
+      />
     </div>
   );
 };
