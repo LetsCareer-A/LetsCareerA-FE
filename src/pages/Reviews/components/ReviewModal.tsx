@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, IconButton, Backdrop } from '@mui/material';
+import { Box, Typography, IconButton, Backdrop } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
 import { getReviewMid } from '../../../api/Reviews/getReviewMid';
+import { getReviewInt } from '../../../api/Reviews/getReviewInt';
 
 interface Review {
   type: string;
@@ -22,14 +23,26 @@ interface ReviewModalProps {
 
 const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedReview }) => {
   const [reviewDetails, setReviewDetails] = useState<any>(null);
+  const [reviewInt, setReviewInt] = useState<any>(null);
 
   useEffect(() => {
     const fetchDetails = async () => {
       if (selectedReview) {
         try {
-          const { scheduleId, stageId, reviewId } = selectedReview;
-          const response = await getReviewMid(scheduleId, stageId, reviewId);
-          setReviewDetails(response.data);
+          const { scheduleId, stageId, reviewId, type } = selectedReview;
+
+          let response;
+          if (type === '중간 전형 회고') {
+            response = await getReviewMid(scheduleId, stageId, reviewId);
+            setReviewDetails(response.data);
+          } else if (type === '면접 회고') {
+            response = await getReviewInt(scheduleId, stageId, reviewId);
+            setReviewInt(response.data);
+          } else {
+            console.warn('Unknown review type:', type);
+            return;
+          }
+
         } catch (error) {
           console.error('Error fetching review details:', error);
         }
@@ -40,6 +53,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
   }, [selectedReview]);
 
   if (!open) return null;
+
+  // Choose which data to display based on availability
+  const reviewData = reviewDetails || reviewInt;
 
   return (
     <>
@@ -73,7 +89,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
               component="h2"
               color={colors.neutral[10]}
             >
-              {reviewDetails?.company} {reviewDetails?.department}
+              {reviewData?.company} {reviewData?.department}
             </Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon sx={{ width: 24, height: 24, color: colors.neutral[40] }} />
@@ -85,8 +101,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
             color={colors.neutral[40]}
             sx={{ mt: 1 }}
           >
-            {reviewDetails ? 
-              `${reviewDetails.deadline ? `${reviewDetails.deadline}에 진행된` : '날짜가 설정되지 않은 일자의'} ${reviewDetails.type}입니다.` 
+            {reviewData ? 
+              `${reviewData.deadline ? `${reviewData.deadline}에 진행된` : '날짜가 설정되지 않은 일자의'} ${reviewData.type}입니다.` 
               : '회고 데이터가 없습니다.'
             }
           </Typography>
@@ -96,7 +112,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
               자유롭게 회고를 진행해주세요.
             </Typography>
             <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-              {reviewDetails?.freeReview}
+              {reviewData?.freeReview}
             </Typography>
           </Box>
           
@@ -105,7 +121,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
               앞으로의 목표를 작성해주세요.
             </Typography>
             <Typography color={colors.neutral[40]} style={typography.xSmallMed}>
-              {reviewDetails?.goal}
+              {reviewData?.goal}
             </Typography>
           </Box>
         </Box>
