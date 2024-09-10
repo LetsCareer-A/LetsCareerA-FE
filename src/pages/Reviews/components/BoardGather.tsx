@@ -9,8 +9,6 @@ import { NormalButton } from '../../../components/CustomButton';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import ReviewModal from './ReviewModal'; 
 import useReviewStore, { Review } from '../../../store/useReviewStore';
-import { postReviewInt } from '../../../api/Reviews/postReviewInt';
-import { postReviewMid } from '../../../api/Reviews/postReviewMid';
 import Toast from '../../../components/Toast';
 import WritingModal from './WritingModal';
 
@@ -25,11 +23,6 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [details, setDetails] = useState('');
-  const [qa, setQa] = useState('');
-  const [feel, setFeel] = useState('');
-  const [goal, setGoal] = useState('');
-  const [freeReview, setFreeReview] = useState('');
   const [showToast, setShowToast] = useState(false); 
   const [toastMessage, setToastMessage] = useState(''); 
   const [toastDescription, setToastDescription] = useState(''); 
@@ -68,22 +61,15 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         console.log(scheduleId, stageId);
   
         if (selectedReview.type === '면접 회고') {
-          await postReviewInt(scheduleId, stageId, details, qa, feel);
           setToastMessage(`'${company} ${department}' 면접에 대한 회고를 완료했어요!`);
           setToastDescription('조금 더 성장에 한 걸음 가까워졌어요 :)');
         } else if (selectedReview.type === '중간 전형 회고') {
-          await postReviewMid(scheduleId, stageId, freeReview, goal); 
           setToastMessage(`${company} ${department}' 중간 전형에 대한 회고를 완료했어요!`);
           setToastDescription('조금 더 성장에 한 걸음 가까워졌어요 :)');
         }
   
         setModalOpen(false);
         setShowToast(true); 
-        setDetails('');
-        setQa('');
-        setFeel('');
-        setFreeReview('');
-        setGoal('');
         await fetchCompanyData(page);
         
       } catch (error) {
@@ -105,15 +91,6 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
     }
   }, [showToast]);
 
-
-  const isButtonDisabled = () => {
-    if (selectedReview?.type === '면접 회고') {
-      return !details || !qa || !feel;
-    } else if (selectedReview?.type === '중간 전형 회고') {
-      return !freeReview || !goal;
-    }
-    return true;
-  };
 
   return (
     <Box 
@@ -185,22 +162,13 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         selectedReview={selectedReview}
       />
 
-    <WritingModal
+      <WritingModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         reviewType={selectedReview?.type || null}
-        details={details}
-        setDetails={setDetails}
-        qa={qa}
-        setQa={setQa}
-        feel={feel}
-        setFeel={setFeel}
-        goal={goal}
-        setGoal={setGoal}
-        freeReview={freeReview}
-        setFreeReview={setFreeReview}
+        initialFreeReview={selectedReview?.freeReview || ''}
         onConfirm={handleConfirm}
-        isButtonDisabled={isButtonDisabled}
+        selectedReview={selectedReview}
       />
 
       {showToast && (
