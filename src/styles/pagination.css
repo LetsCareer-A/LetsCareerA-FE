@@ -1,14 +1,14 @@
 /* src/styles/pagination.css */
+
 .pagination {
     display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    align-items: center;
+    justify-content: center; /* 중앙 정렬 */
+    flex-wrap: wrap; /* 페이지네이션 버튼이 컨테이너 내에서 줄 바꿈 */
+    gap: 4px; /* 버튼 간의 간격 */
 }
 
 .page-item {
-    margin: 0 2px; /* 버튼 간의 간격 조정 */
+    margin: 0; /* 버튼 간의 기본 간격 제거 */
 }
 
 .page-link {
@@ -24,11 +24,13 @@
     transition: background-color 0.3s, color 0.3s;
     font-size: 14px; /* 버튼 텍스트 크기 */
     font-family: 'Roboto', sans-serif; /* 텍스트 폰트 설정 */
+    line-height: 24px; /* 버튼 텍스트 수직 중앙 정렬 */
 }
 
-.page-link:hover{
+.page-link:hover {
     background-color: #e8e6e6;
 }
+
 .page-item.active .page-link {
     background-color: #4D55F5; /* 클릭 시 배경색 */
     color: white; /* 클릭 시 텍스트 색상 */
@@ -37,4 +39,10 @@
 .page-item.disabled .page-link {
     color: #7A7D84;
     pointer-events: none;
+}
+
+/* 추가 스타일 */
+.pagination-container {
+    width: 100%; /* 페이지네이션 컨테이너 너비를 부모 컨테이너에 맞춤 */
+    overflow: hidden; /* 버튼이 컨테이너를 넘어가지 않도록 */
 }
