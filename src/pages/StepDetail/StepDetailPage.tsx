@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
-// import CareerMenu from '../../components/CareerMenu';
+import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -12,16 +12,16 @@ import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
-import SupportState from './components/SupportState';
+import ReadyState from './components/ReadyState';
+import AddStateModal from './components/AddStateModal';
+// import MidReview from './components/MidReview';
 
-// Dropdown 메뉴 아이템
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
     { text: '최종 합격', color: '#4D55F5' },
     { text: '최종 불합격', color: '#FF566A' },
 ];
 
-// 상태 아이템
 const Stateitems: DropdownItem[] = [
     { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
     { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
@@ -70,9 +70,37 @@ const StepDetailPage = () => {
     const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    // const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]); // 추가
-    // const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null); //페이지 연결할때
+    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
+    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
+    const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
+    const [readyStates, setReadyStates] = useState<DropdownItem[]>([]); //전형 상태 저장주
 
+    // 면접 전형 추가 모달 관리
+    const handleOpenAddStateModal = () => {
+        setIsAddStateModalOpen(true);
+    };
+
+    const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
+        setIsAddStateModalOpen(false);
+
+        if (selectedStep) {
+            setReadyStates((prevStates) => [...prevStates, selectedStep]);
+        }
+    };
+
+     // ReadyState 렌더링
+     const renderReadyStates = () => {
+        return readyStates.map((state, index) => (
+            <ReadyState
+                key={index}
+                dropdownItems={Stateitems}
+                selectedChip={state}
+                onDropdownSelect={() => {}} // 선택한 상태 업데이트 기능 (추후 필요하면 추가)
+            />
+        ));
+    };
+
+    // 자기소개서 관련 이벤트
     const handleQuestionTextFieldChange = (index: number) => (
         event: React.ChangeEvent<HTMLInputElement>
         ) => {
@@ -97,24 +125,26 @@ const StepDetailPage = () => {
     setIntroduceBoxes((prevBoxes) => prevBoxes.filter((_, i) => i !== index));
     };
     
+    {/* 핵심경험 관련 이벤트*/}
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
     };
 
-    // const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
-        // setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
-    //     setToastMessage('핵심경험이 추가되었습니다!');
-    //     setTimeout(() => setToastMessage(''), 3000);
-    //     setIsCareerMenuVisible(false);
-    // };
+    const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
+     setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
+        setToastMessage('핵심경험이 추가되었습니다!');
+        setTimeout(() => setToastMessage(''), 3000);
+        setIsCareerMenuVisible(false);
+    };
 
-    // const handleDropdownSelect = (item: DropdownItem) => {
-    //     // setSelectedChip(item); // 상태 업데이트
-    // };
+    const handleDropdownSelect = (item: DropdownItem) => {
+        setSelectedChip(item);
+    };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
             <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
+                {/* 헤더 */}
                 <ArrowBackIosNewIcon />
                 <Chip
                     text="D-4"
@@ -135,16 +165,17 @@ const StepDetailPage = () => {
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText="준비 단계"
+                        buttonText={selectedChip ? selectedChip.text : "준비 단계"}
                         items={items}
                         renderItem={(item) => 
                         <Chip text={item.text} backgroundColor={item.color} />}
-                        // onSelect={handleDropdownSelect}
+                        onSelect={handleDropdownSelect}
                         sx={{width:142, height:44}}
                     />
                 </Box>
             </Stack>
 
+            {/* 전형 준비 상태 */}
             <Stack spacing="16px" mt={3}>
                 <Box
                     sx={{
@@ -170,7 +201,8 @@ const StepDetailPage = () => {
                             borderRadius: '12px',
                         }}
                     />
-<SupportState dropdownItems={Stateitems} selectedChip={null} onDropdownSelect={() => {}} />
+                {/* 기존 준비 상태 렌더링 */}
+                {renderReadyStates()}
 
                     {/* 전형 추가 */}
                      <Box
@@ -197,6 +229,7 @@ const StepDetailPage = () => {
                                 borderRadius: '8px',
                                 bgcolor: colors.primary[10],
                             }}
+                            onClick={handleOpenAddStateModal}
                         >
                             <AddIcon width={'12px'}/>
                         </Box>
@@ -204,6 +237,7 @@ const StepDetailPage = () => {
                     </Box>
                 </Box>
 
+                {/* 배너 */}
                 <Box
                     sx={{
                         width: '1043px',
@@ -215,6 +249,7 @@ const StepDetailPage = () => {
                     onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
                 />
 
+                {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
                     <Box
                         sx={{
@@ -225,8 +260,10 @@ const StepDetailPage = () => {
                             gap: '10px',
                             border: `1px solid ${colors.neutral[85]}`,
                             backgroundColor: colors.neutral[100],
+                            justifyContent: 'center'
                         }}
                     >
+                        {/* 서류전형 - 자기소개서 */}
                         <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
                             <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
                                 <Typography color={colors.neutral[10]} style={typography.smallBold}>
@@ -261,26 +298,30 @@ const StepDetailPage = () => {
                                         boxShadow: 'none',
                                     },
                                 }}
-                                endIcon={<AddIcon />}
-                                onClick={handleAddIntroduceBox}
-                                
+                                endIcon={<AddIcon />}   
+                                onClick={handleAddIntroduceBox}                             
                                 >
                                 문항 추가하기
                             </Button>
                         </Box>
-          <Box gap="8px" display="flex" flexDirection="column">
-          {introduceBoxes.map((box, index) => (
-              <IntroduceBox
-                key={index}
-                boxNumber={index + 1}
-                questionTextFieldValue={box.question}
-                handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
-                answerTextFieldValue={box.answer}
-                handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
-                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)} // 삭제 핸들러 전달
-                />
-            ))}
-          </Box>
+                        <Box gap="8px" display="flex" flexDirection="column">
+                        {introduceBoxes.map((box, index) => (
+                            <IntroduceBox
+                                key={index}
+                                boxNumber={index + 1}
+                                questionTextFieldValue={box.question}
+                                handleQuestionTextFieldChange={handleQuestionTextFieldChange(index)}
+                                answerTextFieldValue={box.answer}
+                                handleAnswerTextFieldChange={handleAnswerTextFieldChange(index)}
+                                handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)}
+                                />
+                            ))}
+                        </Box>
+
+                        {/* 중간전형 - 회고보드 */}
+
+          {/* <MidReview/> */}
+
           </Box>
 
                     {/*핵심경험*/}
@@ -306,22 +347,31 @@ const StepDetailPage = () => {
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            {selectedCareerCards.map((card, index) => (
+                                <ExperienceBox key={index} card={card} onClick={() => {}} />
+                            ))}
                             <ExperienceBox onClick={handleExperienceBoxClick} />
                         </Box>
                     </Box>
 
-                    {/* {isCareerMenuVisible && (
+                    {isCareerMenuVisible && (
                         <CareerMenu
                             onClose={() => setIsCareerMenuVisible(false)}
                             onComplete={handleCompleteButtonClick}
                         />
-                    )} */}
+                    )}
                 </Stack>
             </Stack>
 
+            {/* AddStateModal 컴포넌트 */}
+
+            <AddStateModal
+                open={isAddStateModalOpen}
+                onClose={handleCloseAddStateModal} // 전형 추가 시 handleCloseAddStateModal 호출
+                onAddState={(newState) => setReadyStates((prev) => [...prev, newState])} // 전형이 추가될 때 실행될 함수 전달
+            />
+
+            {/* 토스트 */}
             {toastMessage && (
                 <Toast
                     message="핵심 경험 등록을 완료했어요!"

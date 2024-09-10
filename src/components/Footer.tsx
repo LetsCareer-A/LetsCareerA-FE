@@ -1,5 +1,6 @@
 import { FaInstagram } from "react-icons/fa";
 import { FaMicroblog } from "react-icons/fa";
+import Logo from '../assets/Logo.svg'
 
 
 const Footer = () => {
@@ -12,7 +13,7 @@ const Footer = () => {
                 <div className="flex flex-col items-center justify-start">
                   <div className="w-32 h-9 justify-start items-center gap-1.5 inline-flex">
                     <div className="relative w-8 h-8" />
-                    <img className="w-32 h-9" src="public/Logo.svg" alt="Logo" />
+                    <img className="w-32 h-9" src={Logo} alt="Logo" />
                     <div className="relative w-20 h-9" />
                   </div>
                 </div>

@@ -45,6 +45,7 @@ interface ModalProps {
   confirmText?: string;
   onConfirm?: () => void;
   width?: string;
+  height?: string;
   isButtonDisabled?: boolean;
   showConfirmButton?: boolean; 
 }

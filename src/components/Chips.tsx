@@ -57,3 +57,4 @@ const Chip: React.FC<ChipProps> = ({ text, backgroundColor, textColor, image, im
 };
 
 export default Chip;
+
