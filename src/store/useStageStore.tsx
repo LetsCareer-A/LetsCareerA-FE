@@ -7,8 +7,9 @@ interface StageStore {
   readyStates: {
     type: string;
     date: string;
+    status: string;
   };
-  setReadyStates: (states: { type: string; date: string }) => void;
+  setReadyStates: (states: { type: string; date: string;  status: string; }) => void;
 }
 
 const useStageStore = create<StageStore>((set) => ({
@@ -17,6 +18,7 @@ const useStageStore = create<StageStore>((set) => ({
   readyStates: {
     type: '전형이 지정되지 않음', //기본값
     date: '날짜가 지정되지 않음', //기본값
+    status: '진행 상태를 선택해 주세요',
   },
   setReadyStates: (states) => set({ readyStates: states }),
 }));
