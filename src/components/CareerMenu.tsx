@@ -1,66 +1,78 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';import typography from "../styles/typography";
+import ClearIcon from '@mui/icons-material/Clear';
+import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 import CareerCard from './CareerCard';
+import { getCareers } from '../api/StepDetail/getCareer'; 
 
 type CareerMenuProps = {
   onClose: () => void;
-  onComplete: (selectedCards: { chipText: string, title: string }[]) => void; // 수정된 onComplete 타입
+  onComplete: (selectedCards: { chipText: string, title: string }[]) => void;
 };
 
 const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
-  const [isVisible, setIsVisible] = useState(true); 
-  const [isSliding, setIsSliding] = useState(false); 
-  const [selectedCards, setSelectedCards] = useState<{ chipText: string, title: string }[]>([]); // 선택된 카드 상태 배열 추가
+  const [isVisible, setIsVisible] = useState(true);
+  const [isSliding, setIsSliding] = useState(false);
+  const [selectedCards, setSelectedCards] = useState<{ chipText: string, title: string }[]>([]);
+  const [careerCards, setCareerCards] = useState<{ chipText: string, title: string, description: string }[]>([]); // API 데이터 저장 상태
+
+  useEffect(() => {
+    const fetchCareerData = async () => {
+      try {
+        const response = await getCareers();
+        const careers = response.data.careers;
+
+        const mappedCareers = careers.map(career => ({
+          chipText: career.category,
+          title: career.title,
+          description: career.summary
+        }));
+        setCareerCards(mappedCareers);
+      } catch (error) {
+        console.error('Failed to fetch career data:', error);
+      }
+    };
+
+    fetchCareerData();
+  }, []);
 
   const handleCardSelect = (card: { chipText: string, title: string }) => {
-    setSelectedCards(prevCards => [...prevCards, card]); // 카드 선택 시 상태에 추가
+    setSelectedCards(prevCards => [...prevCards, card]);
   };
-const handleCompleteClose = () => {
-  setIsSliding(true);
-  setTimeout(() => {
-    setIsVisible(false);
-    onComplete(selectedCards); // 선택된 카드들을 부모로 전달
-    onClose();
-  }, 300);
-};
 
+  const handleCompleteClose = () => {
+    setIsSliding(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      onComplete(selectedCards);
+      onClose();
+    }, 300);
+  };
 
   const handleClose = () => {
-    setIsSliding(true); 
+    setIsSliding(true);
     setTimeout(() => {
-      setIsVisible(false); 
-      onClose(); // 부모 컴포넌트의 상태를 변경
-    }, 300); 
+      setIsVisible(false);
+      onClose();
+    }, 300);
   };
 
   if (!isVisible) return null;
 
-  const careerCards = [
-    { chipText: '공모전', title: 'Software Engineer', description: 'Developed and maintained software applications.' },
-    { chipText: '기타', title: 'Marketing Specialist', description: 'Managed marketing campaigns and analyzed data.' },
-    { chipText: '실무', title: 'UI/UX Designer', description: 'Designed user interfaces and conducted user research.' },
-    { chipText: '프로젝트', title: 'Project Manager', description: 'Led project teams and managed project timelines.' },
-    { chipText: '공모전', title: 'Data Scientist', description: 'Analyzed data and created data-driven insights.' },
-    { chipText: '기타', title: 'Content Writer', description: 'Wrote and edited content for various platforms.' },
-    { chipText: '실무', title: 'DevOps Engineer', description: 'Managed deployment pipelines and infrastructure.' },
-    { chipText: '프로젝트', title: 'Product Owner', description: 'Oversaw product development and managed stakeholder expectations.' }
-  ];
-
   return (
-    <Box 
+    <Box
       display='flex'
       sx={{
         position: 'fixed',
-        top: '70px', 
+        top: '70px',
         left: 0,
         width: '381px',
         height: '100%',
         backgroundColor: 'white',
-        zIndex: 9999, 
+        zIndex: 9999,
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-        transform: isSliding ? 'translateX(-100%)' : 'translateX(0)', 
+        transform: isSliding ? 'translateX(-100%)' : 'translateX(0)',
         transition: 'transform 0.3s ease-in-out',
         display: 'flex',
         flexDirection: 'column'
@@ -71,31 +83,28 @@ const handleCompleteClose = () => {
           어필할 경험
         </Typography>
         <ClearIcon
-          style={{ cursor: 'pointer' }} 
-          onClick={handleClose} 
+          style={{ cursor: 'pointer' }}
+          onClick={handleClose}
         />
       </Box>
-      
-      <Box 
+
+      <Box
         padding='12px 40px 0 40px'
         sx={{
           flexGrow: 1,
           overflowY: 'auto',
-          marginBottom: '200px',  
+          marginBottom: '200px',
           overflowX: 'hidden',
         }}
       >
         {careerCards.map((card, index) => (
-          <Box onClick={() => handleCardSelect({ chipText: card.chipText, title: card.title })}>
-  <CareerCard 
-    key={index}
-    chipText={card.chipText}
-    title={card.title}
-    description={card.description}
-  />
-</Box>
-
-
+          <Box key={index} onClick={() => handleCardSelect({ chipText: card.chipText, title: card.title })}>
+            <CareerCard
+              chipText={card.chipText}
+              title={card.title}
+              description={card.description}
+            />
+          </Box>
         ))}
       </Box>
 
