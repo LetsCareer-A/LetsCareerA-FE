@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
 import CareerMenu from '../../components/CareerMenu';
@@ -15,6 +15,10 @@ import IntroduceBox from './components/IntroduceBox';
 import ReadyState from './components/ReadyState';
 import AddStateModal from './components/AddStateModal';
 // import MidReview from './components/MidReview';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+
 
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
@@ -65,7 +69,7 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
     </Box>
 );
 
-const StepDetailPage = () => {
+const StepDetailPage: React.FC = () => {
     // 상태 변수들 선언
     const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
@@ -74,6 +78,24 @@ const StepDetailPage = () => {
     const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
     const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
     const [readyStates, setReadyStates] = useState<DropdownItem[]>([]); //전형 상태 저장주
+    const [scheduleData, setScheduleData] = useState<any>(null);
+    const { scheduleId } = useParams<{ scheduleId: string }>();
+
+    useEffect(() => {
+        const fetchScheduleData = async () => {
+            try {
+                const response = await axios.get(`/api/schedules/${scheduleId}`);
+                setScheduleData(response.data.data);
+            } catch (error) {
+                console.error('Failed to fetch schedule data:', error);
+            }
+        };
+
+        if (scheduleId) {
+            fetchScheduleData();
+        }
+    }, [scheduleId]);
+
 
     // 면접 전형 추가 모달 관리
     const handleOpenAddStateModal = () => {
@@ -154,14 +176,14 @@ const StepDetailPage = () => {
                     imageWidth="16px"
                     imageHeight="16px"
                 />
-                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    회사이름
+                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+                    {scheduleData?.company || '회사이름'}
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    직무
+                    {scheduleData?.department || '직무'}
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown

@@ -10,6 +10,8 @@ import File from '../../../assets/blueFile.svg';
 import Communication from '../../../assets/communication.png';
 import Interface from '../../../assets/interface.svg';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import { useNavigate } from 'react-router-dom'; // useNavigate import
+
 
 interface Schedule {
   scheduleId: number;
@@ -32,6 +34,8 @@ const DetailList: React.FC = () => {
   const { selectedDate } = useCalendarStore();
 
   const currentDate = selectedDate || new Date().toISOString().split('T')[0];
+  const navigate = useNavigate(); // 페이지 이동을 위한 hook
+
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -68,6 +72,10 @@ const DetailList: React.FC = () => {
     setPage(newPage);
   };
 
+  const handleCardClick = (scheduleId: number) => {
+    // API 요청을 통해 이벤트 정보를 가져와 StepDetailPage로 전달
+    navigate(`/schedules/${scheduleId}`); // useNavigate로 페이지 이동
+  };
   const getCurrentDateWithDay = () => {
     const today = new Date(currentDate);
     const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -191,7 +199,9 @@ const DetailList: React.FC = () => {
                     borderRadius: 1,
                     mb: '8px',
                     p: '12px',
+                    cursor: 'pointer' // 클릭 가능하게 커서 변경
                   }}
+                  onClick={() => handleCardClick(item.scheduleId)} // 클릭 시 페이지 이동
                 >
                   <Typography mb='8px' style={typography.xSmall2Bold}>
                     {item.company} | {item.department}
