@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import Dropdown from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
@@ -7,24 +6,25 @@ import fileImage from '../../../assets/ill_file.png';
 import interview from '../../../assets/intervew.png';
 import workcheck from '../../../assets/workcheck.png';
 import { DropdownItem } from '../../../components/Dropdown';
+import useStageStore from '../../../store/useStageStore';
 
-interface SupportStateProps {
-  dropdownItems: DropdownItem[];
-  selectedChip: DropdownItem | null;
-  onDropdownSelect: (item: DropdownItem) => void;
-}
+// export interface ReadyStateProps {
+//   type: string;
+//   date: string;
+//   status?: string;
+// }
 
-// ReadyStates 타입 정의
-interface ReadyStates {
-  type: string; // 전형명 (예: '서류', '면접', '중간')
-  date: string; // 날짜 (예: '24.08.30')
-}
+const Stateitems: DropdownItem[] = [
+  { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+  { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+  { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+  { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+];
 
-const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSelect }) => {
-  const [readyStates, setReadyStates] = useState<ReadyStates>({
-    type: '', // 초기 전형 상태
-    date: '', // 초기 날짜
-  });
+
+
+const ReadyState = () => {
+  const {readyStates, setReadyStates} = useStageStore();
 
   // 전형 상태에 따른 이미지 반환 함수
   const getImageForStage = () => {
@@ -45,18 +45,18 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
   };
 
   const handleDropdownSelect = (item: DropdownItem) => {
-    console.log("핸들드롭다운 시작")
-
-    setReadyStates((prevState) => ({
-      ...prevState,
-      type: item.text, // 드롭다운에서 선택된 전형 상태로 업데이트
-    }));
-    console.log("핸들드롭다운 중간")
-
-    onDropdownSelect(item); // 부모 컴포넌트의 선택 처리 함수 호출
-    console.log("핸들드롭다운 끗")
-
+    console.log(readyStates);
+  
+    // 상태를 직접 객체로 업데이트
+    setReadyStates({
+      ...readyStates, // 기존 readyStates 상태 유지
+      status: item.text, // 드롭다운에서 선택된 상태로 업데이트
+    });
+    
+    console.log(readyStates);
   };
+  
+  
 
   return (
     <Box
@@ -96,28 +96,9 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
       </Typography>
 
       <Dropdown
-        buttonText="진행중"
+        buttonText={readyStates.type}
         backgroundColor={colors.primary[10]}
-        items={dropdownItems}
-        onSelect={onDropdownSelect}
-        renderItem={(item) => (
-          <Typography
-            style={typography.xSmall2Reg}
-            color={colors.neutral[20]}
-            sx={{
-              width: '80px',
-              padding: '8px',
-              alignItems: 'flex-start',
-              gap: '4px',
-              '&:hover': {
-                backgroundColor: colors.primary[20],
-                borderRadius: '4px',
-              },
-            }}
-          >
-            {item.text}
-          </Typography>
-        )}
+        items={Stateitems}
         onSelect={handleDropdownSelect}
         sx={{
           height: '28px',
