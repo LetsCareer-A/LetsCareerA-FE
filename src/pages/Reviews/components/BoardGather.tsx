@@ -12,6 +12,8 @@ import { Review } from '../../../store/useReviewStore';
 import Modal from '../../../components/Modal';
 import Textfield from '../../../components/Textfield';
 import Label from '../../../components/Label';
+import { postReviewInt } from '../../../api/Reviews/postReviewInt';
+import { postReviewMid } from '../../../api/Reviews/postReviewMid';
 
 interface BoardGatherProps {
   company: string;
@@ -19,7 +21,7 @@ interface BoardGatherProps {
   reviews: Review[];
 }
 
-const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews }) => {
+const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}) => {
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,6 +37,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
     } else if (type === '중간 전형 회고') {
       return Chart; 
     }
+    return undefined;
   };
 
   const handleReviewClick = (review: Review) => {
@@ -51,14 +54,39 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
 
   const handleConfirm = async () => {
     if (selectedReview) {
+      try {
+        const scheduleId = String(selectedReview.scheduleId);
+        const stageId = String(selectedReview.stageId); 
 
+        console.log(scheduleId, stageId);
+  
+        if (selectedReview.type === '면접 회고') {
+          await postReviewInt(scheduleId, stageId, details, qa, feel);
+        } else if (selectedReview.type === '중간 전형 회고') {
+          await postReviewMid(scheduleId, stageId, freeReview, goal); 
+        }
+  
+        alert('회고가 성공적으로 제출되었습니다!');
+        setModalOpen(false);
+        setDetails('');
+        setQa('');
+        setFeel('');
+        setFreeReview('');
+        setGoal('');
+      } catch (error) {
+        console.error('회고 제출 오류:', error);
+        alert('회고 제출에 실패했습니다.');
+      }
+    } else {
+      console.error('Selected review or IDs are missing');
+    }
   };
 
   const isButtonDisabled = () => {
     if (selectedReview?.type === '면접 회고') {
       return !details || !qa || !feel;
     } else if (selectedReview?.type === '중간 전형 회고') {
-      return !freeReview|| !goal;
+      return !freeReview || !goal;
     }
     return true;
   };
@@ -183,33 +211,32 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
         ) : (
           <>
             <Box mt='32px' mb='24px'>
-              <Label label="자유롭게 회고를 진행해주세요." required={true} />
+              <Label label="회고의 목표를 입력해 주세요." required={true} />
               <Textfield
-                    showCharCount={true}
-                    value={freeReview}
-                    onChange={(e) => setFreeReview(e.target.value)}
-                    placeholder="중간 전형을 진행하면서 느꼈던 점이나 어려웠던 부분 등을 자유롭게 기록해주세요."
-                    maxLength={500} 
-                    height="220px"
-                    placeholderVerticalAlign="top"
-                  />
+                  showCharCount={true}
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                  placeholder="어떤 목표를 가지고 중간 전형을 준비했는지 적어보세요."
+                  maxLength={100} 
+                  height="132px"
+                  placeholderVerticalAlign="top"
+                />
             </Box>
             <Box mb='24px'>
-              <Label label="앞으로의 목표를 작성해주세요." required={true} />
+              <Label label="자유롭게 작성해주세요" required={true} />
               <Textfield
-                    showCharCount={true}
-                    value={goal}
-                    onChange={(e) => setGoal(e.target.value)}
-                    placeholder="앞으로 이 중간 전형을 기점으로 본인이 어떻게 성장할 수 있는지 적어보세요."
-                    maxLength={500} 
-                    height="220px"
-                    placeholderVerticalAlign="top"
-                  />
+                  showCharCount={true}
+                  value={freeReview}
+                  onChange={(e) => setFreeReview(e.target.value)}
+                  placeholder="어떤 목표를 가지고 중간 전형을 준비했는지 적어보세요."
+                  maxLength={500} 
+                  height="220px"
+                  placeholderVerticalAlign="top"
+                />
             </Box>
           </>
         )}
       </Modal>
-
     </Box>
   );
 };
