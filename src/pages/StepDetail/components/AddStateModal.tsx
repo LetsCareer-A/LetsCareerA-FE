@@ -13,7 +13,9 @@ import chat from '../../../assets/chat.png';
 import pencil from '../../../assets/pencil.png';
 import CalendarInput from '../../../components/CalendarInput';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; // CSS import
+import 'react-datepicker/dist/react-datepicker.css';
+import { postAddType } from '../../../api/StepDetail/postAddType'; 
+import { useParams } from 'react-router-dom'; 
 
 const items: DropdownItem[] = [
   { text: '서류 전형', color: `${colors.primary.normal}`, image: notebook },
@@ -31,10 +33,44 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
   const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
   const [, setStartDate] = useState<Date | null>(null);
   const { date, setDate } = useModalStore();
+  
+  const { scheduleId } = useParams<{ scheduleId: string }>();
 
-  const handleConfirm = () => {
-    if (selectedState) {
-      onAddState(selectedState); // 사용자가 선택한 전형 상태 전달
+  const handleConfirm = async () => {
+    if (selectedState && scheduleId) {
+      try {
+
+        let type: string;
+      switch (selectedState.text) {
+        case '서류 전형':
+          type = 'DOC';
+          break;
+        case '면접 전형':
+          type = 'INT';
+          break;
+        case '중간 전형(직접 입력)':
+          type = 'MID';
+          break;
+        default:
+          type = 'UNKNOWN';
+          break;
+      }
+
+      
+        const payload = {
+          type: type,
+          mid_name:  '', 
+          date: date ? date.toISOString().split('T')[0] : '', 
+        };
+
+        console.log(payload)
+
+        await postAddType(scheduleId, payload);
+
+        onAddState(selectedState);
+      } catch (error) {
+        console.error('Error adding state:', error);
+      }
     }
     onClose(); // 모달 닫기
   };
