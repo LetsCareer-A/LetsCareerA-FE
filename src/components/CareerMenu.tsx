@@ -6,6 +6,14 @@ import { PrimaryButton } from "./CustomButton";
 import CareerCard from './CareerCard';
 import { getCareers } from '../api/StepDetail/getCareer'; 
 
+type Career = {
+  careerId: number;
+  category: string;
+  title: string;
+  summary: string;
+};
+
+
 type CareerMenuProps = {
   onClose: () => void;
   onComplete: (selectedCards: { chipText: string, title: string, careerId: number }[]) => void;
@@ -21,8 +29,8 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
     const fetchCareerData = async () => {
       try {
         const response = await getCareers();
-        const careers = response.data.careers;
-
+        const careers: Career[] = response.data.careers;
+    
         const mappedCareers = careers.map(career => ({
           chipText: career.category,
           title: career.title,
