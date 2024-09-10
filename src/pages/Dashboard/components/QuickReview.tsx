@@ -13,6 +13,7 @@ const QuickReview: React.FC = () => {
     const [fastReviews, setFastReviews] = useState<any[]>([]); 
     const itemsPerPage = 4; 
     const [totalPages, setTotalPages] = useState(1);
+    const [total, setTotal] =useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,6 +22,9 @@ const QuickReview: React.FC = () => {
                 if (response && response.data) {
                     setFastReviews(response.data.fastReviews || []); 
                     setTotalPages(Math.ceil(response.data.total / itemsPerPage)); 
+                    setTotal(response.data.total)
+
+                    console.log(fastReviews)
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -54,7 +58,7 @@ const QuickReview: React.FC = () => {
                     style={typography.xSmallBold}
                     sx={{ color: theme.palette.primary.main }}
                 >
-                    {fastReviews.length}건
+                    {total}건
                 </Typography>
             </Box>
             <Typography 
