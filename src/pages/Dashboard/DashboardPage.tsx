@@ -23,7 +23,6 @@ import Communication from '../../assets/communication.svg';
 import Edit from '../../assets/edit.svg';
 import { postScheduleData } from '../../api/Dashboard/postSchedules';
 import { getCalendar } from '../../api/Dashboard/getCalendar'; 
-import { useNavigate } from 'react-router-dom'
 
 interface Event {
   title: string;
@@ -46,7 +45,6 @@ const DashboardPage = () => {
   const [midCount, setMidCount] = useState<number>(0);
   const [interviewCount, setInterviewCount] = useState<number>(0);
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
-  const navigate = useNavigate(); // 페이지 이동을 위한 navigate 훅 사용
 
   const {
     companyName,
@@ -181,10 +179,6 @@ const DashboardPage = () => {
     setShowToast(false);
   };
 
-  const handleDetailListClick = () => {
-    navigate('/step-detail'); // StepDetailPage로 이동
-  };
-
   const items = [
     { 
       text: '서류 준비 중', 
@@ -226,7 +220,7 @@ const DashboardPage = () => {
         sx={{ overflow: 'hidden' }}
       >
         <Calendar />
-        <DetailList onClick={handleDetailListClick} /> {/* 클릭 시 handleDetailListClick 호출 */}
+        <DetailList />
       </Box>
       <Box display='flex' gap='4px' justifyContent='space-between' borderRadius='12px' sx={{ overflow: 'hidden' }}>
         <TodoList />

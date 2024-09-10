@@ -1,5 +1,5 @@
-import React from 'react';
-import Chip from '../../../components/Chips';
+// import React from 'react';
+// import Chip from '../../../components/Chips';
 import { Box, Typography } from '@mui/material';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';

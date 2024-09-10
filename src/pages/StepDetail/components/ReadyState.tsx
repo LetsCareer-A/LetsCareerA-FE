@@ -21,7 +21,6 @@ interface ReadyStates {
 }
 
 const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSelect }) => {
-  // 전형 상태 관리
   const [readyStates, setReadyStates] = useState<ReadyStates>({
     type: '서류', // 초기 전형 상태
     date: '24.08.30', // 초기 날짜
@@ -39,6 +38,14 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
       default:
         return fileImage;
     }
+  };
+
+  const handleDropdownSelect = (item: DropdownItem) => {
+    setReadyStates((prevState) => ({
+      ...prevState,
+      type: item.text, // 드롭다운에서 선택된 전형 상태로 업데이트
+    }));
+    onDropdownSelect(item); // 부모 컴포넌트의 선택 처리 함수 호출
   };
 
   return (
@@ -67,21 +74,17 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
           bgcolor: colors.primary[80],
         }}
       >
-        {/* 상태에 따른 이미지 렌더링 */}
         <img src={getImageForStage()} alt={readyStates.type} style={{ width: '100%', height: '100%' }} />
       </Box>
       
-      {/* 전형 상태 유형 */}
       <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
         {readyStates.type} 전형
       </Typography>
 
-      {/* 전형 날짜 */}
       <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
         {readyStates.date}
       </Typography>
 
-      {/* 상태 선택 드롭다운 */}
       <Dropdown
         buttonText="진행중"
         backgroundColor={colors.primary[10]}
@@ -104,7 +107,7 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
             {item.text}
           </Typography>
         )}
-        onSelect={onDropdownSelect}
+        onSelect={handleDropdownSelect}
         sx={{
           height: '28px',
           marginTop: '10px',
@@ -115,5 +118,6 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
     </Box>
   );
 };
+
 
 export default ReadyState;
