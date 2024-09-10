@@ -76,7 +76,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
   return (
     <div>
       <StyledButton onClick={handleClick} open={open} bgColor={backgroundColor} sx={sx}>
-        <Box display="flex" alignItems="center" gap='8px'>
+        <Box display="flex" alignItems="center" gap='8px' justifyContent={'space-between'}>
           {selectedItem ? (
             <Chip 
               text={selectedItem.text}

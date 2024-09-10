@@ -264,7 +264,7 @@ const StepDetailPage = () => {
                         }}
                     >
                         {/* 서류전형 - 자기소개서 */}
-                        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
+                        {/* <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
                             <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
                                 <Typography color={colors.neutral[10]} style={typography.smallBold}>
                                     자기소개서
@@ -316,11 +316,11 @@ const StepDetailPage = () => {
                                 handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)}
                                 />
                             ))}
-                        </Box>
+                        </Box> */}
 
                         {/* 중간전형 - 회고보드 */}
 
-          {/* <MidReview/> */}
+          <MidReview/>
 
           </Box>
 
@@ -365,11 +365,11 @@ const StepDetailPage = () => {
 
             {/* AddStateModal 컴포넌트 */}
 
-      <AddStateModal
-        open={isAddStateModalOpen}
-        onClose={handleCloseAddStateModal} // 전형 추가 시 handleCloseAddStateModal 호출
-        onAddState={(newState) => setReadyStates((prev) => [...prev, newState])} // 전형이 추가될 때 실행될 함수 전달
-      />
+            <AddStateModal
+                open={isAddStateModalOpen}
+                onClose={handleCloseAddStateModal} // 전형 추가 시 handleCloseAddStateModal 호출
+                onAddState={(newState) => setReadyStates((prev) => [...prev, newState])} // 전형이 추가될 때 실행될 함수 전달
+            />
 
             {/* 토스트 */}
             {toastMessage && (
