@@ -166,7 +166,6 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         reviewType={selectedReview?.type || null}
-        initialFreeReview={selectedReview?.freeReview || ''}
         onConfirm={handleConfirm}
         selectedReview={selectedReview}
       />

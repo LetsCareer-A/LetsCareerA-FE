@@ -56,13 +56,12 @@ const WritingModal: React.FC<WritingModalProps> = ({
           await postReviewInt(selectedReview.scheduleId, selectedReview.stageId, details, qa, feel);
           onConfirm({ details, qa, feel, goal: '', freeReview: '' });
         } else if (reviewType === '중간 전형 회고') {
-          await postReviewMid(selectedReview.scheduleId, selectedReview.tageId, freeReview, goal);
+          await postReviewMid(selectedReview.scheduleId, selectedReview.stageId, freeReview, goal);
           onConfirm({ details: '', qa: '', feel: '', goal, freeReview });
         }
         onClose();
       } catch (error) {
         console.error('회고 제출 오류:', error);
-        alert('회고 제출에 실패했습니다.');
       }
     } else {
       console.error('Review type is missing');
