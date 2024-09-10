@@ -8,14 +8,14 @@ import { getCareers } from '../api/StepDetail/getCareer';
 
 type CareerMenuProps = {
   onClose: () => void;
-  onComplete: (selectedCards: { chipText: string, title: string }[]) => void;
+  onComplete: (selectedCards: { chipText: string, title: string, careerId: number }[]) => void;
 };
 
 const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isSliding, setIsSliding] = useState(false);
-  const [selectedCards, setSelectedCards] = useState<{ chipText: string, title: string }[]>([]);
-  const [careerCards, setCareerCards] = useState<{ chipText: string, title: string, description: string }[]>([]); // API 데이터 저장 상태
+  const [selectedCards, setSelectedCards] = useState<{ chipText: string, title: string, careerId: number }[]>([]);
+  const [careerCards, setCareerCards] = useState<{ chipText: string, title: string, description: string, careerId: number }[]>([]);
 
   useEffect(() => {
     const fetchCareerData = async () => {
@@ -26,7 +26,8 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
         const mappedCareers = careers.map(career => ({
           chipText: career.category,
           title: career.title,
-          description: career.summary
+          description: career.summary,
+          careerId: career.careerId
         }));
         setCareerCards(mappedCareers);
       } catch (error) {
@@ -37,8 +38,16 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
     fetchCareerData();
   }, []);
 
-  const handleCardSelect = (card: { chipText: string, title: string }) => {
-    setSelectedCards(prevCards => [...prevCards, card]);
+  const handleCardClick = (card: { chipText: string, title: string, careerId: number }) => {
+    const isSelected = selectedCards.some(selected => selected.careerId === card.careerId);
+
+    if (isSelected) {
+      // 카드가 선택된 상태이면 해제
+      setSelectedCards(prevCards => prevCards.filter(selected => selected.careerId !== card.careerId));
+    } else if (selectedCards.length < 4) {
+      // 카드가 선택되지 않은 상태이면 추가
+      setSelectedCards(prevCards => [...prevCards, card]);
+    }
   };
 
   const handleCompleteClose = () => {
@@ -66,7 +75,7 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
       sx={{
         position: 'fixed',
         top: '70px',
-        left: 0,
+        left: '-15px',
         width: '381px',
         height: '100%',
         backgroundColor: 'white',
@@ -97,12 +106,13 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
           overflowX: 'hidden',
         }}
       >
-        {careerCards.map((card, index) => (
-          <Box key={index} onClick={() => handleCardSelect({ chipText: card.chipText, title: card.title })}>
+        {careerCards.map((card) => (
+          <Box key={card.careerId} onClick={() => handleCardClick(card)}>
             <CareerCard
               chipText={card.chipText}
               title={card.title}
               description={card.description}
+              isSelected={selectedCards.some(selected => selected.careerId === card.careerId)}
             />
           </Box>
         ))}
@@ -124,7 +134,11 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
           flexShrink: 0
         }}
       >
-        <PrimaryButton sx={{ width: '100%' }} onClick={handleCompleteClose}>
+        <PrimaryButton
+          sx={{ width: '100%' }}
+          onClick={handleCompleteClose}
+          disabled={selectedCards.length === 0 || selectedCards.length > 4} 
+        >
           어필할 경험 추가 완료하기
         </PrimaryButton>
       </Box>
