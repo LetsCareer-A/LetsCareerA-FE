@@ -14,6 +14,7 @@ import Textfield from '../../../components/Textfield';
 import Label from '../../../components/Label';
 import { postReviewInt } from '../../../api/Reviews/postReviewInt';
 import { postReviewMid } from '../../../api/Reviews/postReviewMid';
+import Toast from '../../../components/Toast';
 
 interface BoardGatherProps {
   company: string;
@@ -30,6 +31,9 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
   const [feel, setFeel] = useState('');
   const [goal, setGoal] = useState('');
   const [freeReview, setFreeReview] = useState('');
+  const [showToast, setShowToast] = useState(false); 
+  const [toastMessage, setToastMessage] = useState(''); 
+  const [toastDescription, setToastDescription] = useState(''); 
 
   const getChipIcon = (type: string) => {
     if (type === '면접 회고') {
@@ -52,6 +56,10 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
     setModalOpen(true);  
   };
 
+  const handleCloseToast = () => {
+    setShowToast(false);  
+  };
+
   const handleConfirm = async () => {
     if (selectedReview) {
       try {
@@ -62,12 +70,16 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
   
         if (selectedReview.type === '면접 회고') {
           await postReviewInt(scheduleId, stageId, details, qa, feel);
+          setToastMessage(`'${company} ${department}' 면접에 대한 회고를 완료했어요!`);
+          setToastDescription('조금 더 성장에 한 걸음 가까워졌어요 :)');
         } else if (selectedReview.type === '중간 전형 회고') {
           await postReviewMid(scheduleId, stageId, freeReview, goal); 
+          setToastMessage(`${company} ${department}' 중간 전형에 대한 회고를 완료했어요!`);
+          setToastDescription('조금 더 성장에 한 걸음 가까워졌어요 :)');
         }
   
-        alert('회고가 성공적으로 제출되었습니다!');
         setModalOpen(false);
+        setShowToast(true); 
         setDetails('');
         setQa('');
         setFeel('');
@@ -237,6 +249,15 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
           </>
         )}
       </Modal>
+
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          description={toastDescription}
+          onClose={handleCloseToast}
+        />
+      )}
+
     </Box>
   );
 };
