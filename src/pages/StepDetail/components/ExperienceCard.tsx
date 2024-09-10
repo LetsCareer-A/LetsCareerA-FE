@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 
-const ExperienceCard = ({ career }) => {
+const ExperienceCard = () => {
   return (
     <Box 
       display={'flex'} 
@@ -14,7 +14,7 @@ const ExperienceCard = ({ career }) => {
       border={`1px solid ${colors.neutral[85]}`} 
       bgcolor={colors.neutral[100]}
     >
-      <Chip label={career.category} />
+      {/* <Chip label={career.category} /> */}
       <Box 
         display={'flex'} 
         flexDirection={'row'} 
@@ -26,11 +26,12 @@ const ExperienceCard = ({ career }) => {
           color={colors.neutral[10]} 
           style={typography.xSmallMed}
         >
-          {career.title}
+          {/* {career.title} */}
         </Typography>
       </Box>
     </Box>
   );
 };
+;
 
 export default ExperienceCard;

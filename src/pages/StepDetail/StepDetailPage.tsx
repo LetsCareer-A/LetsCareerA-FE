@@ -14,7 +14,7 @@ import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
 import ReadyState from './components/ReadyState';
 import AddStateModal from './components/AddStateModal';
-import MidReview from './components/MidReview';
+// import MidReview from './components/MidReview';
 
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
@@ -165,7 +165,7 @@ const StepDetailPage = () => {
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText="준비 단계"
+                        buttonText={selectedChip ? selectedChip.text : "준비 단계"}
                         items={items}
                         renderItem={(item) => 
                         <Chip text={item.text} backgroundColor={item.color} />}
@@ -264,7 +264,7 @@ const StepDetailPage = () => {
                         }}
                     >
                         {/* 서류전형 - 자기소개서 */}
-                        {/* <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
+                        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
                             <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
                                 <Typography color={colors.neutral[10]} style={typography.smallBold}>
                                     자기소개서
@@ -316,11 +316,11 @@ const StepDetailPage = () => {
                                 handleRemoveIntroduceBox={() => handleDeleteIntroduceBox(index)}
                                 />
                             ))}
-                        </Box> */}
+                        </Box>
 
                         {/* 중간전형 - 회고보드 */}
 
-          <MidReview/>
+          {/* <MidReview/> */}
 
           </Box>
 
@@ -347,9 +347,9 @@ const StepDetailPage = () => {
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
+                            {selectedCareerCards.map((card, index) => (
+                                <ExperienceBox key={index} card={card} onClick={() => {}} />
+                            ))}
                             <ExperienceBox onClick={handleExperienceBoxClick} />
                         </Box>
                     </Box>

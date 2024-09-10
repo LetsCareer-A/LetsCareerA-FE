@@ -17,14 +17,13 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Layout>
-            {/* <Routes>
+            <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/reviews" element={<ReviewsPage />} />
               <Route path="/careers" element={<CareersPage />} />
               <Route path="/schedules/{scheduleId}/" element={<StepDetailPage />} />
-            </Routes> */}
-            <StepDetailPage/>
+            </Routes>
           </Layout>
         </Router>
       </ThemeProvider>
