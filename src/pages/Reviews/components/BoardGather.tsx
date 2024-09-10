@@ -9,7 +9,7 @@ import { NormalButton } from '../../../components/CustomButton';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import ReviewModal from './ReviewModal'; 
 import { Review } from '../../../store/useReviewStore';
-
+import Modal from '../../../components/Modal';
 
 interface BoardGatherProps {
   company: string;
@@ -18,8 +18,9 @@ interface BoardGatherProps {
 }
 
 const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const getChipIcon = (type: string) => {
     if (type === '면접 회고') {
@@ -32,8 +33,12 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
   const handleReviewClick = (review: Review) => {
     if (review.isReviewed) {
       setSelectedReview(review);
-      setModalOpen(true);
+      setReviewModalOpen(true);
     }
+  };
+
+  const handleButtonClick = () => {
+    setModalOpen(true); 
   };
 
   return (
@@ -89,6 +94,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
               <NormalButton
                 width="100%"
                 padding="4px"
+                onClick={handleButtonClick}   
               >
                 회고 작성하기
                 <CreateOutlinedIcon sx={{ width: '16px', color: colors.primary.normal }} />
@@ -99,10 +105,21 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews 
       </Stack>
 
       <ReviewModal 
-        open={modalOpen}
-        handleClose={() => setModalOpen(false)}
+        open={reviewModalOpen}
+        handleClose={() => setReviewModalOpen(false)}
         selectedReview={selectedReview}
       />
+
+      {/* Modal 컴포넌트 */}
+      <Modal 
+        open={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        title="회고 작성"
+        subtitle="회고를 작성해주세요"
+      >
+        {/* Modal 내부 콘텐츠 */}
+        <Typography>회고 작성 내용을 여기에 입력하세요</Typography>
+      </Modal>
     </Box>
   );
 };
