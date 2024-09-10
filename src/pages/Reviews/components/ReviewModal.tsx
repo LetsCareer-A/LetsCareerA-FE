@@ -102,10 +102,11 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, handleClose, selectedRe
             sx={{ mt: 1 }}
           >
             {reviewInfo?.deadline ? 
-              `${reviewInfo.deadline}에 진행된 ${reviewInfo.type}` 
+              `${reviewInfo.deadline}에 진행된 ${reviewInfo.type === '중간' ? '중간 전형' : reviewInfo.type}입니다.` 
               : '날짜가 설정되지 않은 일자의 회고입니다.'
             }
           </Typography>
+
 
           {selectedReview?.type === '중간 전형 회고' && (
             <>
