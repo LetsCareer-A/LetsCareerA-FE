@@ -1,11 +1,12 @@
 import axiosInstance from '..';
 
-export const getCareers = async (pageNum: number, sizeNum: number) => {
+export const getCareers = async (pageNum: number, sizeNum: number, categories: string[]) => {
   try {
     const response = await axiosInstance.get('/careers', {
       params: {
         page: pageNum,
-        size: sizeNum
+        size: sizeNum,
+        category: categories.join(',')
       }
     });
     console.log(response.data);
