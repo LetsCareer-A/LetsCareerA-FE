@@ -39,19 +39,16 @@ const useReviewStore = create<ReviewStore>((set) => ({
         const reviews: Review[] = [
           ...company.interviewReviews.map((review: any) => ({
             type: '면접 회고',
-            freeReview: review.isReviewed
-              ? `${review.deadline ? review.deadline : '날짜가 설정되지 않은 일자'}에 진행된 면접입니다.`
-              : `${review.deadline ? review.deadline : '날짜가 설정되지 않은 일자'}에 진행된 면접입니다. 아직 진행되지 않은 회고입니다.`,
+            freeReview: `${review.deadline ? review.deadline : '날짜가 설정되지 않은 일자'}에 진행된 면접입니다.`,
+
             isReviewed: review.isReviewed,
             scheduleId: review.scheduleId,
             stageId: review.stageId,
-            reviewId: review.reviewId
+            reviewId: review.reviewId,
           })),
           ...company.midtermReviews.map((review: any) => ({
             type: '중간 전형 회고',
-            freeReview: review.isReviewed
-              ? `${review.deadline ? review.deadline : '날짜가 설정되지 않은 일자'}에 진행된 중간 전형입니다.`
-              : `${review.deadline ? review.deadline : '날짜가 설정되지 않은 일자'}에 진행된 중간 전형입니다. 아직 진행되지 않은 회고입니다.`,
+            freeReview: `${review.deadline ? review.deadline : '날짜가 설정되지 않은 일자'}에 진행된 중간 전형입니다.`,
             isReviewed: review.isReviewed,
             scheduleId: review.scheduleId,
             stageId: review.stageId,
