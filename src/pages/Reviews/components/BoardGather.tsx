@@ -8,7 +8,7 @@ import Commuincation from '../../../assets/communication.svg';
 import { NormalButton } from '../../../components/CustomButton';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import ReviewModal from './ReviewModal'; 
-import { Review } from '../../../store/useReviewStore';
+import useReviewStore, { Review } from '../../../store/useReviewStore';
 import Modal from '../../../components/Modal';
 import Textfield from '../../../components/Textfield';
 import Label from '../../../components/Label';
@@ -23,6 +23,7 @@ interface BoardGatherProps {
 }
 
 const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}) => {
+  const { fetchCompanyData, page } = useReviewStore();
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -85,6 +86,8 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         setFeel('');
         setFreeReview('');
         setGoal('');
+        await fetchCompanyData(page);
+        
       } catch (error) {
         console.error('회고 제출 오류:', error);
         alert('회고 제출에 실패했습니다.');
