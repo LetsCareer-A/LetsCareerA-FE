@@ -14,9 +14,9 @@ import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
 import ReadyState from './components/ReadyState';
 import AddStateModal from './components/AddStateModal';
-// import MidReview from './components/MidReview';
+import MidReview from './components/MidReview';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { getSchedules } from '../../api/\bStepDetail/getSchedules';
 
 
 
@@ -84,15 +84,15 @@ const StepDetailPage: React.FC = () => {
     useEffect(() => {
         const fetchScheduleData = async () => {
             try {
-                const response = await axios.get(`/api/schedules/${scheduleId}`);
-                setScheduleData(response.data.data);
+                const data = await getSchedules(Number(scheduleId)); 
+                setScheduleData(data.data); 
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
             }
         };
 
         if (scheduleId) {
-            fetchScheduleData();
+            fetchScheduleData(); 
         }
     }, [scheduleId]);
 
