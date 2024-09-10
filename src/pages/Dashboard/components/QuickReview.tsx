@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { useTheme } from '@mui/material';
 import '../../../styles/pagination.css';
 import { getFastReview } from '../../../api/Dashboard/getFastReview';
+import Edit from '../../../assets/edit_pencil.png';
 
 const QuickReview: React.FC = () => {
     const theme = useTheme();
@@ -71,7 +72,8 @@ const QuickReview: React.FC = () => {
             <Box display='flex' flexDirection='column' gap='8px' flexGrow={1}>
                 {fastReviews.length > 0 ? (
                     fastReviews.map((review, index) => (
-                        <Box
+                        <Box>
+                             <Box
                             key={index} 
                             height='62px'
                             sx={{
@@ -82,19 +84,41 @@ const QuickReview: React.FC = () => {
                                 p: '8px'
                             }}
                         >
+                            <Box display='flex' gap='22px' alignItems='center' justifyContent='space-between'>
+                            <Box>
                             <Typography 
                                 style={typography.xSmallMed} 
                                 color='#2A2D34'
+                                sx={{
+                                    whiteSpace: 'nowrap',      
+                                    overflow: 'hidden',       
+                                    textOverflow: 'ellipsis',   
+                                    width: '99px'  
+                                }}
                             >
                                 {review.company}
                             </Typography>
                             <Typography 
                                 style={typography.xSmall2Reg} 
                                 color='#7A7D84' 
+                                sx={{
+                                    whiteSpace: 'nowrap',     
+                                    overflow: 'hidden',       
+                                    textOverflow: 'ellipsis',
+                                    width: '99px'   
+                                }}
                             >
                                 {review.department}
                             </Typography>
+
                         </Box>
+                        <img src={Edit} style={{width: '20px', height:'20px' ,display:'flex',  alignItems:'center'}}/>       
+                            </Box>
+                                
+                             </Box>    
+                                             
+                        </Box>
+                       
                     ))
                 ) : (
                     <Typography
