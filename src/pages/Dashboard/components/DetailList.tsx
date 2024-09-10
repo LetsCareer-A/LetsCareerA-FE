@@ -73,9 +73,9 @@ const DetailList: React.FC = () => {
   };
 
   const handleCardClick = (scheduleId: number) => {
-    // API 요청을 통해 이벤트 정보를 가져와 StepDetailPage로 전달
-    navigate(`/schedules/${scheduleId}`); // useNavigate로 페이지 이동
+    navigate(`/schedules/${scheduleId}`); 
   };
+
   const getCurrentDateWithDay = () => {
     const today = new Date(currentDate);
     const month = String(today.getMonth() + 1).padStart(2, '0');

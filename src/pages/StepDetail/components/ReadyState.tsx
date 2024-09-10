@@ -22,30 +22,40 @@ interface ReadyStates {
 
 const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSelect }) => {
   const [readyStates, setReadyStates] = useState<ReadyStates>({
-    type: '서류', // 초기 전형 상태
-    date: '24.08.30', // 초기 날짜
+    type: '', // 초기 전형 상태
+    date: '', // 초기 날짜
   });
 
   // 전형 상태에 따른 이미지 반환 함수
   const getImageForStage = () => {
     switch (readyStates.type) {
       case '서류':
+        console.log(readyStates)
         return fileImage;
       case '중간':
+        console.log("중간")
         return workcheck;
       case '면접':
+        console.log("면접")
         return interview;
       default:
+        console.log("기본")
         return fileImage;
     }
   };
 
   const handleDropdownSelect = (item: DropdownItem) => {
+    console.log("핸들드롭다운 시작")
+
     setReadyStates((prevState) => ({
       ...prevState,
       type: item.text, // 드롭다운에서 선택된 전형 상태로 업데이트
     }));
+    console.log("핸들드롭다운 중간")
+
     onDropdownSelect(item); // 부모 컴포넌트의 선택 처리 함수 호출
+    console.log("핸들드롭다운 끗")
+
   };
 
   return (
@@ -89,6 +99,7 @@ const ReadyState: React.FC<SupportStateProps> = ({ dropdownItems, onDropdownSele
         buttonText="진행중"
         backgroundColor={colors.primary[10]}
         items={dropdownItems}
+        onSelect={onDropdownSelect}
         renderItem={(item) => (
           <Typography
             style={typography.xSmall2Reg}

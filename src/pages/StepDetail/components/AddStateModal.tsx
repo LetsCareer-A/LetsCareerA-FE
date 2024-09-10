@@ -14,7 +14,7 @@ import pencil from '../../../assets/pencil.png';
 import CalendarInput from '../../../components/CalendarInput';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { postAddType } from '../../../api/StepDetail/postAddType'; 
+import { postAddType } from '../../../api/SteApDetail/postAddType'; 
 import { useParams } from 'react-router-dom'; 
 
 const items: DropdownItem[] = [
@@ -31,7 +31,7 @@ interface AddStateModalProps {
 
 const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState }) => {
   const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
-  const [, setStartDate] = useState<Date | null>(null);
+  const [StartDate, setStartDate] = useState<Date | null>(null);
   const { date, setDate } = useModalStore();
   
   const { scheduleId } = useParams<{ scheduleId: string }>();
@@ -55,8 +55,6 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
           type = 'UNKNOWN';
           break;
       }
-
-      
         const payload = {
           type: type,
           mid_name:  '', 

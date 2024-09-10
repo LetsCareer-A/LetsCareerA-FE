@@ -177,7 +177,7 @@ const StepDetailPage: React.FC = () => {
                     imageHeight="16px"
                 />
                  <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.company || '회사이름'}
+                    {scheduleData?.company}
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
