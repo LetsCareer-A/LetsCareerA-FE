@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import typography from '../../../styles/typography';
 import colors from '../../../styles/colors';
@@ -93,6 +93,17 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
       console.error('Selected review or IDs are missing');
     }
   };
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 5000); 
+
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
 
   const isButtonDisabled = () => {
     if (selectedReview?.type === '면접 회고') {
