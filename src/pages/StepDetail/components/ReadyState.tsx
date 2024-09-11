@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Select, MenuItem, Typography, FormControl, InputLabel } from '@mui/material';
 import Dropdown from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
@@ -14,13 +15,12 @@ import useStageStore from '../../../store/useStageStore';
 //   status?: string;
 // }
 
-const Stateitems: DropdownItem[] = [
-  { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
-  { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
-  { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
-  { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+const Stateitems = [
+  { text: '진행중', color: colors.primary[10], textColor: colors.primary.normal },
+  { text: '진행완료', color: colors.primary[10], textColor: colors.primary.normal },
+  { text: '합격', color: colors.primary[10], textColor: colors.primary.normal },
+  { text: '불합격', color: colors.primary[10], textColor: colors.primary.normal },
 ];
-
 
 
 const ReadyState = () => {
@@ -56,58 +56,58 @@ const ReadyState = () => {
     // console.log(readyStates);
   };
   
+  const [selectedStage, setSelectedStage] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSelectedStage(event.target.value as string);
+    // handleDropdownSelect(event.target.value as string);
+  };
   
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        width: '100px',
-        paddingBottom: '4px',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '4px',
-        marginLeft: '23px',
-        marginTop: '25px',
-        position: 'relative',
-      }}
-    >
-      <Box
+    <Box width={'1043px'} height={'237px'} borderRadius={'12px'} border={`1px solid ${colors.neutral[85]}`} bgcolor={colors.neutral[100]}>
+       <Box display={'inline-flex'} alignItems={'flex-start'} gap={'16px'}>
+        <Box
         sx={{
           display: 'flex',
-          width: 100,
-          height: 100,
-          padding: '3px 3px',
-          justifyContent: 'center',
+          width: '100pxç',
+          paddingBottom: '4px',
+          flexDirection: 'column',
           alignItems: 'center',
-          borderRadius: '8px',
-          bgcolor: colors.primary[80],
+          gap: '4px',
+          marginLeft: '23px',
+          marginTop: '25px',
+          position: 'relative',
         }}
       >
-        <img src={fileImage} style={{ width: '100%', height: '100%' }} />
+        <Box
+          sx={{
+            display: 'flex',
+            width: 100,
+            height: 100,
+            padding: '3px 3px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '8px',
+            bgcolor: colors.primary[80],
+          }}
+        >
+          <img src={fileImage} style={{ width: '100%', height: '100%' }} />
+        </Box>
+        
+        <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
+          전형 이름
+        </Typography>
+
+        <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
+          날짜
+        </Typography>
       </Box>
       
-      <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-        전형 이름
-      </Typography>
-
-      <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-        날짜
-      </Typography>
-
-      <Dropdown
-        buttonText='상태'
-        backgroundColor={colors.primary[10]}
-        items={Stateitems}
-        onSelect={handleDropdownSelect}
-        sx={{
-          height: '28px',
-          marginTop: '10px',
-          color: `${colors.primary.normal}`,
-          typography: `${typography.xSmall2Med}`,
-        }}
-      />
+       </Box>
+       
     </Box>
+  
   );
 };
 

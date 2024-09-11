@@ -157,7 +157,7 @@ const StepDetailPage: React.FC = () => {
 
             {/* 전형 준비 상태 */}
             <Stack spacing="16px" mt={3}>
-                {/* <ReadyState /> */}
+                <ReadyState />
                 {/* 배너 */}
                 <Box
                     sx={{
