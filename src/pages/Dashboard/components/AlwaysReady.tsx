@@ -58,7 +58,6 @@ const AlwaysReady = () => {
     const [readyBoardData, setReadyBoardData] = useState<{ company: string; department: string; status: string }[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [totalItems, setTotalItems] = useState(0);  
 
     useEffect(() => {
         const fetchData = async () => {
@@ -71,8 +70,7 @@ const AlwaysReady = () => {
                         status: item.status,
                     }));
                     setReadyBoardData(alwaysData);
-                    setTotalItems(response.data.total);
-                    setTotalPages(Math.ceil(response.data.total / 5)); 
+                    setTotalPages(Math.ceil(response.data.total / 5));
                 }
             } catch (error) {
                 console.error('Failed to fetch always ready data:', error);
