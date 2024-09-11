@@ -11,25 +11,25 @@ import notebook from '../../assets/notebook.png';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
-// import ReadyState from './components/ReadyState';
+import ReadyState from './components/ReadyState';
 // import MidReview from './components/MidReview';
 import { useParams } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 
-
-
+// 헤더 드롭다운
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
     { text: '최종 합격', color: '#4D55F5' },
     { text: '최종 불합격', color: '#FF566A' },
 ];
 
+//핵심커리어 내용
 interface ExperienceBoxProps {
     card?: { chipText: string; title: string };
     onClick: () => void;
 }
-
+//핵심커리어 박스 컴포넌트
 const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
     <Box
         sx={{
@@ -60,6 +60,7 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
         )}
     </Box>
 );
+
 
 const StepDetailPage: React.FC = () => {
     const { scheduleId } = useParams<{ scheduleId: string }>();
@@ -144,7 +145,7 @@ const StepDetailPage: React.FC = () => {
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText={scheduleData.progress} // scheduleId의 progress를 받아와서 기본으로 지정
+                        buttonText={ scheduleData.progress} // scheduleId의 progress를 받아와서 기본으로 지정
                         items={items} //드랍다운 아이템 가져오기
                         renderItem={(item) => 
                         <Chip text={item.text} backgroundColor={item.color} />} // 공고 진행중 , 파란색

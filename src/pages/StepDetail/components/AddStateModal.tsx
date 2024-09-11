@@ -1,3 +1,5 @@
+{/* 입사 준비 단계 전형 추가 */}
+
 import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { DropdownItem } from '../../../components/Dropdown';
