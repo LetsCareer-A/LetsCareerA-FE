@@ -5,38 +5,45 @@ import typography from "../styles/typography";
 import { PrimaryButton } from "./CustomButton";
 import CareerCard from './CareerCard';
 import { getCareers } from '../api/StepDetail/getCareer'; 
+import { postCareer } from '../api/StepDetail/postCareer';
 
 type Career = {
   careerId: number;
   category: string;
   title: string;
   summary: string;
+  isAppeal: boolean;
 };
 
 type CareerMenuProps = {
   onClose: () => void;
   onComplete: (selectedCards: { chipText: string, title: string, careerId: number }[]) => void;
-  onOpen?: () => void; 
+  onOpen?: () => void;
+  scheduleId: number;
+  stageId: number; 
 };
 
-const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
+const CareerMenu = ({ scheduleId, stageId, onClose, onComplete, onOpen }: CareerMenuProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isSliding, setIsSliding] = useState(false);
   const [selectedCards, setSelectedCards] = useState<{ chipText: string, title: string, careerId: number }[]>([]);
-  const [careerCards, setCareerCards] = useState<{ chipText: string, title: string, description: string, careerId: number }[]>([]);
+  const [careerCards, setCareerCards] = useState<{
+    chipText: string, title: string, description: string, careerId: number, isAppeal: boolean 
+  }[]>([]);
 
   useEffect(() => {
     const fetchCareerData = async () => {
       try {
-        //  const response = await getCareers(scheduleId, stageId);
-        const response = await getCareers(50, 50);
+        // const response = await getCareers(50, 50);
+        const response = await getCareers(scheduleId, stageId);
         const careers: Career[] = response.data.careers;
-    
+
         const mappedCareers = careers.map(career => ({
           chipText: career.category,
           title: career.title,
           description: career.summary,
-          careerId: career.careerId
+          careerId: career.careerId,
+          isAppeal: career.isAppeal
         }));
         setCareerCards(mappedCareers);
       } catch (error) {
@@ -47,23 +54,38 @@ const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
     fetchCareerData();
   }, []);
 
-  const handleCardClick = (card: { chipText: string, title: string, careerId: number }) => {
-    const isSelected = selectedCards.some(selected => selected.careerId === card.careerId);
+  const handleCardClick = (cardId: number) => {
+    const isSelected = selectedCards.some(selected => selected.careerId === cardId);
+    const card = careerCards.find(card => card.careerId === cardId);
+
+    const appealCards = careerCards.filter(card => card.isAppeal);
+
+    const totalSelectedAndAppealCount = selectedCards.length + appealCards.length;
 
     if (isSelected) {
-      setSelectedCards(prevCards => prevCards.filter(selected => selected.careerId !== card.careerId));
-    } else if (selectedCards.length < 4) {
-      setSelectedCards(prevCards => [...prevCards, card]);
+      setSelectedCards(prevCards => prevCards.filter(selected => selected.careerId !== cardId));
+    } else if (totalSelectedAndAppealCount < 4 || (card && card.isAppeal)) {
+      if (card) {
+        setSelectedCards(prevCards => [...prevCards, { chipText: card.chipText, title: card.title, careerId: cardId }]);
+      }
     }
   };
 
-  const handleCompleteClose = () => {
+  const handleCompleteClose = async () => {
     setIsSliding(true);
-    setTimeout(() => {
-      setIsVisible(false);
-      onComplete(selectedCards);
-      onClose();
-    }, 300);
+
+    const selectedCareerIds = selectedCards.map(card => card.careerId);
+
+    try {
+      await postCareer(50, 50, selectedCareerIds);
+      setTimeout(() => {
+        setIsVisible(false);
+        onComplete(selectedCards);
+        onClose();
+      }, 300);
+    } catch (error) {
+      console.error('Failed to post careers:', error);
+    }
   };
 
   const handleClose = () => {
@@ -73,11 +95,12 @@ const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
       onClose();
     }, 300);
   };
+
   useEffect(() => {
     setTimeout(() => {
       setIsVisible(true);
       if (onOpen) {
-        onOpen(); 
+        onOpen();
       }
     }, 0);
   }, [onOpen]);
@@ -128,7 +151,9 @@ const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
               title={card.title}
               description={card.description}
               isSelected={selectedCards.some(selected => selected.careerId === card.careerId)}
-              onCardClick={() => handleCardClick(card)} 
+              isAppeal={card.isAppeal}
+              onCardClick={handleCardClick}
+              careerId={card.careerId}
             />
           </Box>
         ))}
@@ -153,9 +178,9 @@ const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
         <PrimaryButton
           sx={{ width: '100%' }}
           onClick={handleCompleteClose}
-          disabled={selectedCards.length === 0 || selectedCards.length > 4} 
+          disabled={selectedCards.length === 0}
         >
-          어필할 경험 추가 완료하기
+          선택 완료
         </PrimaryButton>
       </Box>
     </Box>
