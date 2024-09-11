@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import colors from '../../../styles/colors';
@@ -6,6 +6,8 @@ import typography from '../../../styles/typography';
 import Chip from '../../components/Chips';
 import CareerMenu from '../../../components/CareerMenu';
 import Toast from '../../../components/Toast';
+import { getDocDetail } from '../../../api/StepDetail/getDocDetail';
+import { getIntDetail } from '../../../api/StepDetail/getIntDetail';
 
 interface ExperienceBoxProps {
     card?: { chipText: string; title: string };
@@ -48,8 +50,30 @@ const CoreExperience: React.FC = () => {
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
+    const [experienceType, setExperienceType] = useState<'서류' | '면접'>('서류'); 
+    const [isLoading, setIsLoading] = useState(true); 
 
     const MAX_EXPERIENCE_BOXES = 4;
+
+    useEffect(() => {
+        const loadCareers = async () => {
+            try {
+                const response = await fetchCareersByType();
+                if (response) {
+                    setSelectedCareerCards(response.data.appealCareers.map(career => ({
+                        chipText: career.category,
+                        title: career.title
+                    })));
+                }
+            } catch (error) {
+                console.error('Failed to fetch career data:', error);
+            } finally {
+                setIsLoading(false); 
+            }
+        };
+
+        loadCareers();
+    }, [experienceType]);
 
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
@@ -61,6 +85,20 @@ const CoreExperience: React.FC = () => {
             setToastMessage('핵심경험이 추가되었습니다!');
             setTimeout(() => setToastMessage(''), 3000);
             setIsCareerMenuVisible(false);
+        }
+    };
+
+    // API를 선택적으로 호출하는 함수
+    const fetchCareersByType = async () => {
+        try {
+            if (experienceType === '서류') {
+                return await getDocDetail(scheduleId, stageId);
+                // return await getDocDetail(50, 50);
+            } else if (experienceType === '면접') {
+                return await getIntDetail(scheduleId, stageId);
+            }
+        } catch (error) {
+            console.error('Failed to fetch career data:', error);
         }
     };
 
@@ -93,7 +131,7 @@ const CoreExperience: React.FC = () => {
                         key={index}
                         card={selectedCareerCards[index]}
                         onClick={handleExperienceBoxClick}
-                        isEmpty={!selectedCareerCards[index]}
+                        isEmpty={selectedCareerCards[index] === undefined}
                     />
                 ))}
             </Box>
