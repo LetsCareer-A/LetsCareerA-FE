@@ -14,7 +14,7 @@ import Toast from '../../components/Toast';
 import IntroduceBox from './components/IntroduceBox'; 
 import ReadyState from './components/ReadyState';
 import AddStateModal from './components/AddStateModal';
-import MidReview from './components/MidReview';
+// import MidReview from './components/MidReview';
 import { useParams } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 

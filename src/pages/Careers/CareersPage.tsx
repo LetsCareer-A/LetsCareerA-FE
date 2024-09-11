@@ -218,7 +218,7 @@ const CareersPage = () => {
           <img src={Plus} alt='플러스 아이콘' />
         </PrimaryButton>
       </Box>
-      <a href="https://www.letscareer.co.kr/program" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.letscareer.co.kr/program" rel="noopener noreferrer">
         <img style={{ width: '1043px', marginTop: '14px' }} src={CareerBanner} alt="Career Banner" />
       </a>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Pagination, Typography } from '@mui/material';
-import colors from '../.././../styles/colors';
+import colors from '../../../styles/colors';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import typography from '../../../styles/typography';
 import { getAlways } from '../../../api/Dashboard/getAlways'; 
@@ -70,7 +70,7 @@ const AlwaysReady = () => {
                         status: item.status,
                     }));
                     setReadyBoardData(alwaysData);
-                    setTotalPages(Math.ceil(response.data.size / 5));
+                    setTotalPages(Math.ceil(response.data.total / 5));
                 }
             } catch (error) {
                 console.error('Failed to fetch always ready data:', error);

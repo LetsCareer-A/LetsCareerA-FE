@@ -6,6 +6,11 @@ import Label from '../../../components/Label';
 import { postReviewInt } from '../../../api/Reviews/postReviewInt';
 import { postReviewMid } from '../../../api/Reviews/postReviewMid';
 
+interface Review {
+  scheduleId: string | number;
+  stageId: string | number;
+}
+
 interface WritingModalProps {
   open: boolean;
   onClose: () => void;
@@ -24,9 +29,8 @@ interface WritingModalProps {
     goal: string;
     freeReview: string;
   }) => void;
-  selectedReview?: Review; 
+  selectedReview: Review | null;
 }
-
 
 const WritingModal: React.FC<WritingModalProps> = ({
   open,
@@ -47,16 +51,16 @@ const WritingModal: React.FC<WritingModalProps> = ({
   const [freeReview, setFreeReview] = useState(initialFreeReview);
 
   const handleConfirm = async () => {
-    if (reviewType) {
+    if (reviewType && selectedReview) {
+      const scheduleId = String(selectedReview.scheduleId);
+      const stageId = String(selectedReview.stageId);
 
-      console.log(selectedReview)
-      console.log(selectedReview.scheduleId, selectedReview.stageId)
       try {
         if (reviewType === '면접 회고') {
-          await postReviewInt(selectedReview.scheduleId, selectedReview.stageId, details, qa, feel);
+          await postReviewInt(scheduleId, stageId, details, qa, feel);
           onConfirm({ details, qa, feel, goal: '', freeReview: '' });
         } else if (reviewType === '중간 전형 회고') {
-          await postReviewMid(selectedReview.scheduleId, selectedReview.stageId, freeReview, goal);
+          await postReviewMid(scheduleId, stageId, freeReview, goal);
           onConfirm({ details: '', qa: '', feel: '', goal, freeReview });
         }
         onClose();
@@ -64,7 +68,7 @@ const WritingModal: React.FC<WritingModalProps> = ({
         console.error('회고 제출 오류:', error);
       }
     } else {
-      console.error('Review type is missing');
+      console.error('Review type or selectedReview is missing');
     }
   };
 
