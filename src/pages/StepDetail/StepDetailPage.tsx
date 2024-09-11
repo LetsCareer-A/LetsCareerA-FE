@@ -11,13 +11,10 @@ import notebook from '../../assets/notebook.png';
 import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
-import IntroQnA from './components/IntroQnA'; 
-import ReadyState from './components/ReadyState';
-import AddStateModal from './components/AddStateModal';
+// import ReadyState from './components/ReadyState';
 // import MidReview from './components/MidReview';
 import { useParams } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
-import useStageStore from '../../store/useStageStore';
 import Introduce from './components/Introduce';
 
 
@@ -67,15 +64,12 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
 const StepDetailPage: React.FC = () => {
     const { scheduleId } = useParams<{ scheduleId: string }>();
     const [scheduleData, setScheduleData] = useState<any>(null);
-    const {selectedStage, setSelectedStage, readyStates, setReadyStates } = useStageStore();
-    const [StageData, setStageData ] = useState<any>(null);
-
-
-    const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
+    // const [StageData, setStageData ] = useState<any>(null);
+    // const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
-    const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
+    // const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -83,7 +77,7 @@ const StepDetailPage: React.FC = () => {
             try {
                 const data = await getSchedules(Number(scheduleId)); 
                 setScheduleData(data.data); 
-                setStageData(data.stages);
+                // setStageData(data.stages);
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
             }
@@ -95,46 +89,19 @@ const StepDetailPage: React.FC = () => {
     }, [scheduleId]);
 
 // 면접 전형 추가 모달 관리
-const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
-    setIsAddStateModalOpen(false);
+// const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
+//     setIsAddStateModalOpen(false);
 
-    if (selectedStep) {
-        // 상태를 바로 객체 형태로 전달
-        setReadyStates({
-            type: selectedStep.text, // DropdownItem의 text를 type에 할당
-            date: new Date().toISOString(), // 현재 날짜를 ISO 형식으로 설정
-            status: null // DropdownItem의 color를 status에 할당
-        });
-    }
-};
+//     if (selectedStep) {
+//         // 상태를 바로 객체 형태로 전달
+//         setReadyStates({
+//             type: selectedStep.text, // DropdownItem의 text를 type에 할당
+//             date: new Date().toISOString(), // 현재 날짜를 ISO 형식으로 설정
+//             status: null // DropdownItem의 color를 status에 할당
+//         });
+//     }
+// };
 
-
-    
-    // 자기소개서 관련 이벤트
-    const handleQuestionTextFieldChange = (index: number) => (
-        event: React.ChangeEvent<HTMLInputElement>
-        ) => {
-        const updatedBoxes = [...IntroQnAs];
-        updatedBoxes[index].question = event.target.value;
-        setIntroQnAs(updatedBoxes);
-    };
-
-    const handleAnswerTextFieldChange = (index: number) => (
-    event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-    const updatedBoxes = [...IntroQnAs];
-    updatedBoxes[index].answer = event.target.value;
-    setIntroQnAs(updatedBoxes);
-    };
-
-    const handleAddIntroQnAs = () => {
-        setIntroQnAs([...IntroQnAs, { question: '', answer: '' }]);
-      };
-
-    const handleDeleteIntroQnAs = (index: number) => {
-    setIntroQnAs((prevQnAs) => prevQnAs.filter((_, i) => i !== index));
-    };
-    
     {/* 핵심경험 관련 이벤트*/}
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
@@ -175,7 +142,7 @@ const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText={selectedStage ? selectedStage.text : scheduleData.progress} // scheduleId의 progress를 받아와서 기본으로 지정
+                        buttonText={scheduleData.progress} // scheduleId의 progress를 받아와서 기본으로 지정
                         items={items} //드랍다운 아이템 가져오기
                         renderItem={(item) => 
                         <Chip text={item.text} backgroundColor={item.color} />} // 공고 진행중 , 파란색
@@ -187,7 +154,7 @@ const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
 
             {/* 전형 준비 상태 */}
             <Stack spacing="16px" mt={3}>
-                <ReadyState />
+                {/* <ReadyState /> */}
                 {/* 배너 */}
                 <Box
                     sx={{
@@ -260,3 +227,7 @@ const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
 };
 
 export default StepDetailPage;
+function setSelectedStage(item: DropdownItem) {
+    throw new Error('Function not implemented.');
+}
+

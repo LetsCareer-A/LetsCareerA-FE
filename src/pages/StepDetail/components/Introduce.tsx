@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+{/* 자기소개 컴포넌트 */}
 
+import React, { useState } from 'react';
+import { Box, Button, Typography } from '@mui/material';
 import IntroQnA from './IntroQnA'; 
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
+
+import AddIcon from '@mui/icons-material/Add';
+
 
 const Introduce = () => {
     const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
