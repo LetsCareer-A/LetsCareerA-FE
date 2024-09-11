@@ -76,18 +76,19 @@ const StepDetailPage: React.FC = () => {
     useEffect(() => {
         const fetchScheduleData = async () => {
             try {
-                const data = await getSchedules(Number(scheduleId)); 
-                setScheduleData(data.data); 
-                // setStageData(data.stages);
+                const data = await getSchedules(Number(scheduleId));
+                console.log('Fetched data:', data); // 로그로 데이터 확인
+                setScheduleData(data.data);
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
             }
         };
-
+    
         if (scheduleId) {
-            fetchScheduleData(); 
+            fetchScheduleData();
         }
     }, [scheduleId]);
+    
 
 // 면접 전형 추가 모달 관리
 // const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
@@ -134,25 +135,24 @@ const StepDetailPage: React.FC = () => {
                     imageWidth="16px"
                     imageHeight="16px"
                 />
-                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.company}
+                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+                    {scheduleData?.company || '회사명 없음'}
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.department}
+                    {scheduleData?.department || '부서명 없음'}
                 </Typography>
-                <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText={ scheduleData.progress} // scheduleId의 progress를 받아와서 기본으로 지정
-                        items={items} //드랍다운 아이템 가져오기
+                        buttonText={scheduleData?.progress || '진행 상태 없음'}
+                        items={items}
                         renderItem={(item) => 
-                        <Chip text={item.text} backgroundColor={item.color} />} // 공고 진행중 , 파란색
+                            <Chip text={item.text} backgroundColor={item.color} />}
                         onSelect={handleDropdownSelect}
-                        sx={{width:142, height:44}}
+                        sx={{ width: 142, height: 44 }}
                     />
-                </Box>
+
             </Stack>
 
             {/* 전형 준비 상태 */}
@@ -230,7 +230,3 @@ const StepDetailPage: React.FC = () => {
 };
 
 export default StepDetailPage;
-// function setSelectedStage(item: DropdownItem) {
-//     throw new Error('Function not implemented.');
-// }
-

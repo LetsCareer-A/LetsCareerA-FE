@@ -24,36 +24,36 @@ const Stateitems: DropdownItem[] = [
 
 
 const ReadyState = () => {
-  const {readyStates, setReadyStates} = useStageStore();
+  // const {readyStates, setReadyStates} = useStageStore();
 
-  // 전형 상태에 따른 이미지 반환 함수
-  const getImageForStage = () => {
-    switch (readyStates.type) {
-      case '서류':
-        console.log(readyStates)
-        return fileImage;
-      case '중간':
-        console.log("중간")
-        return workcheck;
-      case '면접':
-        console.log("면접")
-        return interview;
-      default:
-        console.log("기본")
-        return fileImage;
-    }
-  };
+  // // 전형 상태에 따른 이미지 반환 함수
+  // const getImageForStage = () => {
+  //   switch (readyStates.type) {
+  //     case '서류':
+  //       console.log(readyStates)
+  //       return fileImage;
+  //     case '중간':
+  //       console.log("중간")
+  //       return workcheck;
+  //     case '면접':
+  //       console.log("면접")
+  //       return interview;
+  //     default:
+  //       console.log("기본")
+  //       return fileImage;
+  //   }
+  // };
 
   const handleDropdownSelect = (item: DropdownItem) => {
-    console.log(readyStates);
+    // console.log(readyStates);
   
-    // 상태를 직접 객체로 업데이트
-    setReadyStates({
-      ...readyStates, // 기존 readyStates 상태 유지
-      status: item.text, // 드롭다운에서 선택된 상태로 업데이트
-    });
+    // // 상태를 직접 객체로 업데이트
+    // setReadyStates({
+    //   ...readyStates, // 기존 readyStates 상태 유지
+    //   status: item.text, // 드롭다운에서 선택된 상태로 업데이트
+    // });
     
-    console.log(readyStates);
+    // console.log(readyStates);
   };
   
   
@@ -84,19 +84,19 @@ const ReadyState = () => {
           bgcolor: colors.primary[80],
         }}
       >
-        <img src={getImageForStage()} alt={readyStates.type} style={{ width: '100%', height: '100%' }} />
+        <img src={fileImage} style={{ width: '100%', height: '100%' }} />
       </Box>
       
       <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-        {readyStates.type} 전형
+        전형 이름
       </Typography>
 
       <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-        {readyStates.date}
+        날짜
       </Typography>
 
       <Dropdown
-        buttonText={readyStates.type}
+        buttonText='상태'
         backgroundColor={colors.primary[10]}
         items={Stateitems}
         onSelect={handleDropdownSelect}
