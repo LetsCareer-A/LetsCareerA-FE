@@ -3,12 +3,12 @@ import create from 'zustand';
 // 스테이지 데이터 타입 정의
 interface Stage {
   stageId: number;
-  order: number;
+  order?: number;
   type: string;
-  mid_name: string;
+  mid_name?: string;
   status: string; // "준비 진행 중", "진행 완료"
   date: string;
-  dday: string;
+  dday?: string;
 }
 
 // 스토어 인터페이스 정의
