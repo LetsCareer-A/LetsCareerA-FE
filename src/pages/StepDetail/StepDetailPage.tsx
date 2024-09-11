@@ -123,7 +123,7 @@ const StepDetailPage: React.FC = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', left: '40px', top: '40px', position: 'relative' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
                 {/* 헤더 */}
                 <ArrowBackIosNewIcon />
