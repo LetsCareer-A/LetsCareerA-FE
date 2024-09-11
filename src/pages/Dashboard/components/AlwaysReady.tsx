@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Pagination, Typography } from '@mui/material';
-import colors from '../.././../styles/colors';
+import colors from '../../../styles/colors';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import typography from '../../../styles/typography';
 import { getAlways } from '../../../api/Dashboard/getAlways'; 
@@ -58,6 +58,7 @@ const AlwaysReady = () => {
     const [readyBoardData, setReadyBoardData] = useState<{ company: string; department: string; status: string }[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);  
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,7 +71,8 @@ const AlwaysReady = () => {
                         status: item.status,
                     }));
                     setReadyBoardData(alwaysData);
-                    setTotalPages(Math.ceil(response.data.size / 5));
+                    setTotalItems(response.data.total);
+                    setTotalPages(Math.ceil(response.data.total / 5)); 
                 }
             } catch (error) {
                 console.error('Failed to fetch always ready data:', error);
