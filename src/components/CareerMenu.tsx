@@ -13,7 +13,6 @@ type Career = {
   summary: string;
 };
 
-
 type CareerMenuProps = {
   onClose: () => void;
   onComplete: (selectedCards: { chipText: string, title: string, careerId: number }[]) => void;
@@ -50,10 +49,8 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
     const isSelected = selectedCards.some(selected => selected.careerId === card.careerId);
 
     if (isSelected) {
-      // 카드가 선택된 상태이면 해제
       setSelectedCards(prevCards => prevCards.filter(selected => selected.careerId !== card.careerId));
     } else if (selectedCards.length < 4) {
-      // 카드가 선택되지 않은 상태이면 추가
       setSelectedCards(prevCards => [...prevCards, card]);
     }
   };
@@ -115,12 +112,13 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
         }}
       >
         {careerCards.map((card) => (
-          <Box key={card.careerId} onClick={() => handleCardClick(card)}>
+          <Box key={card.careerId}>
             <CareerCard
               chipText={card.chipText}
               title={card.title}
               description={card.description}
               isSelected={selectedCards.some(selected => selected.careerId === card.careerId)}
+              onCardClick={() => handleCardClick(card)} 
             />
           </Box>
         ))}

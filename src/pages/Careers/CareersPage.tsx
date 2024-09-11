@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Pagination } from '@mui/material';
+import { Box, Typography, Pagination, FormControlLabel, Checkbox } from '@mui/material';
 import { PrimaryButton } from '../../components/CustomButton';
 import Card from './components/Card';  
 import typography from '../../styles/typography';
@@ -70,10 +70,35 @@ const CareersPage = () => {
   const [toastDescription, setToastDescription] = useState(''); 
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([
+    '대외활동', '공모전', '실무', '프로젝트', '자격증', '기타'
+  ]);
+  
+  const handleCheckboxChange = (category: string) => {
+    setSelectedCategories(prevSelectedCategories =>
+      prevSelectedCategories.includes(category)
+        ? prevSelectedCategories.filter(cat => cat !== category)
+        : [...prevSelectedCategories, category]
+    );
+  };
+
   
   const fetchCards = async () => {
     try {
-      const response = await getCareers(currentPage, CardsPerPage);
+      const categoryMapping: { [key: string]: string } = {
+        '대외활동': 'ACTIVITY',
+        '공모전': 'COMPETITION',
+        '실무': 'TASK',
+        '프로젝트': 'PROJECT',
+        '자격증': 'CERTIFICATION',
+        '기타': 'OTHER'
+      };
+      
+      const selectedCategoriesInEnglish = selectedCategories.map(cat => categoryMapping[cat]);
+
+      console.log(selectedCategoriesInEnglish)
+      const response = await getCareers(currentPage, CardsPerPage, selectedCategoriesInEnglish);
       const { data } = response;
       setCards(data.careers || []);
       setTotalPages(data.totalPages || 0);
@@ -84,7 +109,7 @@ const CareersPage = () => {
 
   useEffect(() => {
     fetchCards();
-  }, [currentPage]);
+  }, [currentPage ,selectedCategories ]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -170,6 +195,11 @@ const CareersPage = () => {
     setSelectedCard(null);
   };
 
+
+  
+
+
+
   return (
     <Box>
       <Box display='flex' justifyContent='space-between'>
@@ -188,9 +218,72 @@ const CareersPage = () => {
           <img src={Plus} alt='플러스 아이콘' />
         </PrimaryButton>
       </Box>
-      <a href="https://www.letscareer.co.kr/program" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.letscareer.co.kr/program" rel="noopener noreferrer">
         <img style={{ width: '1043px', marginTop: '14px' }} src={CareerBanner} alt="Career Banner" />
       </a>
+
+      <Box mt='32px'>
+      <Box
+        sx={{
+          gap: '24px',
+        }}
+      >
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectedCategories.includes('대외활동')}
+              onChange={() => handleCheckboxChange('대외활동')}
+            />
+          }
+          label={<Typography style={typography.xSmall2Med}>대외활동</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectedCategories.includes('공모전')}
+              onChange={() => handleCheckboxChange('공모전')}
+            />
+          }
+          label={<Typography style={typography.xSmall2Med}>공모전</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectedCategories.includes('실무')}
+              onChange={() => handleCheckboxChange('실무')}
+            />
+          }
+          label={<Typography style={typography.xSmall2Med}>실무</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectedCategories.includes('프로젝트')}
+              onChange={() => handleCheckboxChange('프로젝트')}
+            />
+          }
+          label={<Typography style={typography.xSmall2Med}>프로젝트</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectedCategories.includes('자격증')}
+              onChange={() => handleCheckboxChange('자격증')}
+            />
+          }
+          label={<Typography style={typography.xSmall2Med}>자격증</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectedCategories.includes('기타')}
+              onChange={() => handleCheckboxChange('기타')}
+            />
+          }
+          label={<Typography style={typography.xSmall2Med}>기타</Typography>}
+        />
+      </Box>
+    </Box>
       
       <Box
         display='grid'

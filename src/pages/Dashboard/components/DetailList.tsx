@@ -10,7 +10,7 @@ import File from '../../../assets/blueFile.svg';
 import Communication from '../../../assets/communication.png';
 import Interface from '../../../assets/interface.svg';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import { useNavigate } from 'react-router-dom'; // useNavigate import
+import { useNavigate } from 'react-router-dom'; 
 
 
 interface Schedule {
@@ -22,6 +22,7 @@ interface Schedule {
   deadline: string;
   dday: number;
   progress: string;
+  totalCount: number;
 }
 
 const ITEMS_PER_PAGE = 5;
@@ -34,22 +35,23 @@ const DetailList: React.FC = () => {
   const { selectedDate } = useCalendarStore();
 
   const currentDate = selectedDate || new Date().toISOString().split('T')[0];
-  const navigate = useNavigate(); // 페이지 이동을 위한 hook
+  const navigate = useNavigate(); 
 
 
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
         const response = await getDetailSchedule(currentDate);
-        if (response.code === 200) {
           const fetchedSchedules = response.data.schedules;
           setAllSchedules(fetchedSchedules);
           setTotalCount(response.data.totalCount);
 
+          console.log(response.data.schedule,'데이터');
+          console.log(allSchedules,'데이터')
+
           const startIndex = (page - 1) * ITEMS_PER_PAGE;
           const endIndex = startIndex + ITEMS_PER_PAGE;
           setSchedules(fetchedSchedules.slice(startIndex, endIndex));
-        }
       } catch (error) {
         console.error('Error fetching schedules:', error);
       }
@@ -74,6 +76,7 @@ const DetailList: React.FC = () => {
 
   const handleCardClick = (scheduleId: number) => {
     navigate(`/schedules/${scheduleId}`); 
+
   };
 
   const getCurrentDateWithDay = () => {
@@ -188,20 +191,20 @@ const DetailList: React.FC = () => {
               </Typography>
             </Box>
           ) : (
-            schedules.map(item => {
+            schedules.map((item, index) => {
               const chipColor = getChipColor(item.type);
               const chipImage = getChipImage(item.type);
               return (
                 <Box
-                  key={item.scheduleId}
+                key={`${item.scheduleId}-${index}`}
                   sx={{
                     border: '1px solid #ddd',
                     borderRadius: 1,
                     mb: '8px',
                     p: '12px',
-                    cursor: 'pointer' // 클릭 가능하게 커서 변경
+                    cursor: 'pointer' 
                   }}
-                  onClick={() => handleCardClick(item.scheduleId)} // 클릭 시 페이지 이동
+                  onClick={() => handleCardClick(item.scheduleId)}
                 >
                   <Typography mb='8px' style={typography.xSmall2Bold}>
                     {item.company} | {item.department}
