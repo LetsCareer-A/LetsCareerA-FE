@@ -17,6 +17,7 @@ import AddStateModal from './components/AddStateModal';
 // import MidReview from './components/MidReview';
 import { useParams } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
+import useStageStore from '../../store/useStageStore';
 
 
 
@@ -24,13 +25,6 @@ const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
     { text: '최종 합격', color: '#4D55F5' },
     { text: '최종 불합격', color: '#FF566A' },
-];
-
-const Stateitems: DropdownItem[] = [
-    { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
-    { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
-    { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
-    { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
 ];
 
 interface ExperienceBoxProps {
@@ -70,22 +64,25 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
 );
 
 const StepDetailPage: React.FC = () => {
-    // 상태 변수들 선언
+    const { scheduleId } = useParams<{ scheduleId: string }>();
+    const [scheduleData, setScheduleData] = useState<any>(null);
+    const {selectedStage, setSelectedStage, readyStates, setReadyStates } = useStageStore();
+    const [StageData, setStageData ] = useState<any>(null);
+
+
     const [introduceBoxes, setIntroduceBoxes] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
-    const [selectedChip, setSelectedChip] = useState<DropdownItem | null>(null);
     const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
-    const [readyStates, setReadyStates] = useState<DropdownItem[]>([]); //전형 상태 저장주
-    const [scheduleData, setScheduleData] = useState<any>(null);
-    const { scheduleId } = useParams<{ scheduleId: string }>();
+
 
     useEffect(() => {
         const fetchScheduleData = async () => {
             try {
                 const data = await getSchedules(Number(scheduleId)); 
                 setScheduleData(data.data); 
+                setStageData(data.stages);
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
             }
@@ -96,32 +93,33 @@ const StepDetailPage: React.FC = () => {
         }
     }, [scheduleId]);
 
+     // ReadyState 렌더링
+    //  const renderReadyStates = () => {
+    //     return readyStates => (
+    //         <ReadyState
+    //             key={index}
+    //             dropdownItems={Stateitems}
+    //             selectedChip={StageData}
+    //             onDropdownSelect={() => {}} // 선택한 상태 업데이트 기능 (추후 필요하면 추가)
+    //         />
+    //     ));
+    // };
+
 
     // 면접 전형 추가 모달 관리
-    const handleOpenAddStateModal = () => {
-        setIsAddStateModalOpen(true);
-    };
-
     const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
         setIsAddStateModalOpen(false);
-
+    
         if (selectedStep) {
-            setReadyStates((prevStates) => [...prevStates, selectedStep]);
+            setReadyStates((readyStates) => ({
+                ...readyStates
+                type: selectedStep.text, // 예시로 DropdownItem의 text를 type에 할당
+                date: new Date().toISOString(), // 임의의 date 값 설정 (필요한 데이터로 변경)
+                status: selectedStep.color // 예시로 DropdownItem의 color를 status에 할당
+            }));
         }
     };
-
-     // ReadyState 렌더링
-     const renderReadyStates = () => {
-        return readyStates.map((state, index) => (
-            <ReadyState
-                key={index}
-                dropdownItems={Stateitems}
-                selectedChip={state}
-                onDropdownSelect={() => {}} // 선택한 상태 업데이트 기능 (추후 필요하면 추가)
-            />
-        ));
-    };
-
+    
     // 자기소개서 관련 이벤트
     const handleQuestionTextFieldChange = (index: number) => (
         event: React.ChangeEvent<HTMLInputElement>
@@ -160,7 +158,7 @@ const StepDetailPage: React.FC = () => {
     };
 
     const handleDropdownSelect = (item: DropdownItem) => {
-        setSelectedChip(item);
+        setSelectedStage(item);
     };
 
     return (
@@ -177,20 +175,20 @@ const StepDetailPage: React.FC = () => {
                     imageHeight="16px"
                 />
                  <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.company || '회사이름'}
+                    {scheduleData?.company}
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.department || '직무'}
+                    {scheduleData?.department}
                 </Typography>
                 <Box sx={{ position: 'absolute', right: '0' }}>
                     <Dropdown
-                        buttonText={selectedChip ? selectedChip.text : "준비 단계"}
-                        items={items}
+                        buttonText={selectedStage ? selectedStage.text : scheduleData.progress} // scheduleId의 progress를 받아와서 기본으로 지정
+                        items={items} //드랍다운 아이템 가져오기
                         renderItem={(item) => 
-                        <Chip text={item.text} backgroundColor={item.color} />}
+                        <Chip text={item.text} backgroundColor={item.color} />} // 공고 진행중 , 파란색
                         onSelect={handleDropdownSelect}
                         sx={{width:142, height:44}}
                     />
@@ -223,10 +221,8 @@ const StepDetailPage: React.FC = () => {
                             borderRadius: '12px',
                         }}
                     />
-                {/* 기존 준비 상태 렌더링 */}
-                {renderReadyStates()}
-
                     {/* 전형 추가 */}
+                    
                      <Box
                         sx={{
                             display: 'flex',
@@ -240,7 +236,8 @@ const StepDetailPage: React.FC = () => {
                             position: 'relative',
                         }}
                     >
-                        <Box
+                    <ReadyState />
+                    <Box
                             sx={{
                                 display: 'flex',
                                 width: 100,
@@ -255,7 +252,6 @@ const StepDetailPage: React.FC = () => {
                         >
                             <AddIcon width={'12px'}/>
                         </Box>
-                        
                     </Box>
                 </Box>
 
@@ -384,13 +380,12 @@ const StepDetailPage: React.FC = () => {
                     )}
                 </Stack>
             </Stack>
-
             {/* AddStateModal 컴포넌트 */}
 
             <AddStateModal
                 open={isAddStateModalOpen}
                 onClose={handleCloseAddStateModal} // 전형 추가 시 handleCloseAddStateModal 호출
-                onAddState={(newState) => setReadyStates((prev) => [...prev, newState])} // 전형이 추가될 때 실행될 함수 전달
+                onAddState={(newState) => setReadyStates((prev: any) => [...prev, newState])} // 전형이 추가될 때 실행될 함수 전달
             />
 
             {/* 토스트 */}

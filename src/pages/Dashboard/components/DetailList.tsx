@@ -75,7 +75,8 @@ const DetailList: React.FC = () => {
   };
 
   const handleCardClick = (scheduleId: number) => {
-    navigate(`/schedules/${scheduleId}`);
+    navigate(`/schedules/${scheduleId}`); 
+
   };
 
   const getCurrentDateWithDay = () => {

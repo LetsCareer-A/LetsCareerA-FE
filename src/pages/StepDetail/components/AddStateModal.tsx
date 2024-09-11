@@ -30,33 +30,29 @@ interface AddStateModalProps {
 }
 
 const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState }) => {
-  const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
-  const [, setStartDate] = useState<Date | null>(null);
+  const [selectedDropdown, setselectedDropdown] = useState<DropdownItem | null>(null); // 선택된 전형 저장
   const { date, setDate } = useModalStore();
-  
   const { scheduleId } = useParams<{ scheduleId: string }>();
 
   const handleConfirm = async () => {
-    if (selectedState && scheduleId) {
+    if (selectedDropdown && scheduleId) {
       try {
 
         let type: string;
-      switch (selectedState.text) {
+      switch (selectedDropdown.text) {
         case '서류 전형':
-          type = 'DOC';
+          type = '서류';
           break;
         case '면접 전형':
-          type = 'INT';
+          type = '면접';
           break;
         case '중간 전형(직접 입력)':
-          type = 'MID';
+          type = '중간';
           break;
         default:
           type = 'UNKNOWN';
           break;
       }
-
-      
         const payload = {
           type: type,
           mid_name:  '', 
@@ -67,7 +63,7 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
 
         await postAddType(scheduleId, payload);
 
-        onAddState(selectedState);
+        onAddState(selectedDropdown);
       } catch (error) {
         console.error('Error adding state:', error);
       }
@@ -83,7 +79,7 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
       confirmText="추가하기"
       width="412px"
       height="auto"
-      onConfirm={handleConfirm}  // 확인 버튼 클릭 시 handleConfirm 호출
+      onConfirm={handleConfirm}
     >
       <Box
         sx={{
@@ -106,10 +102,10 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
             buttonText="전형 단계를 선택해주세요."
             items={items}
             renderItem={(item) => (
-              <Chip text={item.text as string} backgroundColor={item.color} sx={{ height: '24px', padding: '4px 8px', gap: '4px' }} />
+              <Chip text={item.text} backgroundColor={item.color} sx={{ height: '24px', padding: '4px 8px', gap: '4px' }} />
             )}
             sx={{ width: '195px', height: '44px' }}
-            onSelect={(item) => setSelectedState(item)} // 드롭다운 선택 시 선택된 전형 저장
+            onSelect={(item) => setselectedDropdown(item)} // 드롭다운 선택 시 선택된 전형 저장
           />
         </Box>
 
@@ -125,8 +121,8 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
                 dateFormat="yyyy년 MM월 dd일"
                 customInput={
                   <CalendarInput
-                    value={date ? date.toLocaleDateString() : ''}
-                    onClick={() => setStartDate(new Date())} // Update datePicker
+                    value={date ? date.toLocaleDateString() : '상시모집'}
+                    onClick={() => setDate(new Date())} // Update datePicker
                   />
                 }
               />
