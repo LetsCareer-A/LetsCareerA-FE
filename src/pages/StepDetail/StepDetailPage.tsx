@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
 import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
@@ -114,8 +114,10 @@ const StepDetailPage: React.FC = () => {
         setIsCareerMenuVisible(false);
     };
 
-    const handleDropdownSelect = (item: DropdownItem) => {
-        setSelectedStage(item);
+    const handleDropdownSelect = (
+        // item: DropdownItem
+    ) => {
+        // setSelectedStage(item);
     };
 
     return (
@@ -227,7 +229,7 @@ const StepDetailPage: React.FC = () => {
 };
 
 export default StepDetailPage;
-function setSelectedStage(item: DropdownItem) {
-    throw new Error('Function not implemented.');
-}
+// function setSelectedStage(item: DropdownItem) {
+//     throw new Error('Function not implemented.');
+// }
 
