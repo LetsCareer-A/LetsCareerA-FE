@@ -1,3 +1,5 @@
+{/* 자기소개 문항 텍스트필드 for 추가 및 삭제*/}
+
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import Textfield from '../../../components/Textfield';
@@ -5,22 +7,22 @@ import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import RemoveIcon from '@mui/icons-material/Remove'; // RemoveIcon 추가
 
-interface IntroduceBoxProps {
+interface IntroQnAProps {
   questionTextFieldValue: string;
   handleQuestionTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   answerTextFieldValue: string;
   handleAnswerTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   boxNumber: number;
-  handleRemoveIntroduceBox: () => void; // IntroduceBox 삭제 핸들러
+  handleRemoveIntroQnAs: () => void;
 }
 
-const IntroduceBox: React.FC<IntroduceBoxProps> = ({
+const IntroQnA: React.FC<IntroQnAProps> = ({
   questionTextFieldValue,
   handleQuestionTextFieldChange,
   answerTextFieldValue,
   handleAnswerTextFieldChange,
   boxNumber,
-  handleRemoveIntroduceBox,
+  handleRemoveIntroQnAs,
 }) => (
   <Box gap="8px" display="flex" flexDirection="column">
     {/* 문항 번호와 버튼 렌더링 */}
@@ -53,7 +55,7 @@ const IntroduceBox: React.FC<IntroduceBoxProps> = ({
             },
           }}
           endIcon={<RemoveIcon />}
-          onClick={handleRemoveIntroduceBox} // 버튼 클릭 시 박스 삭제
+          onClick={handleRemoveIntroQnAs} // 버튼 클릭 시 박스 삭제
         >
           {boxNumber === 1 ? '문항 추가하기' : '문항 삭제하기'}
         </Button>
@@ -86,4 +88,4 @@ const IntroduceBox: React.FC<IntroduceBoxProps> = ({
   </Box>
 );
 
-export default IntroduceBox;
+export default IntroQnA;
