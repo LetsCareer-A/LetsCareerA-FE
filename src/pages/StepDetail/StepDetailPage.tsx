@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { DropdownItem } from '../../components/Dropdown';
-import CareerMenu from '../../components/CareerMenu';
 import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -16,6 +15,7 @@ import ReadyState from './components/ReadyState';
 import { useParams } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
+import CoreExperience from './components/CoreExperience';
 
 // 헤더 드롭다운
 const items: DropdownItem[] = [
@@ -24,42 +24,6 @@ const items: DropdownItem[] = [
     { text: '최종 불합격', color: '#FF566A' },
 ];
 
-//핵심커리어 내용
-interface ExperienceBoxProps {
-    card?: { chipText: string; title: string };
-    onClick: () => void;
-}
-//핵심커리어 박스 컴포넌트
-const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
-    <Box
-        sx={{
-            display: 'flex',
-            width: '260px',
-            height: '55px',
-            padding: '16px 8px',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '8px',
-            border: `1px solid ${colors.neutral[85]}`,
-            bgcolor: colors.neutral[100],
-            cursor: 'pointer',
-        }}
-        onClick={onClick}
-    >
-        {card ? (
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography style={typography.xSmallBold} color={colors.neutral[10]}>
-                    {card.chipText}
-                </Typography>
-                <Typography style={typography.smallBold} color={colors.neutral[10]}>
-                    {card.title}
-                </Typography>
-            </Box>
-        ) : (
-            <AddIcon sx={{ width: '24px', height: '24px' }} />
-        )}
-    </Box>
-);
 
 
 const StepDetailPage: React.FC = () => {
@@ -67,9 +31,7 @@ const StepDetailPage: React.FC = () => {
     const [scheduleData, setScheduleData] = useState<any>(null);
     // const [StageData, setStageData ] = useState<any>(null);
     // const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
-    const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
     // const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
 
 
@@ -104,17 +66,6 @@ const StepDetailPage: React.FC = () => {
 //     }
 // };
 
-    {/* 핵심경험 관련 이벤트*/}
-    const handleExperienceBoxClick = () => {
-        setIsCareerMenuVisible((prev) => !prev);
-    };
-
-    const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
-     setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]); // 상태 업데이트
-        setToastMessage('핵심경험이 추가되었습니다!');
-        setTimeout(() => setToastMessage(''), 3000);
-        setIsCareerMenuVisible(false);
-    };
 
     const handleDropdownSelect = (
         // item: DropdownItem
@@ -180,41 +131,7 @@ const StepDetailPage: React.FC = () => {
 
 
                     {/*핵심경험*/}
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '290px',
-                            height: '317px',
-                            padding: '16px',
-                            gap: '15px',
-                            borderRadius: '12px',
-                            border: isCareerMenuVisible ? `1px solid ${colors.primary[30]}` : `1px solid ${colors.neutral[85]}`,
-                            backgroundColor: isCareerMenuVisible ? colors.primary[10] : colors.neutral[100],
-                        }}
-                    >
-                        <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
-                            <Typography color={colors.neutral[10]} style={typography.smallBold}>
-                                핵심경험
-                            </Typography>
-                            <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-                                어필할 핵심 경험을 추가해보세요.
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            {selectedCareerCards.map((card, index) => (
-                                <ExperienceBox key={index} card={card} onClick={() => {}} />
-                            ))}
-                            <ExperienceBox onClick={handleExperienceBoxClick} />
-                        </Box>
-                    </Box>
-
-                    {isCareerMenuVisible && (
-                        <CareerMenu
-                            onClose={() => setIsCareerMenuVisible(false)}
-                            onComplete={handleCompleteButtonClick}
-                        />
-                    )}
+                    <CoreExperience />
                 </Stack>
             </Stack>
 
