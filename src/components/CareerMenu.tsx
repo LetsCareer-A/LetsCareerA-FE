@@ -16,10 +16,11 @@ type Career = {
 type CareerMenuProps = {
   onClose: () => void;
   onComplete: (selectedCards: { chipText: string, title: string, careerId: number }[]) => void;
+  onOpen?: () => void; 
 };
 
-const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
-  const [isVisible, setIsVisible] = useState(true);
+const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
+  const [isVisible, setIsVisible] = useState(false);
   const [isSliding, setIsSliding] = useState(false);
   const [selectedCards, setSelectedCards] = useState<{ chipText: string, title: string, careerId: number }[]>([]);
   const [careerCards, setCareerCards] = useState<{ chipText: string, title: string, description: string, careerId: number }[]>([]);
@@ -71,6 +72,14 @@ const CareerMenu = ({ onClose, onComplete }: CareerMenuProps) => {
       onClose();
     }, 300);
   };
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(true);
+      if (onOpen) {
+        onOpen(); 
+      }
+    }, 0);
+  }, [onOpen]);
 
   if (!isVisible) return null;
 

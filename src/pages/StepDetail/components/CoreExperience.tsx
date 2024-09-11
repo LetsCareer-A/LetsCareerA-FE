@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
@@ -10,9 +10,10 @@ import Toast from '../../../components/Toast';
 interface ExperienceBoxProps {
     card?: { chipText: string; title: string };
     onClick: () => void;
+    isEmpty: boolean;
 }
 
-const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
+const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick, isEmpty }) => (
     <Box
         sx={{
             display: 'flex',
@@ -24,9 +25,9 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick }) => (
             borderRadius: '8px',
             border: `1px solid ${colors.neutral[85]}`,
             bgcolor: colors.neutral[100],
-            cursor: 'pointer',
+            cursor: isEmpty ? 'pointer' : 'default',
         }}
-        onClick={onClick}
+        onClick={isEmpty ? onClick : undefined}
     >
         {card ? (
             <Box display="flex" flexDirection="column" alignItems="center">
@@ -48,15 +49,19 @@ const CoreExperience: React.FC = () => {
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
 
+    const MAX_EXPERIENCE_BOXES = 4;
+
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
     };
 
     const handleCompleteButtonClick = (selectedCards: { chipText: string; title: string }[]) => {
-        setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards]);
-        setToastMessage('핵심경험이 추가되었습니다!');
-        setTimeout(() => setToastMessage(''), 3000);
-        setIsCareerMenuVisible(false);
+        if (selectedCareerCards.length < MAX_EXPERIENCE_BOXES) {
+            setSelectedCareerCards((prevCards) => [...prevCards, ...selectedCards].slice(0, MAX_EXPERIENCE_BOXES));
+            setToastMessage('핵심경험이 추가되었습니다!');
+            setTimeout(() => setToastMessage(''), 3000);
+            setIsCareerMenuVisible(false);
+        }
     };
 
     return (
@@ -83,16 +88,21 @@ const CoreExperience: React.FC = () => {
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {selectedCareerCards.map((card, index) => (
-                    <ExperienceBox key={index} card={card} onClick={() => {}} />
+                {[...Array(MAX_EXPERIENCE_BOXES)].map((_, index) => (
+                    <ExperienceBox
+                        key={index}
+                        card={selectedCareerCards[index]}
+                        onClick={handleExperienceBoxClick}
+                        isEmpty={!selectedCareerCards[index]}
+                    />
                 ))}
-                <ExperienceBox onClick={handleExperienceBoxClick} />
             </Box>
 
             {isCareerMenuVisible && (
                 <CareerMenu
                     onClose={() => setIsCareerMenuVisible(false)}
                     onComplete={handleCompleteButtonClick}
+                    onOpen={() => setIsCareerMenuVisible(true)}
                 />
             )}
 
