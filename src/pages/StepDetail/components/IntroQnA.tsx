@@ -5,7 +5,7 @@ import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import RemoveIcon from '@mui/icons-material/Remove'; // RemoveIcon 추가
 
-interface IntroduceBoxProps {
+interface IntroQnAProps {
   questionTextFieldValue: string;
   handleQuestionTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   answerTextFieldValue: string;
@@ -14,7 +14,7 @@ interface IntroduceBoxProps {
   handleRemoveIntroduceBox: () => void; // IntroduceBox 삭제 핸들러
 }
 
-const IntroduceBox: React.FC<IntroduceBoxProps> = ({
+const IntroQnA: React.FC<IntroQnAProps> = ({
   questionTextFieldValue,
   handleQuestionTextFieldChange,
   answerTextFieldValue,
@@ -86,4 +86,4 @@ const IntroduceBox: React.FC<IntroduceBoxProps> = ({
   </Box>
 );
 
-export default IntroduceBox;
+export default IntroQnA;

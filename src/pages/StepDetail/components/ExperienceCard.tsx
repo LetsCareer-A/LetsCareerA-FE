@@ -20,7 +20,7 @@ const ExperienceCard = () => {
         flexDirection={'row'} 
         alignItems={'center'} 
         gap={'8px'} 
-        ml={'16px'} // Adjust spacing between Chip and title
+        ml={'16px'} 
       >
         <Typography 
           color={colors.neutral[10]} 
