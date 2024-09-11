@@ -159,16 +159,17 @@ const StepDetailPage: React.FC = () => {
             <Stack spacing="16px" mt={3}>
                 <ReadyState />
                 {/* 배너 */}
-                <Box
-                    sx={{
+                <img
+                    src={banner}
+                    alt="Banner"
+                    style={{
                         width: '1043px',
                         height: '55px',
-                        backgroundImage: `url(${banner})`,
                         border: `1px solid ${colors.neutral[95]}`,
                         cursor: 'pointer',
                     }}
                     onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
-                />
+                    />
 
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
