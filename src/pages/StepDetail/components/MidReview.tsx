@@ -3,15 +3,16 @@ import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import pencil from '../../../assets/edit_pencil.png';
 
-const ReviewQuestion = ({ review }) => {
+const ReviewQuestion = () => {
   return (
+    //const ReviewQuestion = ({review}) => {
     <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} gap={'6px'} alignSelf={'stretch'}>
-      <Typography color={colors.neutral[10]} style={typography.smallBold}>
+      {/* <Typography color={colors.neutral[10]} style={typography.smallBold}>
         {review ? `질문: ${review.qa}` : '작성된 회고를 확인해보세요.'}
       </Typography>
       <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
         {review ? `느낀점: ${review.feel}` : ''}
-      </Typography>
+      </Typography> */}
     </Box>
   );
 };
@@ -88,7 +89,9 @@ const MidReview = () => {
         <Box display={'flex'} flexDirection={'column'} alignItems={'flex-start'} gap={'32px'} padding={'15px 24px'}>
           {reviewAvailable ? (
             reviews.map((review) => (
-              <ReviewQuestion key={review.reviewId} review={review} />
+              <ReviewQuestion key={review.reviewId} 
+              // review={review}
+               />
             ))
           ) : (
             <UploadReview />
