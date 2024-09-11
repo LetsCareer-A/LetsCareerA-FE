@@ -28,7 +28,8 @@ const CareerMenu = ({ onClose, onComplete, onOpen }: CareerMenuProps) => {
   useEffect(() => {
     const fetchCareerData = async () => {
       try {
-        const response = await getCareers();
+        //  const response = await getCareers(scheduleId, stageId);
+        const response = await getCareers(50, 50);
         const careers: Career[] = response.data.careers;
     
         const mappedCareers = careers.map(career => ({
