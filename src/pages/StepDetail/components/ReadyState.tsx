@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Select, MenuItem, Typography, FormControl, InputLabel } from '@mui/material';
 import Dropdown from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
@@ -15,12 +14,13 @@ import useStageStore from '../../../store/useStageStore';
 //   status?: string;
 // }
 
-const Stateitems = [
-  { text: '진행중', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '진행완료', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '합격', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '불합격', color: colors.primary[10], textColor: colors.primary.normal },
+const Stateitems: DropdownItem[] = [
+  { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+  { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+  { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
+  { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}`},
 ];
+
 
 
 const ReadyState = () => {
@@ -56,12 +56,6 @@ const ReadyState = () => {
     // console.log(readyStates);
   };
   
-  const [selectedStage, setSelectedStage] = useState('');
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedStage(event.target.value as string);
-    // handleDropdownSelect(event.target.value as string);
-  };
   
 
   return (
@@ -102,8 +96,20 @@ const ReadyState = () => {
         <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
           날짜
         </Typography>
+
+        <Dropdown
+          buttonText='상태'
+          backgroundColor={colors.primary[10]}
+          items={Stateitems}
+          onSelect={handleDropdownSelect}
+          sx={{
+            height: '28px',
+            marginTop: '10px',
+            color: `${colors.primary.normal}`,
+            typography: `${typography.xSmall2Med}`,
+          }}
+        />
       </Box>
-      
        </Box>
        
     </Box>
