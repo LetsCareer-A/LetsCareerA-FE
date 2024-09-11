@@ -1,6 +1,6 @@
 import React, { useState, MouseEvent } from 'react';
-import { Box, Button, Menu, styled } from '@mui/material';
-import Chip from './Chips'; // Chip 컴포넌트 가져오기
+import { Box, Button, Menu, MenuItem, styled } from '@mui/material';
+import Chip from './Chips'; 
 import colors from '../styles/colors';
 import Arrow from '../assets/arrow.svg';
 
@@ -40,6 +40,14 @@ const StyledMenu = styled(Menu)(() => ({
     margin: 0,
     maxHeight: '200px', // 메뉴의 최대 높이 설정
     overflowY: 'auto', // 스크롤 가능하게 설정
+  },
+}));
+
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  '&:hover': {
+    backgroundColor: theme.palette.action.selected,
+    borderRadius: '6px',
+    color: theme.palette.primary.light
   },
 }));
 
@@ -109,6 +117,10 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
             onClick={() => handleItemClick(item)}
             sx={{ margin: '4px 0' }} // 적절한 마진 추가
           >
+            <StyledMenuItem
+            key={index}
+            onClick={() => handleItemClick(item)} 
+          >
             {renderItem ? (
               renderItem(item) // renderItem이 있는 경우 이를 사용
             ) : (
@@ -119,6 +131,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
                 sx={{ width: '100%', display: 'flex', alignItems: 'center' }} // Chip 스타일 조정
               />
             )}
+            </StyledMenuItem>
           </Box>
         ))}
       </StyledMenu>
