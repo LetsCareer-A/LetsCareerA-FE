@@ -111,13 +111,17 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
-                    {/* 서류전형 - 자기소개서 */}
-                    {/* <Introduce scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} /> */}
-                    {/* 중간전형 - 회고보드 */}
-                    <MidReview scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
+                    {/* ReadyState에서 선택된 stageId에 맞는 전형의 type 값에 따라 조건부 렌더링 */}
+                    {scheduleData?.text === '서류전형' ? (
+                        <Introduce scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
+                    ) : (
+                        <MidReview scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
+                    )}
+                    
                     {/*핵심경험*/}
                     <CoreExperience scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
                 </Stack>
+
             </Stack>
 
             {/* 토스트 */}
