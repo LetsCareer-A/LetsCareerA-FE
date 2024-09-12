@@ -58,6 +58,7 @@ const StepDetailPage: React.FC = () => {
     const handleDropdownSelect = (item: DropdownItem) => {
         // 드롭다운에서 선택된 항목을 처리하는 로직 추가
         console.log('Selected item:', item);
+
     };
 
     return (
@@ -132,3 +133,4 @@ const StepDetailPage: React.FC = () => {
 };
 
 export default StepDetailPage;
+
