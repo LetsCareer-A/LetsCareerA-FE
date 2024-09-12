@@ -91,6 +91,7 @@ const ReadyState = () => {
     }
   };
 
+
   return (
     <Box
       width="1043px"
@@ -143,7 +144,7 @@ const ReadyState = () => {
         <AddStateModal
           open={isAddStateModalOpen}
           onClose={handleCloseAddStateModal}
-          onAddState={handleAddState} // 상태 추가 핸들러 전달
+          onAddState={handleAddState}
         />
       )}
     </Box>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { DropdownItem } from '../../../components/Dropdown';
 import Modal from '../../../components/Modal';
@@ -17,6 +17,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { postAddType } from '../../../api/StepDetail/postAddType'; 
 import { useParams } from 'react-router-dom'; 
 import Textfield from '../../../components/Textfield';
+import useScheduleStore from '../../../store/useScheduleStore'
 
 const items: DropdownItem[] = [
   { text: '서류 전형', color: `${colors.primary.normal}`, image: notebook },
@@ -27,17 +28,25 @@ const items: DropdownItem[] = [
 interface AddStateModalProps {
   open: boolean;
   onClose: (selectedStep?: DropdownItem) => void;
-  onAddState: (newState: DropdownItem) => void; // 추가
+  onAddState: (newState: DropdownItem) => void; 
 }
 
 const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState }) => {
 
+  const { schedule, setSchedule } = useScheduleStore();
   const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
   const [midName, setMidName] = useState<string>(''); // 중간 전형 입력값 저장
   const [, setStartDate] = useState<Date | null>(null);
   const { date, setDate } = useModalStore();
   
   const { scheduleId } = useParams<{ scheduleId: string }>();
+
+  useEffect(() => {
+    if (schedule) {
+      // 데이터가 업데이트되면 UI를 리렌더링합니다.
+    }
+  }, [schedule]);
+
 
   const handleConfirm = async () => {
     if (selectedState && scheduleId) {
@@ -69,7 +78,13 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
 
         await postAddType(scheduleId, payload);
 
-        onAddState(selectedState);
+        const stateType = selectedState.text.replace(' 전형', '');
+
+        onAddState({
+          type: stateType,
+          mid_name: midName,
+          date: payload.date,
+        });
       } catch (error) {
         console.error('Error adding state:', error);
       }
