@@ -104,7 +104,6 @@ const ReadyState = () => {
   return (
     <Box
       width="1043px"
-      height="237px"
       borderRadius="12px"
       border={`1px solid ${colors.neutral[85]}`}
       bgcolor={colors.neutral[100]}
