@@ -1,8 +1,8 @@
 import axiosInstance from '..';
 
-export const getCareers = async () => {
+export const getCareers = async (scheduleId: number, stageId: number) => {
   try {
-    const response = await axiosInstance.get('/careers/all');
+    const response = await axiosInstance.get(`/schedules/${scheduleId}/stages/${stageId}/careers/all`);
     console.log(response.data);
     return response.data;
   } catch (error) {

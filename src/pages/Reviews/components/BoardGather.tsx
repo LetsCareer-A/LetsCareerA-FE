@@ -106,13 +106,18 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         cursor: 'pointer'
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
         <Typography sx={typography.small2Bold}>{company}</Typography>
         <Typography sx={typography.small2Bold}> | </Typography> 
         <Typography sx={typography.small2Bold}>{department}</Typography>
       </Box>
 
-      <Stack spacing={2}>
+      <Stack spacing={2}
+      mt='16px'
+      sx={{ 
+        overflowY: 'auto'   
+      }}
+      >
         {reviews.map((review, index) => (
           <Box 
             key={index} 

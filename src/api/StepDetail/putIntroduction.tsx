@@ -1,6 +1,6 @@
 import axiosInstance from '..';
 
-export const putIntroduction = async (scheduleId: string, stageId: string, selfIntros: Array<{ sequence: number, title: string, content: string }>) => {
+export const putIntroduction = async (scheduleId: number, stageId: number, selfIntros: Array<{ sequence: number, title: string, content: string }>) => {
   try {
     const response = await axiosInstance.put(
       `/schedules/${scheduleId}/stages/${stageId}/self-intro`, 

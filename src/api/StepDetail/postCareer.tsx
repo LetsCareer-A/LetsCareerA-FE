@@ -1,6 +1,6 @@
 import axiosInstance from '..';
 
-export const postCareer = async (scheduleId: string, stageId: string, careerIds: number[]) => {
+export const postCareer = async (scheduleId: number, stageId: number, careerIds: number[]) => {
   try {
     const response = await axiosInstance.post(
       `/schedules/${scheduleId}/stages/${stageId}/career`,
