@@ -1,22 +1,31 @@
 // UploadReview.tsx
-import React, { useState } from 'react';
-import { Box, Typography, Button, Modal } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import pencil from '../../../assets/edit_pencil.png';
-import ReviewModal from '../../Reviews/components/ReviewModal'; // ReviewModal 컴포넌트 import
 
 const UploadReview: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
-  
-
-  const handleOpen = () => setOpenModal(true);
-  const handleClose = () => setOpenModal(false);
-
   return (
-    <Box gap="8px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ height: '100%', width: '100%', marginTop: 10 }} >
-      {/* 회고 진행 안됐을 때 */}
-      <Box display="flex" flexDirection="column" alignItems={'center'} justifyContent={'center'} sx={{ height: '100%', width: '100%' }}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ 
+        width: '100%',
+        height: '100%', // 화면 전체 높이로 설정
+        textAlign: 'center', // 텍스트 가운데 정렬
+        marginTop: 10,
+      }}
+    >
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        gap="8px"
+      >
         <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
           아직 회고를 진행하지 않았어요!
         </Typography>
@@ -25,7 +34,6 @@ const UploadReview: React.FC = () => {
         </Typography>
       </Box>
       <Button
-        onClick={handleOpen}
         sx={{
           display: 'inline-flex',
           height: '44px',
@@ -43,15 +51,6 @@ const UploadReview: React.FC = () => {
         </Typography>
         <img src={pencil} alt="edit icon" style={{ width: '20px', height: '20px', marginBottom: '4px' }} />
       </Button>
-
-      {/* ReviewModal */}
-      {/* <Modal
-        open={openModal}
-        onClose={handleClose}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
-        <ReviewModal onClose={handleClose} />
-      </Modal> */}
     </Box>
   );
 };
