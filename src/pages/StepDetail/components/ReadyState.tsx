@@ -7,7 +7,7 @@ import fileImage from '../../../assets/ill_file.png';
 import AddIcon from '@mui/icons-material/Add';
 import AddStateModal from './AddStateModal';
 
-import useScheduleStore from '../../../store/useScheduleStore'; // 스케줄 스토어 가져오기
+import useScheduleStore from '../../../store/useScheduleStore';
 
 const Stateitems: DropdownItem[] = [
   { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
@@ -92,7 +92,14 @@ const ReadyState = () => {
   };
 
   return (
-    <Box width={'1043px'} height={'237px'} borderRadius={'12px'} border={`1px solid ${colors.neutral[85]}`} bgcolor={colors.neutral[100]}>
+    <Box
+      width="1043px"
+      height="237px"
+      borderRadius="12px"
+      border={`1px solid ${colors.neutral[85]}`}
+      bgcolor={colors.neutral[100]}
+      sx={{ overflowX: 'auto' }}
+      >
       <Box display={'inline-flex'} alignItems={'flex-start'} gap={'16px'}>
         {/* 스케줄의 단계(stages)를 반복 렌더링 */}
         {schedule?.stages.map((stage) => (
