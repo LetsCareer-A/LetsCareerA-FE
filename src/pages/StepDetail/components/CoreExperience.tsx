@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
-import Chip from '../../components/Chips';
+// import Chip from '../../components/Chips';
 import CareerMenu from '../../../components/CareerMenu';
 import Toast from '../../../components/Toast';
 import { getDocDetail } from '../../../api/StepDetail/getDocDetail';
@@ -14,6 +14,12 @@ interface ExperienceBoxProps {
     onClick: () => void;
     isEmpty: boolean;
 }
+
+interface CoreExperienceProps {
+    scheduleId: number;
+    stageId: number;
+}
+
 
 const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick, isEmpty }) => (
     <Box
@@ -46,7 +52,7 @@ const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick, isEmpty })
     </Box>
 );
 
-const CoreExperience: React.FC = () => {
+const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) => {
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
@@ -60,7 +66,7 @@ const CoreExperience: React.FC = () => {
             try {
                 const response = await fetchCareersByType();
                 if (response) {
-                    setSelectedCareerCards(response.data.appealCareers.map(career => ({
+                    setSelectedCareerCards(response.data.appealCareers.map((career: { category: string; title: string; }) => ({
                         chipText: career.category,
                         title: career.title
                     })));
@@ -73,7 +79,7 @@ const CoreExperience: React.FC = () => {
         };
 
         loadCareers();
-    }, [experienceType]);
+    }, [experienceType, scheduleId, stageId]);
 
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
@@ -141,7 +147,9 @@ const CoreExperience: React.FC = () => {
                     onClose={() => setIsCareerMenuVisible(false)}
                     onComplete={handleCompleteButtonClick}
                     onOpen={() => setIsCareerMenuVisible(true)}
-                />
+                    scheduleId={0}
+                    stageId={0}               
+                 />
             )}
 
             {toastMessage && (

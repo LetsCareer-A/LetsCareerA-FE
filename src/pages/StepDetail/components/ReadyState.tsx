@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import Dropdown, { DropdownItem } from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
@@ -9,41 +9,49 @@ import AddStateModal from './AddStateModal';
 
 import useScheduleStore from '../../../store/useScheduleStore';
 
-const Stateitems: DropdownItem[] = [
-  { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
-  { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
-  { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
-  { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
+const Stateitems = [
+  { text: '진행중', color: colors.primary[10], textColor: colors.primary.normal },
+  { text: '진행완료', color: colors.primary[10], textColor: colors.primary.normal },
+  { text: '합격', color: colors.primary[10], textColor: colors.primary.normal },
+  { text: '불합격', color: colors.primary[10], textColor: colors.primary.normal },
 ];
 
-const StateGroup = ({ stage }: { stage: any }) => (
-  <Box
-    sx={{
-      display: 'flex',
-      width: '100px',
-      paddingBottom: '4px',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '4px',
-      marginLeft: '23px',
-      marginTop: '25px',
-      position: 'relative',
-    }}
-  >
+const StateGroup = () => {
+  const [selectedState, setSelectedState] = useState('');
+
+  const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSelectedState(event.target.value);
+  };
+  
+
+  return (
     <Box
       sx={{
         display: 'flex',
-        width: 100,
-        height: 100,
-        padding: '3px 3px',
-        justifyContent: 'center',
+        width: '100px',
+        paddingBottom: '4px',
+        flexDirection: 'column',
         alignItems: 'center',
-        borderRadius: '8px',
-        bgcolor: colors.primary[80],
+        gap: '4px',
+        marginLeft: '23px',
+        marginTop: '25px',
+        position: 'relative',
       }}
     >
-      <img src={fileImage} style={{ width: '100%', height: '100%' }} />
-    </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          width: 100,
+          height: 100,
+          padding: '3px 3px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: '8px',
+          bgcolor: colors.primary[80],
+        }}
+      >
+        <img src={fileImage} style={{ width: '100%', height: '100%' }} />
+      </Box>
 
     <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
       {stage.type === '중간' ? stage.mid_name : `${stage.type} 전형` }
@@ -54,19 +62,48 @@ const StateGroup = ({ stage }: { stage: any }) => (
       {stage.date || '날짜'}
     </Typography>
 
-    <Dropdown
-      buttonText="상태"
-      backgroundColor={colors.primary[10]}
-      items={Stateitems}
-      sx={{
-        height: '28px',
-        marginTop: '10px',
-        color: `${colors.primary.normal}`,
-        typography: `${typography.xSmall2Med}`,
-      }}
-    />
-  </Box>
-);
+      <FormControl sx={{ width: '100%', marginTop: '10px' }}>
+      <Select
+        value={selectedState || '진행중'} // selectedState가 없으면 '진행중'으로 설정
+        onChange={handleChange}
+        sx={{
+          height: '28px',
+          typography: typography.xSmall2Reg,
+          textAlign: 'center', 
+          background: `${colors.primary[10]}`,
+          color: `${colors.primary.normal }`,
+          '& .MuiOutlinedInput-notchedOutline': {
+            border: 'none',
+          },
+        }}
+      >
+        {Stateitems.map((item) => (
+          <MenuItem
+            key={item.text}
+            value={item.text}
+            sx={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'white',
+              color: 'black',
+              typography: typography.xSmall2Reg,
+              '&:hover': {
+                backgroundColor: `${item.color}80`, // 호버 시 배경색 약간 투명하게
+                color: item.textColor,
+              },
+            }}
+          >
+            {item.text}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+
+    </Box>
+  );
+};
 
 const ReadyState = () => {
   const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
@@ -120,7 +157,7 @@ const ReadyState = () => {
             position: 'relative',
             cursor: 'pointer',
           }}
-          onClick={handleOpenAddStateModal} // onClick 이벤트 추가
+          onClick={handleOpenAddStateModal}
         >
           <Box
             sx={{
@@ -144,6 +181,7 @@ const ReadyState = () => {
         <AddStateModal
           open={isAddStateModalOpen}
           onClose={handleCloseAddStateModal}
+          onAddState={handleAddState}
           onAddState={handleAddState}
         />
       )}

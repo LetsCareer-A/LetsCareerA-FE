@@ -25,13 +25,9 @@ const items: DropdownItem[] = [
     { text: '최종 불합격', color: '#FF566A' },
 ];
 
-
-
 const StepDetailPage: React.FC = () => {
     const { scheduleId } = useParams<{ scheduleId: string }>();
     const [scheduleData, setScheduleData] = useState<any>(null);
-    // const [StageData, setStageData ] = useState<any>(null);
-    // const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [toastMessage, setToastMessage] = useState('');
     const navigate = useNavigate(); // useNavigate 훅 사용
     // const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
@@ -49,7 +45,7 @@ const StepDetailPage: React.FC = () => {
                 console.error('Failed to fetch schedule data:', error);
             }
         };
-    
+
         if (scheduleId) {
             fetchScheduleData();
         }
@@ -58,27 +54,10 @@ const StepDetailPage: React.FC = () => {
       const handleGoBack = () => {
         navigate(-1); // 이전 페이지로 이동
     };
-    
 
-// 면접 전형 추가 모달 관리
-// const handleCloseAddStateModal = (selectedStep?: DropdownItem) => {
-//     setIsAddStateModalOpen(false);
-
-//     if (selectedStep) {
-//         // 상태를 바로 객체 형태로 전달
-//         setReadyStates({
-//             type: selectedStep.text, // DropdownItem의 text를 type에 할당
-//             date: new Date().toISOString(), // 현재 날짜를 ISO 형식으로 설정
-//             status: null // DropdownItem의 color를 status에 할당
-//         });
-//     }
-// };
-
-
-    const handleDropdownSelect = (
-        // item: DropdownItem
-    ) => {
-        // setSelectedStage(item);
+    const handleDropdownSelect = (item: DropdownItem) => {
+        // 드롭다운에서 선택된 항목을 처리하는 로직 추가
+        console.log('Selected item:', item);
     };
 
     return (
@@ -127,19 +106,16 @@ const StepDetailPage: React.FC = () => {
                         border: `1px solid ${colors.neutral[95]}`,
                         cursor: 'pointer',
                     }}
-                    onClick={() => window.location.href = 'https://www.letscareer.co.kr/program'}
-                    />
-
+                    onClick={() => navigate('/program')} // navigate로 변경
+                />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
                     {/* 서류전형 - 자기소개서 */}
-                    <Introduce />
+                    <Introduce scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
                     {/* 중간전형 - 회고보드 */}
                     {/* <MidReview/> */}
-
-
                     {/*핵심경험*/}
-                    <CoreExperience />
+                    <CoreExperience scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
                 </Stack>
             </Stack>
 
