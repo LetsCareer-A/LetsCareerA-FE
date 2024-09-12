@@ -16,6 +16,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { postAddType } from '../../../api/StepDetail/postAddType'; 
 import { useParams } from 'react-router-dom'; 
+import Textfield from '../../../components/Textfield';
 
 const items: DropdownItem[] = [
   { text: '서류 전형', color: `${colors.primary.normal}`, image: notebook },
@@ -30,7 +31,9 @@ interface AddStateModalProps {
 }
 
 const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState }) => {
+
   const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
+  const [midName, setMidName] = useState<string>(''); // 중간 전형 입력값 저장
   const [, setStartDate] = useState<Date | null>(null);
   const { date, setDate } = useModalStore();
   
@@ -58,7 +61,7 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
 
         const payload = {
           type: type,
-          mid_name:  '', 
+          mid_name: midName, 
           date: date ? date.toISOString().split('T')[0] : '', 
         };
 
@@ -101,15 +104,30 @@ const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState
         <Box display="flex" width={372} flexDirection="column" alignItems="flex-start" gap="8px">
           <Label label="전형단계" required={true} />
           {/* 전형 선택 드롭다운 */}
-          <Dropdown
-            buttonText="전형 단계를 선택해주세요."
-            items={items}
-            renderItem={(item) => (
-              <Chip text={item.text as string} backgroundColor={item.color} sx={{ height: '24px', padding: '4px 8px', gap: '4px' }} />
+          <Box display="flex" flexDirection="row" justify-content={'space-between'} gap={'10px'} align-items={'center'}>
+            <Dropdown
+              buttonText="전형 단계를 선택해주세요."
+              items={items}
+              renderItem={(item) => (
+                <Chip text={item.text as string} backgroundColor={item.color} sx={{ height: '24px', padding: '4px 8px', gap: '4px' }} />
+              )}
+              sx={{ width: '195px', height: '44px' }}
+              onSelect={(item) => setSelectedState(item)}
+            />
+            {/* 중간 전형 선택 시에만 Textfield 표시 */}
+            {selectedState?.text === '중간 전형(직접 입력)' && (
+              <Textfield
+                value={midName}
+                onChange={(event) => setMidName(event.target.value)}
+                placeholder="전형단계명을 입력해주세요"
+                showCharCount={false}
+                fullWidth={false} 
+                height='44px' 
+                sx={{ width: '140px' }} 
+                />
             )}
-            sx={{ width: '195px', height: '44px' }}
-            onSelect={(item) => setSelectedState(item)} // 드롭다운 선택 시 선택된 전형 저장
-          />
+          </Box> 
+          
         </Box>
 
         {/* 전형 일자 설정 */}
