@@ -6,7 +6,8 @@ import typography from '../../../styles/typography';
 import fileImage from '../../../assets/ill_file.png';
 import AddIcon from '@mui/icons-material/Add';
 import AddStateModal from './AddStateModal';
-import useStageStore from '../../../store/useStageStore'; // 상태 관리 스토어 import
+
+import useScheduleStore from '../../../store/useScheduleStore'; // 스케줄 스토어 가져오기
 
 const Stateitems: DropdownItem[] = [
   { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
@@ -15,62 +16,62 @@ const Stateitems: DropdownItem[] = [
   { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
 ];
 
-const StateGroup = () => {
-  return (
+const StateGroup = ({ stage }: { stage: any }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      width: '100px',
+      paddingBottom: '4px',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '4px',
+      marginLeft: '23px',
+      marginTop: '25px',
+      position: 'relative',
+    }}
+  >
     <Box
       sx={{
         display: 'flex',
-        width: '100px',
-        paddingBottom: '4px',
-        flexDirection: 'column',
+        width: 100,
+        height: 100,
+        padding: '3px 3px',
+        justifyContent: 'center',
         alignItems: 'center',
-        gap: '4px',
-        marginLeft: '23px',
-        marginTop: '25px',
-        position: 'relative',
+        borderRadius: '8px',
+        bgcolor: colors.primary[80],
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          width: 100,
-          height: 100,
-          padding: '3px 3px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '8px',
-          bgcolor: colors.primary[80],
-        }}
-      >
-        <img src={fileImage} style={{ width: '100%', height: '100%' }} />
-      </Box>
-
-      <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-        전형 이름
-      </Typography>
-
-      <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-        날짜
-      </Typography>
-
-      <Dropdown
-        buttonText="상태"
-        backgroundColor={colors.primary[10]}
-        items={Stateitems}
-        sx={{
-          height: '28px',
-          marginTop: '10px',
-          color: `${colors.primary.normal}`,
-          typography: `${typography.xSmall2Med}`,
-        }}
-      />
+      <img src={fileImage} style={{ width: '100%', height: '100%' }} />
     </Box>
-  );
-};
+
+    <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
+      {stage.mid_name || '전형 이름'}
+    </Typography>
+
+    <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
+      {stage.date || '날짜'}
+    </Typography>
+
+    <Dropdown
+      buttonText="상태"
+      backgroundColor={colors.primary[10]}
+      items={Stateitems}
+      sx={{
+        height: '28px',
+        marginTop: '10px',
+        color: `${colors.primary.normal}`,
+        typography: `${typography.xSmall2Med}`,
+      }}
+    />
+  </Box>
+);
 
 const ReadyState = () => {
   const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
-  const { stages, setStages } = useStageStore(); // 상태 관리 스토어 사용
+  const { schedule, setSchedule } = useScheduleStore(); // 스케줄 상태 가져오기
+
+  console.log(schedule);
 
   const handleOpenAddStateModal = () => {
     setIsAddStateModalOpen(true);
@@ -81,17 +82,23 @@ const ReadyState = () => {
   };
 
   const handleAddState = (newState: any) => {
-    // 새로운 상태를 추가하는 로직
-    console.log('Adding new state:', newState); // 디버깅용 로그 추가
-    setStages([...stages, newState]); // 상태 업데이트
+    if (schedule) {
+      setSchedule({
+        ...schedule,
+        stages: [...schedule.stages, newState],
+      });
+    }
   };
 
   return (
     <Box width={'1043px'} height={'237px'} borderRadius={'12px'} border={`1px solid ${colors.neutral[85]}`} bgcolor={colors.neutral[100]}>
       <Box display={'inline-flex'} alignItems={'flex-start'} gap={'16px'}>
-      {stages.map((state) => (
-          <StateGroup key={state.stageId}/>
-        ))}        <Box
+        {/* 스케줄의 단계(stages)를 반복 렌더링 */}
+        {schedule?.stages.map((stage) => (
+          <StateGroup key={stage.stageId} stage={stage} />
+        ))}
+
+        <Box
           sx={{
             display: 'flex',
             width: '100px',

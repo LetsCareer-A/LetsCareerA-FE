@@ -16,6 +16,7 @@ import { useParams } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 import CoreExperience from './components/CoreExperience';
+import useScheduleStore from '../../store/useScheduleStore';
 
 // 헤더 드롭다운
 const items: DropdownItem[] = [
@@ -34,13 +35,15 @@ const StepDetailPage: React.FC = () => {
     const [toastMessage, setToastMessage] = useState('');
     // const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
 
+    const { schedule, setSchedule } = useScheduleStore();
+
 
     useEffect(() => {
         const fetchScheduleData = async () => {
             try {
                 const data = await getSchedules(Number(scheduleId));
                 console.log('Fetched data:', data); // 로그로 데이터 확인
-                setScheduleData(data.data);
+                setSchedule(data.data); // 스토어에 데이터 저장
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
             }
@@ -49,7 +52,7 @@ const StepDetailPage: React.FC = () => {
         if (scheduleId) {
             fetchScheduleData();
         }
-    }, [scheduleId]);
+    }, [scheduleId, setSchedule]);
     
 
 // 면접 전형 추가 모달 관리
