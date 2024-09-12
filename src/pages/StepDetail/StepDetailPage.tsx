@@ -12,7 +12,7 @@ import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import ReadyState from './components/ReadyState';
 // import MidReview from './components/MidReview';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 import CoreExperience from './components/CoreExperience';
@@ -33,6 +33,7 @@ const StepDetailPage: React.FC = () => {
     // const [StageData, setStageData ] = useState<any>(null);
     // const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
     const [toastMessage, setToastMessage] = useState('');
+    const navigate = useNavigate(); // useNavigate 훅 사용
     // const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
 
     const { schedule, setSchedule } = useScheduleStore();
@@ -53,6 +54,10 @@ const StepDetailPage: React.FC = () => {
             fetchScheduleData();
         }
     }, [scheduleId, setSchedule]);
+      // 뒤로 가기 버튼 클릭 핸들러
+      const handleGoBack = () => {
+        navigate(-1); // 이전 페이지로 이동
+    };
     
 
 // 면접 전형 추가 모달 관리
@@ -80,7 +85,7 @@ const StepDetailPage: React.FC = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
                 {/* 헤더 */}
-                <ArrowBackIosNewIcon />
+                <ArrowBackIosNewIcon onClick={handleGoBack} style={{ cursor: 'pointer' }} />
                 <Chip
                     text="D-4"
                     backgroundColor="rgba(81, 119, 255, 0.10)"
