@@ -15,6 +15,7 @@ import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 import CoreExperience from './components/CoreExperience';
 import useScheduleStore from '../../store/useScheduleStore';
+// import MidReview from './components/MidReview';
 
 // 헤더 드롭다운
 const items: DropdownItem[] = [
@@ -107,13 +108,19 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
-                    {/* 서류전형 - 자기소개서 */}
+                {selectedStageType === '서류' && (
                     <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
-                    {/* 중간전형 - 회고보드 */}
-                    {/* <MidReview/> */}
-                    {/*핵심경험*/}
-                    <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} 
-                     />
+                )}
+
+                {/* {selectedStageType === '중간' && (
+                    <MidReview scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                )} */}
+
+                {/*핵심경험*/}
+
+                {(selectedStageType === '서류' || selectedStageType === '면접')&& (
+                    <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
                 </Stack>
             </Stack>
 
