@@ -82,7 +82,7 @@ const IntroQnA: React.FC<IntroQnAProps> = ({
       fullWidth
       maxLength={1500}
       multiline
-      rows={10}
+      rows={13}
       sx={{ width: '705px', height: '226px' }} // 필드 크기를 705px * 226px로 설정
     />
   </Box>
