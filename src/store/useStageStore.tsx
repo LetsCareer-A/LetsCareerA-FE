@@ -1,4 +1,5 @@
-import create from 'zustand';
+import { create } from 'zustand';
+
 
 // 스테이지 데이터 타입 정의
 interface Stage {
