@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import Dropdown, { DropdownItem } from '../../../components/Dropdown';
 import colors from '../../../styles/colors';

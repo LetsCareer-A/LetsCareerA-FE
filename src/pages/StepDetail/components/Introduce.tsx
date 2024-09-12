@@ -7,12 +7,24 @@ import AddIcon from '@mui/icons-material/Add';
 import { putIntroduction } from '../../../api/StepDetail/putIntroduction';
 import { getDocDetail } from '../../../api/StepDetail/getDocDetail';
 
+interface SelfIntroduction {
+  title: string;
+  content: string;
+}
+
+interface DocDetailResponse {
+  data: {
+    selfIntroductions: SelfIntroduction[];
+  };
+}
+
+
 const Introduce = ({ scheduleId, stageId }: { scheduleId: number; stageId: number; }) => {
   const [IntroQnAs, setIntroQnAs] = useState<{ question: string; answer: string }[]>([{ question: '', answer: '' }]);
 
   const loadIntroduction = async () => {
     try {
-      const data = await getDocDetail(scheduleId, stageId);
+      const data: DocDetailResponse = await getDocDetail(scheduleId, stageId);
     //   const data = await getDocDetail(50, 50);
       const { selfIntroductions } = data.data;
       const formattedData = selfIntroductions.map((item) => ({

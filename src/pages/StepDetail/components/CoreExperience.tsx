@@ -57,7 +57,6 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
     const [experienceType, setExperienceType] = useState<'서류' | '면접'>('서류'); 
-    const [isLoading, setIsLoading] = useState(true); 
 
     const MAX_EXPERIENCE_BOXES = 4;
 
@@ -73,13 +72,12 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
                 }
             } catch (error) {
                 console.error('Failed to fetch career data:', error);
-            } finally {
-                setIsLoading(false); 
-            }
+            } 
         };
 
         loadCareers();
     }, [experienceType, scheduleId, stageId]);
+    
 
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
@@ -105,6 +103,7 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
             }
         } catch (error) {
             console.error('Failed to fetch career data:', error);
+            setExperienceType('면접')
         }
     };
 

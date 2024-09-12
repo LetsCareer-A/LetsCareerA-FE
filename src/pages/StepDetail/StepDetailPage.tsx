@@ -7,7 +7,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Chip from '../../components/Chips';
 import Dropdown from '../../components/Dropdown';
 import notebook from '../../assets/notebook.png';
-import AddIcon from '@mui/icons-material/Add';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import ReadyState from './components/ReadyState';
@@ -43,6 +42,7 @@ const StepDetailPage: React.FC = () => {
                 setSchedule(data.data); // 스토어에 데이터 저장
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
+                setScheduleData('');
             }
         };
 

@@ -28,12 +28,18 @@ const items: DropdownItem[] = [
 interface AddStateModalProps {
   open: boolean;
   onClose: (selectedStep?: DropdownItem) => void;
-  onAddState: (newState: DropdownItem) => void; 
+  onAddState: (newState: StatePayload) => void; 
+}
+
+interface StatePayload {
+  type: string;
+  mid_name: string;
+  date: string;
 }
 
 const AddStateModal: React.FC<AddStateModalProps> = ({ open, onClose, onAddState }) => {
 
-  const { schedule, setSchedule } = useScheduleStore();
+  const { schedule } = useScheduleStore();
   const [selectedState, setSelectedState] = useState<DropdownItem | null>(null); // 선택된 전형 저장
   const [midName, setMidName] = useState<string>(''); // 중간 전형 입력값 저장
   const [, setStartDate] = useState<Date | null>(null);
