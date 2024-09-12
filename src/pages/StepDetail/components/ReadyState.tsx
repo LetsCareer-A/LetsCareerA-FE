@@ -1,109 +1,87 @@
-import React, { useState } from 'react';
-import { Box, Typography, Select, MenuItem, FormControl } from '@mui/material';
+import { useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import Dropdown, { DropdownItem } from '../../../components/Dropdown';
 import colors from '../../../styles/colors';
 import typography from '../../../styles/typography';
 import fileImage from '../../../assets/ill_file.png';
 import AddIcon from '@mui/icons-material/Add';
 import AddStateModal from './AddStateModal';
-import useStageStore from '../../../store/useStageStore'; // 상태 관리 스토어 import
 
-const Stateitems = [
-  { text: '진행중', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '진행완료', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '합격', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '불합격', color: colors.primary[10], textColor: colors.primary.normal },
+import useScheduleStore from '../../../store/useScheduleStore';
+
+const Stateitems: DropdownItem[] = [
+  { text: '진행중', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
+  { text: '진행완료', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
+  { text: '합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
+  { text: '불합격', color: `${colors.primary[10]}`, textColor: `${colors.primary.normal}` },
 ];
 
-const StateGroup = () => {
-  const [selectedState, setSelectedState] = useState('');
+const StateGroup = ({ stage }: { stage: Stage }) => {
+  const setSelectedStageId = useScheduleStore((state) => state.setSelectedStageId);
+  const setSelectedStageType = useScheduleStore((state) => state.setSelectedStageType);
 
-  const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setSelectedState(event.target.value);
+  const handleClick = () => {
+    setSelectedStageId(stage.stageId);
+    setSelectedStageType(stage.type);
   };
-  
-  return (
+  return(
+  <Box
+    sx={{
+      display: 'flex',
+      width: '100px',
+      paddingBottom: '4px',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '4px',
+      marginLeft: '23px',
+      marginTop: '25px',
+      position: 'relative',
+    }}
+    onClick={handleClick}
+  >
     <Box
       sx={{
         display: 'flex',
-        width: '100px',
-        paddingBottom: '4px',
-        flexDirection: 'column',
+        width: 100,
+        padding: '3px 3px',
+        justifyContent: 'center',
         alignItems: 'center',
-        gap: '4px',
-        marginLeft: '23px',
-        marginTop: '25px',
-        position: 'relative',
+        borderRadius: '8px',
+        bgcolor: colors.primary[80],
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          width: 100,
-          height: 100,
-          padding: '3px 3px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '8px',
-          bgcolor: colors.primary[80],
-        }}
-      >
-        <img src={fileImage} style={{ width: '100%', height: '100%' }} />
-      </Box>
-
-      <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-        전형 이름
-      </Typography>
-
-      <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
-        날짜
-      </Typography>
-
-      <FormControl sx={{ width: '100%', marginTop: '10px' }}>
-      <Select
-        value={selectedState || '진행중'} // selectedState가 없으면 '진행중'으로 설정
-        onChange={handleChange}
-        sx={{
-          height: '28px',
-          typography: typography.xSmall2Reg,
-          textAlign: 'center', 
-          background: `${colors.primary[10]}`,
-          color: `${colors.primary.normal }`,
-          '& .MuiOutlinedInput-notchedOutline': {
-            border: 'none',
-          },
-        }}
-      >
-        {Stateitems.map((item) => (
-          <MenuItem
-            key={item.text}
-            value={item.text}
-            sx={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: 'white',
-              color: 'black',
-              typography: typography.xSmall2Reg,
-              '&:hover': {
-                backgroundColor: `${item.color}80`, // 호버 시 배경색 약간 투명하게
-                color: item.textColor,
-              },
-            }}
-          >
-            {item.text}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-
+      <img src={fileImage} style={{ width: '100%', height: '100%' }} />
     </Box>
-  );
+
+    <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
+      {stage.type === '중간' ? stage.mid_name : `${stage.type} 전형` }
+    </Typography>
+
+
+    <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
+      {stage.date || '날짜'}
+    </Typography>
+
+    <Dropdown
+      buttonText="상태"
+      backgroundColor={colors.primary[10]}
+      items={Stateitems}
+      sx={{
+        height: '28px',
+        marginTop: '10px',
+        color: `${colors.primary.normal}`,
+        typography: `${typography.xSmall2Med}`,
+      }}
+    />
+  </Box>
+  )
 };
 
 const ReadyState = () => {
   const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
-  const { stages, setStages } = useStageStore();
+  const { schedule, setSchedule } = useScheduleStore(); // 스케줄 상태 가져오기
+
+  console.log(schedule);
 
   const handleOpenAddStateModal = () => {
     setIsAddStateModalOpen(true);
@@ -114,16 +92,31 @@ const ReadyState = () => {
   };
 
   const handleAddState = (newState: any) => {
-    console.log('Adding new state:', newState);
-    setStages([...stages, newState]);
+    if (schedule) {
+      setSchedule({
+        ...schedule,
+        stages: [...schedule.stages, newState],
+      });
+    }
   };
 
+
   return (
-    <Box width={'1043px'} height={'237px'} borderRadius={'12px'} border={`1px solid ${colors.neutral[85]}`} bgcolor={colors.neutral[100]}>
+    <Box
+      width="1043px"
+      height="237px"
+      borderRadius="12px"
+      border={`1px solid ${colors.neutral[85]}`}
+      bgcolor={colors.neutral[100]}
+      sx={{ overflowX: 'auto' }}
+      >
       <Box display={'inline-flex'} alignItems={'flex-start'} gap={'16px'}>
-      {stages.map((state) => (
-          <StateGroup key={state.stageId}/>
-        ))}        <Box
+        {/* 스케줄의 단계(stages)를 반복 렌더링 */}
+        {schedule?.stages.map((stage) => (
+          <StateGroup key={stage.stageId} stage={stage} />
+        ))}
+
+        <Box
           sx={{
             display: 'flex',
             width: '100px',
@@ -136,7 +129,7 @@ const ReadyState = () => {
             position: 'relative',
             cursor: 'pointer',
           }}
-          onClick={handleOpenAddStateModal}
+          onClick={handleOpenAddStateModal} // onClick 이벤트 추가
         >
           <Box
             sx={{
