@@ -46,8 +46,9 @@ const StateGroup = ({ stage }: { stage: any }) => (
     </Box>
 
     <Typography color={colors.neutral[10]} style={typography.xSmallMed}>
-      {stage.mid_name || '전형 이름'}
+      {stage.type === '중간' ? stage.mid_name : `${stage.type} 전형` }
     </Typography>
+
 
     <Typography color={colors.neutral[40]} style={typography.xxSmallReg}>
       {stage.date || '날짜'}

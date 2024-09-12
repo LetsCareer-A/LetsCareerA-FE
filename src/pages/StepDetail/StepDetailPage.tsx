@@ -95,16 +95,16 @@ const StepDetailPage: React.FC = () => {
                     imageHeight="16px"
                 />
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.company || '회사명 없음'}
+                    {schedule?.company || '회사명 없음'}
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     |
                 </Typography>
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {scheduleData?.department || '부서명 없음'}
+                    {schedule?.department || '부서명 없음'}
                 </Typography>
                     <Dropdown
-                        buttonText={scheduleData?.progress || '진행 상태 없음'}
+                        buttonText={schedule?.progress || '진행 상태 없음'}
                         items={items}
                         renderItem={(item) => 
                             <Chip text={item.text} backgroundColor={item.color} />}
