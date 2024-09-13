@@ -10,6 +10,9 @@ import notebook from '../../assets/notebook.png';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import ReadyState from './components/ReadyState';
+
+import MidReview from './components/MidReview';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
@@ -108,13 +111,14 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
+
                 {selectedStageType === '서류' && (
                     <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
                 )}
 
-                {/* {selectedStageType === '중간' && (
+                {selectedStageType === '중간' && (
                     <MidReview scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
-                )} */}
+                )}
 
                 {/*핵심경험*/}
 
@@ -122,6 +126,7 @@ const StepDetailPage: React.FC = () => {
                     <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
                 )}
                 </Stack>
+
             </Stack>
 
             {/* 토스트 */}
