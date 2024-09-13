@@ -8,6 +8,7 @@ import CareerMenu from '../../../components/CareerMenu';
 import Toast from '../../../components/Toast';
 import { getDocDetail } from '../../../api/StepDetail/getDocDetail';
 import { getIntDetail } from '../../../api/StepDetail/getIntDetail';
+import useScheduleStore from '../../../store/useScheduleStore';
 
 interface ExperienceBoxProps {
     card?: { chipText: string; title: string };
@@ -19,7 +20,6 @@ interface CoreExperienceProps {
     scheduleId: number;
     stageId: number;
 }
-
 
 const ExperienceBox: React.FC<ExperienceBoxProps> = ({ card, onClick, isEmpty }) => (
     <Box
@@ -56,9 +56,13 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
     const [isCareerMenuVisible, setIsCareerMenuVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [selectedCareerCards, setSelectedCareerCards] = useState<{ chipText: string; title: string }[]>([]);
-    const [experienceType, setExperienceType] = useState<'서류' | '면접'>('서류'); 
 
     const MAX_EXPERIENCE_BOXES = 4;
+
+    // useScheduleStore에서 selectedStageType 가져오기
+    const { selectedStageType } = useScheduleStore((state) => ({
+        selectedStageType: state.selectedStageType
+    }));
 
     useEffect(() => {
         const loadCareers = async () => {
@@ -76,8 +80,7 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
         };
 
         loadCareers();
-    }, [experienceType, scheduleId, stageId]);
-    
+    }, [scheduleId, stageId, selectedStageType]);
 
     const handleExperienceBoxClick = () => {
         setIsCareerMenuVisible((prev) => !prev);
@@ -92,18 +95,15 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
         }
     };
 
-    // API를 선택적으로 호출하는 함수
     const fetchCareersByType = async () => {
         try {
-            if (experienceType === '서류') {
+            if (selectedStageType === '서류') {
                 return await getDocDetail(scheduleId, stageId);
-                // return await getDocDetail(50, 50);
-            } else if (experienceType === '면접') {
+            } else if (selectedStageType === '면접') {
                 return await getIntDetail(scheduleId, stageId);
             }
         } catch (error) {
             console.error('Failed to fetch career data:', error);
-            setExperienceType('면접')
         }
     };
 
@@ -146,9 +146,9 @@ const CoreExperience: React.FC<CoreExperienceProps> = ({ scheduleId, stageId }) 
                     onClose={() => setIsCareerMenuVisible(false)}
                     onComplete={handleCompleteButtonClick}
                     onOpen={() => setIsCareerMenuVisible(true)}
-                    scheduleId={0}
-                    stageId={0}               
-                 />
+                    scheduleId={scheduleId}
+                    stageId={stageId}               
+                />
             )}
 
             {toastMessage && (

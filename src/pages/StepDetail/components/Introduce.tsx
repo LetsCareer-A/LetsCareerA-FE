@@ -98,7 +98,6 @@ const Introduce = ({ scheduleId, stageId }: { scheduleId: number; stageId: numbe
         gap: '10px',
         border: `1px solid ${colors.neutral[85]}`,
         backgroundColor: colors.neutral[100],
-        justifyContent: 'center'
       }}
     >
       <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" gap="16px">
