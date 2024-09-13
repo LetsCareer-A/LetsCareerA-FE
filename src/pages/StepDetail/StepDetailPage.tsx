@@ -10,17 +10,14 @@ import notebook from '../../assets/notebook.png';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import ReadyState from './components/ReadyState';
-
 import MidReview from './components/MidReview';
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 import CoreExperience from './components/CoreExperience';
 import useScheduleStore from '../../store/useScheduleStore';
-// import MidReview from './components/MidReview';
 
-// 헤더 드롭다운
+
 const items: DropdownItem[] = [
     { text: '공고 진행중', color: '#4D55F5' },
     { text: '최종 합격', color: '#4D55F5' },
@@ -30,17 +27,18 @@ const items: DropdownItem[] = [
 const StepDetailPage: React.FC = () => {
     const { scheduleId } = useParams<{ scheduleId: string }>();
     const [scheduleData, setScheduleData] = useState<any>(null);
+    const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null); 
     const [toastMessage, setToastMessage] = useState('');
-    const navigate = useNavigate(); // useNavigate 훅 사용
+    const navigate = useNavigate(); 
 
     const { schedule, setSchedule, selectedStageId, selectedStageType } = useScheduleStore();
 
     useEffect(() => {
         const fetchScheduleData = async () => {
             try {
-                const data = await getSchedules(Number(scheduleId));
-                console.log('Fetched data:', data); // 로그로 데이터 확인
-                setSchedule(data.data); // 스토어에 데이터 저장
+                const response = await getSchedules(Number(scheduleId));
+                console.log('Fetched data:', response);
+                setSchedule(response.data);
             } catch (error) {
                 console.error('Failed to fetch schedule data:', error);
                 setScheduleData('');
@@ -60,6 +58,14 @@ const StepDetailPage: React.FC = () => {
     const handleDropdownSelect = (item: DropdownItem) => {
         // 드롭다운에서 선택된 항목을 처리하는 로직 추가
         console.log('Selected item:', item);
+        setSelectedItem(item); // 선택된 항목 상태 업데이트
+    };
+
+    // `schedule?.progress`에 맞는 색상을 반환하는 함수
+    const getDefaultChipBackgroundColor = () => {
+        const progressText = schedule?.progress || '';
+        const matchingItem = items.find(item => item.text === progressText);
+        return matchingItem ? matchingItem.color : '#FFD700'; // 기본 색상 지정
     };
 
     return (
@@ -85,10 +91,17 @@ const StepDetailPage: React.FC = () => {
                     {schedule?.department || '부서명 없음'}
                 </Typography>
                 <Dropdown
-                    buttonText={schedule?.progress || '진행 상태 없음'}
+                    buttonText={selectedItem?.text || '진행 상태 없음'}
                     items={items}
+                    alwaysShowChip={true} 
+                    defaultChipText={schedule?.progress}
+                    defaultChipBackgroundColor={getDefaultChipBackgroundColor()} 
                     renderItem={(item) => 
-                        <Chip text={item.text} backgroundColor={item.color} />}
+                        <Chip
+                            text={item.text}
+                            backgroundColor={item.color}
+                        />
+                    }
                     onSelect={handleDropdownSelect}
                     sx={{ width: 142, height: 44 }}
                 />
@@ -111,22 +124,17 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
-
-                {selectedStageType === '서류' && (
-                    <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
-                )}
-
-                {selectedStageType === '중간' && (
-                    <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
-                )}
-
-                {/*핵심경험*/}
-
-                {(selectedStageType === '서류' || selectedStageType === '면접')&& (
-                    <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
-                )}
+                    {selectedStageType === '서류' && (
+                        <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                    )}
+                    {selectedStageType === '중간' && (
+                        <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                    )}
+                    {/*핵심경험*/}
+                    {(selectedStageType === '서류' || selectedStageType === '면접') && (
+                        <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                    )}
                 </Stack>
-
             </Stack>
 
             {/* 토스트 */}

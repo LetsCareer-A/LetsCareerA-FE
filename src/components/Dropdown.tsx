@@ -38,8 +38,8 @@ const StyledMenu = styled(Menu)(() => ({
   '& .MuiList-root': {
     padding: 0,
     margin: 0,
-    maxHeight: '200px', // 메뉴의 최대 높이 설정
-    overflowY: 'auto', // 스크롤 가능하게 설정
+    maxHeight: '200px',
+    overflowY: 'auto', 
   },
 }));
 
@@ -57,10 +57,25 @@ interface DropdownProps {
   backgroundColor?: string; // 배경색 추가
   renderItem?: (item: DropdownItem) => React.ReactNode; 
   onSelect?: (item: DropdownItem) => void;
+  alwaysShowChip?: boolean; 
+  defaultChipText?: string; 
+  defaultChipBackgroundColor?: string; 
+  defaultChipTextColor?: string; 
   sx?: object;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor, renderItem, onSelect, sx = {} }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  buttonText,
+  items,
+  backgroundColor,
+  renderItem,
+  onSelect,
+  alwaysShowChip = false,
+  defaultChipText,
+  defaultChipBackgroundColor,
+  defaultChipTextColor,
+  sx = {},
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
   const open = Boolean(anchorEl);
@@ -84,16 +99,17 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
   return (
     <div>
       <StyledButton onClick={handleClick} open={open} bgColor={backgroundColor} sx={sx}>
-        <Box display="flex" alignItems="center" gap='8px'>
-          {selectedItem ? (
+        <Box display="flex" alignItems="center" gap="8px">
+          {/* 항상 Chip을 보여줄지 여부에 따라 Chip 또는 buttonText 표시 */}
+          {alwaysShowChip || selectedItem ? (
             <Chip 
-              text={selectedItem.text}
-              backgroundColor={selectedItem.color}
-              image={selectedItem.image}
-              textColor={selectedItem.textColor}
+              text={selectedItem ? selectedItem.text : defaultChipText || buttonText} 
+              backgroundColor={selectedItem?.color || defaultChipBackgroundColor}
+              image={selectedItem?.image}
+              textColor={selectedItem?.textColor || defaultChipTextColor} 
             />
           ) : (
-            buttonText
+            buttonText 
           )}
           <img 
             src={Arrow} 
@@ -115,22 +131,19 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, backgroundColor,
           <Box 
             key={index}
             onClick={() => handleItemClick(item)}
-            sx={{ margin: '4px 0' }} // 적절한 마진 추가
+            sx={{ margin: '4px 0' }} 
           >
-            <StyledMenuItem
-            key={index}
-            onClick={() => handleItemClick(item)} 
-          >
-            {renderItem ? (
-              renderItem(item) // renderItem이 있는 경우 이를 사용
-            ) : (
-              <Chip 
-                text={item.text}
-                backgroundColor={item.color}
-                image={item.image}
-                sx={{ width: '100%', display: 'flex', alignItems: 'center' }} // Chip 스타일 조정
-              />
-            )}
+            <StyledMenuItem key={index}>
+              {renderItem ? (
+                renderItem(item) 
+              ) : (
+                <Chip 
+                  text={item.text}
+                  backgroundColor={item.color}
+                  image={item.image}
+                  sx={{ width: '100%', display: 'flex', alignItems: 'center' }}
+                />
+              )}
             </StyledMenuItem>
           </Box>
         ))}
