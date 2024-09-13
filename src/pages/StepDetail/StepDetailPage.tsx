@@ -16,6 +16,7 @@ import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 import CoreExperience from './components/CoreExperience';
 import useScheduleStore from '../../store/useScheduleStore';
+import { putProgress } from '../../api/StepDetail/putProgress';
 
 
 const items: DropdownItem[] = [
@@ -23,6 +24,12 @@ const items: DropdownItem[] = [
     { text: '최종 합격', color: '#4D55F5' },
     { text: '최종 불합격', color: '#FF566A' },
 ];
+
+const progressMapping: { [key: string]: string } = {
+    '공고 진행중': 'DO',
+    '최종 합격': 'PASS',
+    '최종 불합격': 'FAIL'
+};
 
 const StepDetailPage: React.FC = () => {
     const { scheduleId } = useParams<{ scheduleId: string }>();
@@ -50,22 +57,30 @@ const StepDetailPage: React.FC = () => {
         }
     }, [scheduleId, setSchedule]);
 
-    // 뒤로 가기 버튼 클릭 핸들러
+
     const handleGoBack = () => {
-        navigate(-1); // 이전 페이지로 이동
+        navigate(-1); 
     };
 
-    const handleDropdownSelect = (item: DropdownItem) => {
-        // 드롭다운에서 선택된 항목을 처리하는 로직 추가
+    const handleDropdownSelect = async (item: DropdownItem) => {
         console.log('Selected item:', item);
-        setSelectedItem(item); // 선택된 항목 상태 업데이트
-    };
+        setSelectedItem(item); 
+      
+        if (scheduleId) {
+            const progress = progressMapping[item.text] || '';
+            console.log(progress)
+            await putProgress(scheduleId, progress);
+            console.log(progress)
+            setToastMessage('진행 상태가 업데이트되었습니다.');
+        }
+  
+      };
+      
 
-    // `schedule?.progress`에 맞는 색상을 반환하는 함수
     const getDefaultChipBackgroundColor = () => {
         const progressText = schedule?.progress || '';
         const matchingItem = items.find(item => item.text === progressText);
-        return matchingItem ? matchingItem.color : '#FFD700'; // 기본 색상 지정
+        return matchingItem ? matchingItem.color : '#4D55F5'; 
     };
 
     return (
