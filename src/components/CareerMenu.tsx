@@ -34,7 +34,6 @@ const CareerMenu = ({ scheduleId, stageId, onClose, onComplete, onOpen }: Career
   useEffect(() => {
     const fetchCareerData = async () => {
       try {
-        // const response = await getCareers(50, 50);
         const response = await getCareers(scheduleId, stageId);
         const careers: Career[] = response.data.careers;
 
@@ -52,20 +51,20 @@ const CareerMenu = ({ scheduleId, stageId, onClose, onComplete, onOpen }: Career
     };
 
     fetchCareerData();
-  }, []);
+  }, [scheduleId, stageId]);
 
   const handleCardClick = (cardId: number) => {
     const isSelected = selectedCards.some(selected => selected.careerId === cardId);
     const card = careerCards.find(card => card.careerId === cardId);
 
-    const appealCards = careerCards.filter(card => card.isAppeal);
+    if (card) {
+      const appealCards = careerCards.filter(card => card.isAppeal);
+      const totalAppealCount = appealCards.filter(card => selectedCards.some(selected => selected.careerId === card.careerId)).length;
+      const totalSelectedCount = selectedCards.length + totalAppealCount;
 
-    const totalSelectedAndAppealCount = selectedCards.length + appealCards.length;
-
-    if (isSelected) {
-      setSelectedCards(prevCards => prevCards.filter(selected => selected.careerId !== cardId));
-    } else if (totalSelectedAndAppealCount < 4 || (card && card.isAppeal)) {
-      if (card) {
+      if (isSelected) {
+        setSelectedCards(prevCards => prevCards.filter(selected => selected.careerId !== cardId));
+      } else if (totalSelectedCount < 4 || (card && card.isAppeal)) {
         setSelectedCards(prevCards => [...prevCards, { chipText: card.chipText, title: card.title, careerId: cardId }]);
       }
     }
@@ -77,7 +76,7 @@ const CareerMenu = ({ scheduleId, stageId, onClose, onComplete, onOpen }: Career
     const selectedCareerIds = selectedCards.map(card => card.careerId);
 
     try {
-      await postCareer(50, 50, selectedCareerIds);
+      await postCareer(scheduleId, stageId, selectedCareerIds);
       setTimeout(() => {
         setIsVisible(false);
         onComplete(selectedCards);

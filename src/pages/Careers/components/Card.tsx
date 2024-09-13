@@ -75,7 +75,16 @@ const Card: React.FC<CardProps> = ({ chipText, chipBackgroundColor, chipTextColo
         backgroundColor={backgroundColor} 
         textColor={textColor}
       />
-      <Typography style={typography.small2Bold} color={colors.neutral[10]} mt="8px">
+      <Typography style={typography.small2Bold} color={colors.neutral[10]}
+      
+      sx={{
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        WebkitLineClamp: 1
+      }}
+      mt="8px">
         {title}
       </Typography>
       <Typography 

@@ -10,12 +10,15 @@ import notebook from '../../assets/notebook.png';
 import banner from '../../assets/banner.png';
 import Toast from '../../components/Toast';
 import ReadyState from './components/ReadyState';
+
 import MidReview from './components/MidReview';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSchedules } from '../../api/StepDetail/getSchedules';
 import Introduce from './components/Introduce';
 import CoreExperience from './components/CoreExperience';
 import useScheduleStore from '../../store/useScheduleStore';
+// import MidReview from './components/MidReview';
 
 // 헤더 드롭다운
 const items: DropdownItem[] = [
@@ -29,10 +32,8 @@ const StepDetailPage: React.FC = () => {
     const [scheduleData, setScheduleData] = useState<any>(null);
     const [toastMessage, setToastMessage] = useState('');
     const navigate = useNavigate(); // useNavigate 훅 사용
-    // const [isAddStateModalOpen, setIsAddStateModalOpen] = useState(false);
 
-    const { schedule, setSchedule } = useScheduleStore();
-
+    const { schedule, setSchedule, selectedStageId, selectedStageType } = useScheduleStore();
 
     useEffect(() => {
         const fetchScheduleData = async () => {
@@ -50,15 +51,15 @@ const StepDetailPage: React.FC = () => {
             fetchScheduleData();
         }
     }, [scheduleId, setSchedule]);
-      // 뒤로 가기 버튼 클릭 핸들러
-      const handleGoBack = () => {
+
+    // 뒤로 가기 버튼 클릭 핸들러
+    const handleGoBack = () => {
         navigate(-1); // 이전 페이지로 이동
     };
 
     const handleDropdownSelect = (item: DropdownItem) => {
         // 드롭다운에서 선택된 항목을 처리하는 로직 추가
         console.log('Selected item:', item);
-
     };
 
     return (
@@ -83,15 +84,14 @@ const StepDetailPage: React.FC = () => {
                 <Typography color={colors.neutral[10]} style={typography.mediumBold}>
                     {schedule?.department || '부서명 없음'}
                 </Typography>
-                    <Dropdown
-                        buttonText={schedule?.progress || '진행 상태 없음'}
-                        items={items}
-                        renderItem={(item) => 
-                            <Chip text={item.text} backgroundColor={item.color} />}
-                        onSelect={handleDropdownSelect}
-                        sx={{ width: 142, height: 44 }}
-                    />
-
+                <Dropdown
+                    buttonText={schedule?.progress || '진행 상태 없음'}
+                    items={items}
+                    renderItem={(item) => 
+                        <Chip text={item.text} backgroundColor={item.color} />}
+                    onSelect={handleDropdownSelect}
+                    sx={{ width: 142, height: 44 }}
+                />
             </Stack>
 
             {/* 전형 준비 상태 */}
@@ -111,15 +111,20 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
-                    {/* ReadyState에서 선택된 stageId에 맞는 전형의 type 값에 따라 조건부 렌더링 */}
-                    {scheduleData?.text === '서류전형' ? (
-                        <Introduce scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
-                    ) : (
-                        <MidReview scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
-                    )}
-                    
-                    {/*핵심경험*/}
-                    <CoreExperience scheduleId={Number(scheduleId)} stageId={scheduleData?.stageId || 0} />
+
+                {selectedStageType === '서류' && (
+                    <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                )}
+
+                {selectedStageType === '중간' && (
+                    <MidReview scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                )}
+
+                {/*핵심경험*/}
+
+                {(selectedStageType === '서류' || selectedStageType === '면접')&& (
+                    <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
                 </Stack>
 
             </Stack>
@@ -137,4 +142,3 @@ const StepDetailPage: React.FC = () => {
 };
 
 export default StepDetailPage;
-
