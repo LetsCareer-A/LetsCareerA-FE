@@ -3,7 +3,7 @@ import axiosInstance from '..';
 export const putProgress = async (scheduleId: string, progress: string) => {
   try {
     const response = await axiosInstance.put(
-      `/schedules/${scheduleId}`,
+      `/schedules/${scheduleId}/progress`,
       { progress }
     );
     console.log(response.data);
