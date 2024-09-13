@@ -117,7 +117,7 @@ const StepDetailPage: React.FC = () => {
                 )}
 
                 {selectedStageType === '중간' && (
-                    <MidReview scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                    <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
                 )}
 
                 {/*핵심경험*/}
