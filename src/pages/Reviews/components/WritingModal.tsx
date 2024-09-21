@@ -58,6 +58,8 @@ const WritingModal: React.FC<WritingModalProps> = ({
       const scheduleIdStr = String(scheduleId); // scheduleId를 문자열로 변환
       const stageIdStr = String(stageId);       // stageId를 문자열로 변환
 
+      console.log(scheduleIdStr,stageIdStr,'dksfhdkj' )
+
       try {
         if (reviewType === '면접 회고') {
           await postReviewInt(scheduleIdStr, stageIdStr, details, qa, feel);

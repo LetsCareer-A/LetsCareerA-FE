@@ -5,16 +5,22 @@ import typography from '../../../styles/typography';
 import pencil from '../../../assets/edit_pencil.png';
 import WritingModal from '../../Reviews/components/WritingModal'; // WritingModal 컴포넌트 불러오기
 
-
 interface MidReviewProps {
   scheduleId: number;
   stageId: number;
   reviewAvailable: boolean;
+  setReviewAvailable: (value: boolean) => void; // 상태 변경 함수 prop 추가
+  selectedStageType: string;
 }
 
-const UploadReview: React.FC<MidReviewProps> = ({scheduleId, stageId, reviewAvailable}) => {
+const UploadReview: React.FC<MidReviewProps> = ({
+  scheduleId,
+  stageId,
+  reviewAvailable, // prop으로 받은 reviewAvailable
+  setReviewAvailable, // prop으로 받은 상태 변경 함수
+  selectedStageType,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // WritingModal의 상태 관리
-  const [review, setreviewAvailable] = useState(reviewAvailable);
 
   const handleOpenModal = () => {
     setIsModalOpen(true); // 모달 열기
@@ -27,9 +33,8 @@ const UploadReview: React.FC<MidReviewProps> = ({scheduleId, stageId, reviewAvai
   const handleConfirm = (data: { details: string; qa: string; feel: string; goal: string; freeReview: string }) => {
     // 모달에서 확인 버튼을 눌렀을 때의 처리
     console.log('Confirmed data:', data);
-    setreviewAvailable(true);
-
-
+    // setReviewAvailable(true); // prop으로 받은 상태 변경 함수 호출
+    setIsModalOpen(false); // 모달 닫기
   };
 
   return (
@@ -41,11 +46,7 @@ const UploadReview: React.FC<MidReviewProps> = ({scheduleId, stageId, reviewAvai
       justifyContent="center"
       marginTop={15}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap="8px"
-      >
+      <Box display="flex" flexDirection="column" gap="8px">
         <Typography color={colors.neutral[10]} style={typography.xSmallBold}>
           아직 회고를 진행하지 않았어요!
         </Typography>
@@ -77,11 +78,11 @@ const UploadReview: React.FC<MidReviewProps> = ({scheduleId, stageId, reviewAvai
       <WritingModal
         open={isModalOpen}
         onClose={handleCloseModal}
-        reviewType="중간 전형 회고" 
-        onConfirm={handleConfirm} 
+        reviewType={selectedStageType}
+        onConfirm={handleConfirm}
         scheduleId={scheduleId}
         stageId={stageId}
-        />
+      />
     </Box>
   );
 };

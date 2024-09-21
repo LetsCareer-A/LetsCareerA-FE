@@ -87,11 +87,23 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
               ) : selectedStageType === '면접' && reviewInt ? (
                 <ReviewQuestion review={reviewInt} stageType="면접" />
               ) : (
-                <UploadReview scheduleId={scheduleId} stageId={stageId}/>
+                <UploadReview
+                  scheduleId={scheduleId}
+                  stageId={stageId}
+                  reviewAvailable={reviewAvailable}
+                  setReviewAvailable={setReviewAvailable} // 상태 변경 함수를 전달
+                  selectedStageType={selectedStageType==='중간' ? '중간 전형 회고' : '면접 회고' }
+                />
               )}
             </>
           ) : (
-            <UploadReview scheduleId={scheduleId} stageId={stageId} reviewAvailable={reviewAvailable}/>
+            <UploadReview
+              scheduleId={scheduleId}
+              stageId={stageId}
+              reviewAvailable={reviewAvailable}
+              setReviewAvailable={setReviewAvailable} // 상태 변경 함수를 전달
+              selectedStageType={selectedStageType==='중간' ? '중간 전형 회고' : '면접 회고' }
+              />
           )}
         </Box>
       </Box>
