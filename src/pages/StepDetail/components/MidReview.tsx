@@ -37,20 +37,26 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
           const response = await getMidDetail(Number(scheduleId), stageId);
           console.log("중간 api", response.data)
           if (response.data) {
+            console.log("리뷰상태체크", response.data.reviewAvailable)
             setReviewAvailable(response.data.reviewAvailable);
+            console.log("리뷰상태 세팅-중간: ", reviewAvailable );
             if (response.data.review) {
               setReviewMid(response.data.review);
-              console.log("중간내용:", reviewMid)
+              console.log("중간내용:", response.data.review)
             }
           }
         } else if (selectedStageType === '면접') {
           const response = await getIntDetail(scheduleId, stageId);
+          console.log("면접 api", response)
           if (response.data) {
+            console.log("리뷰상태체크", response.data.reviewAvailable)
             setReviewAvailable(response.data.reviewAvailable);
+            console.log("리뷰상태 세팅-면접: ", reviewAvailable );
+
             if (response.data.review) {
               setReviewInt(response.data.review);
               setReviews(response.data.appealCareers || []);
-              console.log("면접내용:", reviewInt)
+              console.log("면접내용:", response.data.review)
             }
           }
         } else { 
@@ -88,17 +94,17 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
         <Box display="flex" flexDirection="column" gap="32px" padding="15px 24px">
           {reviewAvailable ==false ? (
             <>
-              {selectedStageType == '중간' && reviewMid ? (
+              {selectedStageType === '중간' && reviewMid ? (
                 <ReviewQuestion review={reviewMid} stageType="중간" />
                 
-              ) : selectedStageType == '면접' && reviewInt ? (
+              ) : selectedStageType === '면접' && reviewInt ? (
                 <ReviewQuestion review={reviewInt} stageType="면접" />
               ) : (
                 <UploadReview
                   scheduleId={scheduleId}
                   stageId={stageId}
                   reviewAvailable={reviewAvailable}
-                  setReviewAvailable={setReviewAvailable} // 상태 변경 함수를 전달
+                  setReviewAvailable={setReviewAvailable}
                   selectedStageType={selectedStageType==='중간' ? '중간 전형 회고' : '면접 회고' }
                 />
               )}
@@ -108,7 +114,7 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
               scheduleId={scheduleId}
               stageId={stageId}
               reviewAvailable={reviewAvailable}
-              setReviewAvailable={setReviewAvailable} // 상태 변경 함수를 전달
+              setReviewAvailable={setReviewAvailable}
               selectedStageType={selectedStageType==='중간' ? '중간 전형 회고' : '면접 회고' }
               />
           )}

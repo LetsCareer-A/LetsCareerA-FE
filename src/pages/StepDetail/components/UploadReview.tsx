@@ -33,7 +33,8 @@ const UploadReview: React.FC<MidReviewProps> = ({
   const handleConfirm = (data: { details: string; qa: string; feel: string; goal: string; freeReview: string }) => {
     // 모달에서 확인 버튼을 눌렀을 때의 처리
     console.log('Confirmed data:', data);
-    // setReviewAvailable(true); // prop으로 받은 상태 변경 함수 호출
+    setReviewAvailable(true); // prop으로 받은 상태 변경 함수 호출
+    console.log("리뷰상태:", reviewAvailable);
     setIsModalOpen(false); // 모달 닫기
   };
 

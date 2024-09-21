@@ -9,6 +9,8 @@ interface ReviewQuestionProps {
 }
 
 const ReviewQuestion: React.FC<ReviewQuestionProps> = ({ review, stageType }) => {
+  console.log("stageId", review.goal);
+
   return (
     <Box display="flex" flexDirection="column" gap="6px" alignSelf="stretch">
       {stageType === '중간' ? (
