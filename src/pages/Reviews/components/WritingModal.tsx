@@ -44,7 +44,6 @@ const WritingModal: React.FC<WritingModalProps> = ({
   onConfirm,
   scheduleId,
   stageId,
-  // selectedReview
 }) => {
   const [details, setDetails] = useState(initialDetails);
   const [qa, setQa] = useState(initialQa);
@@ -53,12 +52,12 @@ const WritingModal: React.FC<WritingModalProps> = ({
   const [freeReview, setFreeReview] = useState(initialFreeReview);
 
   const handleConfirm = async () => {
-    if (reviewType ) {
+    if (reviewType) {
 
-      const scheduleIdStr = String(scheduleId); // scheduleId를 문자열로 변환
-      const stageIdStr = String(stageId);       // stageId를 문자열로 변환
+      const scheduleIdStr = String(scheduleId);
+      const stageIdStr = String(stageId);
 
-      console.log(scheduleIdStr,stageIdStr,'dksfhdkj' )
+      console.log("모달 정보", scheduleIdStr,stageIdStr)
 
       try {
         if (reviewType === '면접 회고') {

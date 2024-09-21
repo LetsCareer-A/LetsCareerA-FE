@@ -30,6 +30,8 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
 
   useEffect(() => {
     const fetchDetails = async () => {
+      console.log("타입:",selectedStageType)                 // 타입확인
+
       try {
         if (selectedStageType === '중간') { 
           const response = await getMidDetail(Number(scheduleId), stageId);
@@ -37,7 +39,8 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
           if (response.data) {
             setReviewAvailable(response.data.reviewAvailable);
             if (response.data.review) {
-              setReviewMid(response.data.review); // 중간 전형 회고 데이터 설정
+              setReviewMid(response.data.review);
+              console.log("중간내용:", reviewMid)
             }
           }
         } else if (selectedStageType === '면접') {
@@ -45,8 +48,9 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
           if (response.data) {
             setReviewAvailable(response.data.reviewAvailable);
             if (response.data.review) {
-              setReviewInt(response.data.review); // 면접 전형 회고 데이터 설정
-              setReviews(response.data.appealCareers || []); // 어필 커리어 목록 설정
+              setReviewInt(response.data.review);
+              setReviews(response.data.appealCareers || []);
+              console.log("면접내용:", reviewInt)
             }
           }
         } else { 
@@ -84,9 +88,10 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
         <Box display="flex" flexDirection="column" gap="32px" padding="15px 24px">
           {reviewAvailable ==false ? (
             <>
-              {selectedStageType === '중간' && reviewMid ? (
+              {selectedStageType == '중간' && reviewMid ? (
                 <ReviewQuestion review={reviewMid} stageType="중간" />
-              ) : selectedStageType === '면접' && reviewInt ? (
+                
+              ) : selectedStageType == '면접' && reviewInt ? (
                 <ReviewQuestion review={reviewInt} stageType="면접" />
               ) : (
                 <UploadReview
