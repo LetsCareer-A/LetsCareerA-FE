@@ -10,10 +10,10 @@ import AddStateModal from './AddStateModal';
 import useScheduleStore from '../../../store/useScheduleStore';
 
 const Stateitems = [
-  { text: '진행중', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '진행완료', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '합격', color: colors.primary[10], textColor: colors.primary.normal },
-  { text: '불합격', color: 'rgba(255, 86, 106, 0.10)', textColor: '#FF566A' },
+  { text: '진행중', color: colors.primary[20], textColor: colors.primary.normal },
+  { text: '진행완료', color: colors.primary[20], textColor: colors.primary.normal },
+  { text: '합격', color: colors.primary[20], textColor: colors.primary.normal },
+  { text: '불합격', color: colors.primary[20], textColor: '#FF566A' },
 ];
 
 const StateGroup = ({ stage }: { stage: Stage }) => {

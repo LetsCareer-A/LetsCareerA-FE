@@ -73,14 +73,6 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
 
   return ( 
     <Box display="flex" flexDirection="column" justifyContent="space-between" gap="16px">
-      <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
-        <Typography color={colors.neutral[10]} style={typography.smallBold}>
-          회고보기
-        </Typography>
-        <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-          {reviewAvailable ==false ? '작성된 회고를 확인해보세요.' : '아직 회고를 진행하지 않았어요.'}
-        </Typography>
-      </Box>
       <Box
         sx={{
           width: '737px',
@@ -91,6 +83,14 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
           overflowY: 'auto',
         }}
       >
+        <Box display="flex" flexDirection="row" gap="12px" alignItems="center" padding="16px">
+          <Typography color={colors.neutral[10]} style={typography.smallBold}>
+            회고보기
+          </Typography>
+          <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
+            {reviewAvailable ==false ? '작성된 회고를 확인해보세요.' : '아직 회고를 진행하지 않았어요.'}
+          </Typography>
+      </Box>
         <Box display="flex" flexDirection="column" gap="32px" padding="15px 24px">
           {reviewAvailable ==false ? (
             <>
