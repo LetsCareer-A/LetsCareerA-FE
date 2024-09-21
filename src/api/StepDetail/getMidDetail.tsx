@@ -1,6 +1,6 @@
 import axiosInstance from '..';
 
-export const getMidDetail = async (scheduleId: string, stageId: string) => {
+export const getMidDetail = async (scheduleId: number, stageId: number) => {
   try {
     const response = await axiosInstance.get(`/schedules/${scheduleId}/stages/${stageId}/mid`);
     console.log(response.data);

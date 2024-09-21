@@ -139,16 +139,24 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
-                    {selectedStageType === '서류' && (
-                        <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
-                    )}
-                    {selectedStageType === '중간' && (
-                        <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
-                    )}
-                    {/*핵심경험*/}
-                    {(selectedStageType === '서류' || selectedStageType === '면접') && (
-                        <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
-                    )}
+
+                {selectedStageType === '서류' && (
+                    <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                )}
+
+                {selectedStageType === '중간' && (
+                    <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
+
+                {selectedStageType === '면접' && (
+                    <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
+
+                {/*핵심경험*/}
+
+                {(selectedStageType === '서류' || selectedStageType === '면접')&& (
+                    <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
                 </Stack>
             </Stack>
 

@@ -6,10 +6,10 @@ import Label from '../../../components/Label';
 import { postReviewInt } from '../../../api/Reviews/postReviewInt';
 import { postReviewMid } from '../../../api/Reviews/postReviewMid';
 
-interface Review {
-  scheduleId: string | number;
-  stageId: string | number;
-}
+// interface Review {
+//   scheduleId: string | number;
+//   stageId: string | number;
+// }
 
 interface WritingModalProps {
   open: boolean;
@@ -29,7 +29,7 @@ interface WritingModalProps {
     goal: string;
     freeReview: string;
   }) => void;
-  selectedReview: Review | null;
+  // selectedReview?: Review | null;
 }
 
 const WritingModal: React.FC<WritingModalProps> = ({
@@ -42,7 +42,9 @@ const WritingModal: React.FC<WritingModalProps> = ({
   initialGoal = '',
   initialFreeReview = '',  
   onConfirm,
-  selectedReview
+  scheduleId,
+  stageId,
+  // selectedReview
 }) => {
   const [details, setDetails] = useState(initialDetails);
   const [qa, setQa] = useState(initialQa);
@@ -51,16 +53,17 @@ const WritingModal: React.FC<WritingModalProps> = ({
   const [freeReview, setFreeReview] = useState(initialFreeReview);
 
   const handleConfirm = async () => {
-    if (reviewType && selectedReview) {
-      const scheduleId = String(selectedReview.scheduleId);
-      const stageId = String(selectedReview.stageId);
+    if (reviewType ) {
+
+      const scheduleIdStr = String(scheduleId); // scheduleId를 문자열로 변환
+      const stageIdStr = String(stageId);       // stageId를 문자열로 변환
 
       try {
         if (reviewType === '면접 회고') {
-          await postReviewInt(scheduleId, stageId, details, qa, feel);
+          await postReviewInt(scheduleIdStr, stageIdStr, details, qa, feel);
           onConfirm({ details, qa, feel, goal: '', freeReview: '' });
         } else if (reviewType === '중간 전형 회고') {
-          await postReviewMid(scheduleId, stageId, freeReview, goal);
+          await postReviewMid(scheduleIdStr, stageIdStr, freeReview, goal);
           onConfirm({ details: '', qa: '', feel: '', goal, freeReview });
         }
         onClose();
