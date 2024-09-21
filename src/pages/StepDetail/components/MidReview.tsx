@@ -59,6 +59,8 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
     fetchDetails();
   }, [scheduleId, stageId, selectedStageType]);
 
+  console.log(reviewMid,'midReview')
+
   return ( 
     <Box display="flex" flexDirection="column" justifyContent="space-between" gap="16px">
       <Box display="flex" flexDirection="row" gap="16px" alignItems="center">
@@ -66,7 +68,7 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
           회고보기
         </Typography>
         <Typography color={colors.neutral[45]} style={typography.xSmall2Med}>
-          {reviewAvailable ? '작성된 회고를 확인해보세요.' : '아직 회고를 진행하지 않았어요.'}
+          {reviewAvailable ==false ? '작성된 회고를 확인해보세요.' : '아직 회고를 진행하지 않았어요.'}
         </Typography>
       </Box>
       <Box
@@ -80,7 +82,7 @@ const MidReview: React.FC<MidReviewProps> = ({ scheduleId, stageId }) => {
         }}
       >
         <Box display="flex" flexDirection="column" gap="32px" padding="15px 24px">
-          {reviewAvailable ? (
+          {reviewAvailable ==false ? (
             <>
               {selectedStageType === '중간' && reviewMid ? (
                 <ReviewQuestion review={reviewMid} stageType="중간" />
