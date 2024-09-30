@@ -43,6 +43,7 @@ const StateGroup = ({ stage }: { stage: Stage }) => {
       marginLeft: '23px',
       marginTop: '25px',
       position: 'relative',
+      overflowY: 'hidden',
     }}
     onClick={handleClick}
   >
