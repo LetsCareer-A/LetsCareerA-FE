@@ -73,7 +73,7 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         await fetchCompanyData(page);
         
       } catch (error) {
-        console.error('회고 제출 오류:', error);
+        console.error('회고 제출 오류 in board:', error);
         alert('회고 제출에 실패했습니다.');
       }
     } else {
@@ -172,7 +172,8 @@ const BoardGather: React.FC<BoardGatherProps> = ({ company, department, reviews}
         onClose={() => setModalOpen(false)}
         reviewType={selectedReview?.type || null}
         onConfirm={handleConfirm}
-        selectedReview={selectedReview}
+        scheduleId={selectedReview?.scheduleId}
+        stageId={selectedReview?.stageId}
       />
 
       {showToast && (

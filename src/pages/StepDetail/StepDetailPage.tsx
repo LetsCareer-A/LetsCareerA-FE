@@ -57,6 +57,25 @@ const StepDetailPage: React.FC = () => {
         }
     }, [scheduleId, setSchedule]);
 
+    const getMinDday = () => {
+        if (!schedule || !schedule.stages) return null;
+    
+        // 유효한 dday 값들만 추출
+        const validDdays = schedule.stages
+            .filter(stage => stage.dday && !isNaN(Number(stage.dday))) // 숫자인 경우만 필터링
+            .map(stage => Number(stage.dday)); // 숫자로 변환
+    
+        console.log("디데이", validDdays);
+    
+        // 유효한 dday 값들 중 최소값 찾기
+        if (validDdays.length > 0) {
+            return Math.max(...validDdays);
+        }
+    
+        return null;  // 유효한 dday가 없는 경우
+    };
+    
+
 
     const handleGoBack = () => {
         navigate(-1); 
@@ -85,26 +104,29 @@ const StepDetailPage: React.FC = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative' }}>
-                {/* 헤더 */}
-                <ArrowBackIosNewIcon onClick={handleGoBack} style={{ cursor: 'pointer' }} />
-                <Chip
-                    text="D-4"
-                    backgroundColor="rgba(81, 119, 255, 0.10)"
-                    textColor={colors.primary.normal}
-                    image={notebook}
-                    imageWidth="16px"
-                    imageHeight="16px"
-                />
-                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {schedule?.company || '회사명 없음'}
-                </Typography>
-                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    |
-                </Typography>
-                <Typography color={colors.neutral[10]} style={typography.mediumBold}>
-                    {schedule?.department || '부서명 없음'}
-                </Typography>
+            <Stack spacing="16px" direction="row" alignItems="center" sx={{ position: 'relative', justifyContent: 'space-between' }}>
+            {/* 헤더 */}
+                <Box display="flex" flexDirection="row" alignItems="center" gap="12px">
+                    <ArrowBackIosNewIcon onClick={handleGoBack} style={{ cursor: 'pointer' }} />
+                    <Chip
+                        text={`D${getMinDday() ?? ''}`}  // 최소 D-day 값이 없으면 빈 문자열을 표시
+                        backgroundColor="rgba(81, 119, 255, 0.10)"
+                        textColor={colors.primary.normal}
+                        image={notebook}
+                        imageWidth="16px"
+                        imageHeight="16px"
+                    />
+                    <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+                        {schedule?.company || '회사명 없음'}
+                    </Typography>
+                    <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+                        |
+                    </Typography>
+                    <Typography color={colors.neutral[10]} style={typography.mediumBold}>
+                        {schedule?.department || '부서명 없음'}
+                    </Typography>
+                </Box>
+                
                 <Dropdown
                     buttonText={selectedItem?.text || '진행 상태 없음'}
                     items={items}
@@ -118,8 +140,8 @@ const StepDetailPage: React.FC = () => {
                         />
                     }
                     onSelect={handleDropdownSelect}
-                    sx={{ width: 142, height: 44 }}
-                />
+                    sx={{ width: 142, height: 44, marginLeft: 'auto' }} // 드롭다운을 오른쪽 끝으로 이동
+                    />
             </Stack>
 
             {/* 전형 준비 상태 */}
@@ -139,16 +161,24 @@ const StepDetailPage: React.FC = () => {
                 />
                 {/* 자기소개서 - 서류전형 진행중 */}
                 <Stack spacing="16px" direction="row">
-                    {selectedStageType === '서류' && (
-                        <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
-                    )}
-                    {selectedStageType === '중간' && (
-                        <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
-                    )}
-                    {/*핵심경험*/}
-                    {(selectedStageType === '서류' || selectedStageType === '면접') && (
-                        <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
-                    )}
+
+                {selectedStageType === '서류' && (
+                    <Introduce scheduleId={Number(scheduleId)} stageId={selectedStageId || 0} />
+                )}
+
+                {selectedStageType === '중간' && (
+                    <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
+
+                {selectedStageType === '면접' && (
+                    <MidReview scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
+
+                {/*핵심경험*/}
+
+                {(selectedStageType === '서류' || selectedStageType === '면접')&& (
+                    <CoreExperience scheduleId={Number(scheduleId)} stageId={Number(selectedStageId) || 0} />
+                )}
                 </Stack>
             </Stack>
 

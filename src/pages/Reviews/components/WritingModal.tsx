@@ -6,10 +6,10 @@ import Label from '../../../components/Label';
 import { postReviewInt } from '../../../api/Reviews/postReviewInt';
 import { postReviewMid } from '../../../api/Reviews/postReviewMid';
 
-interface Review {
-  scheduleId: string | number;
-  stageId: string | number;
-}
+// interface Review {
+//   scheduleId: string | number;
+//   stageId: string | number;
+// }
 
 interface WritingModalProps {
   open: boolean;
@@ -22,14 +22,15 @@ interface WritingModalProps {
   initialFreeReview?: string;
   scheduleId?: string | number; 
   stageId?: string | number;    
-  onConfirm: (data: {
+  onConfirm: (
+    data: {
     details: string;
     qa: string;
     feel: string;
     goal: string;
     freeReview: string;
   }) => void;
-  selectedReview: Review | null;
+  // selectedReview?: Review | null;
 }
 
 const WritingModal: React.FC<WritingModalProps> = ({
@@ -42,7 +43,8 @@ const WritingModal: React.FC<WritingModalProps> = ({
   initialGoal = '',
   initialFreeReview = '',  
   onConfirm,
-  selectedReview
+  scheduleId,
+  stageId,
 }) => {
   const [details, setDetails] = useState(initialDetails);
   const [qa, setQa] = useState(initialQa);
@@ -51,17 +53,28 @@ const WritingModal: React.FC<WritingModalProps> = ({
   const [freeReview, setFreeReview] = useState(initialFreeReview);
 
   const handleConfirm = async () => {
-    if (reviewType && selectedReview) {
-      const scheduleId = String(selectedReview.scheduleId);
-      const stageId = String(selectedReview.stageId);
+    if (reviewType) {
+
+      const scheduleIdStr = String(scheduleId);
+      const stageIdStr = String(stageId);
+
+      console.log("모달 정보", scheduleIdStr,stageIdStr)
 
       try {
         if (reviewType === '면접 회고') {
-          await postReviewInt(scheduleId, stageId, details, qa, feel);
-          onConfirm({ details, qa, feel, goal: '', freeReview: '' });
+          console.log("리뷰type:", reviewType)
+          console.log("stageId", stageId)
+          await postReviewInt(scheduleIdStr, stageIdStr, details, qa, feel);
+          console.log("await 지남")
+          onConfirm({ details, qa, feel, goal: '', freeReview: '' }); //확인버튼을 눌렀을 때, 텍스트 필트 초기화
+          console.log("stageId", stageId)
         } else if (reviewType === '중간 전형 회고') {
-          await postReviewMid(scheduleId, stageId, freeReview, goal);
+          console.log("리뷰type:", reviewType)
+          console.log("stageId", stageId)
+          await postReviewMid(scheduleIdStr, stageIdStr, freeReview, goal);
           onConfirm({ details: '', qa: '', feel: '', goal, freeReview });
+          console.log("stageId", stageId)
+
         }
         onClose();
       } catch (error) {
